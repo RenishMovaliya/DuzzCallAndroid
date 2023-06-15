@@ -8,4 +8,17 @@
     <string name="register">Register</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hgh">Hello World!</string>
+    <string name="welcome_to_duzzcall">Welcome to duzzcall !</string>
+    <string name="terms_and_condition">Terms and Condition</string>
+    <string name="agree_and_continue">Agree and Continue</string>
+    <string name="verify_your_phone_number">Verify your phone number</string>
+    <string name="tap_agree_and_continue">Tap “Agree and continue” to accept\nthe duzzcall Terms of Service and\nPrivacy Policy</string>
+    <string name="duzzcall_will_send_an_sms_message">Duzzcall will send an SMS message\nto verify your phone number</string>
+    <string name="select_the_country">Select the country</string>
+    <string name="enter_your_country">Enter your country and\nphone number</string>
+    <string name="next">Next</string>
+    <string name="verify_91_777_123_456">Verify +91 777 123 456</string>
+    <string name="carrier_sms_charges_may_apply">Carrier SMS charges may apply</string>
+    <string name="resend_sms_in_00_54_secs">Resend SMS in 00:54 secs</string>
 </resources>

@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Edit_PhoneActivity">
+
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d40"
+        android:layout_marginTop="@dimen/d40"
+        android:src="@drawable/titlename"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"></ImageView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/rl_bottom"
+        android:layout_below="@id/imageView"
+        android:layout_marginHorizontal="@dimen/d40"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/d50"
+            android:fontFamily="@font/poppins_bold"
+            android:text="@string/verify_your_phone_number"
+            android:textAlignment="center"
+            android:textColor="@color/appcolour"
+            android:textSize="@dimen/dt17" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/d50"
+            android:fontFamily="@font/poppins_light"
+            android:text="@string/duzzcall_will_send_an_sms_message"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="@dimen/dt14" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/d20"
+            android:fontFamily="@font/poppins_bold"
+            android:text="@string/enter_your_country"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="@dimen/dt13" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/d120"
+            android:layout_marginTop="@dimen/d20"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d45"
+                android:background="@drawable/rounded_corner"
+                android:fontFamily="@font/poppins_light"
+                android:text="@string/select_the_country"
+                android:paddingHorizontal="@dimen/dt20"
+                android:textColor="@color/black"
+                android:textSize="@dimen/dt14" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/d45"
+                    android:layout_marginTop="@dimen/d20"
+                    android:layout_marginRight="@dimen/d5"
+                    android:layout_weight="3"
+                    android:background="@drawable/rounded_corner"
+                    android:fontFamily="@font/poppins_light"
+                    android:gravity="center"
+                    android:text="+91"
+                    android:paddingHorizontal="@dimen/dt20"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/dt14" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/d45"
+                    android:layout_marginLeft="@dimen/d5"
+                    android:layout_marginTop="@dimen/d20"
+                    android:layout_weight="1"
+                    android:background="@drawable/rounded_corner"
+                    android:fontFamily="@font/poppins_light"
+                    android:maxLength="10"
+                    android:hint="777  123  456"
+                    android:inputType="number"
+                    android:paddingHorizontal="@dimen/dt20"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/black"
+                    android:textSize="@dimen/dt14" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/d30"
+            android:alpha="0.5"
+            android:fontFamily="@font/poppins_regular"
+            android:text="@string/carrier_sms_charges_may_apply"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="@dimen/dt13" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/btn_next"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="@dimen/d15"
+                android:background="@drawable/rounded_button_bg"
+                android:fontFamily="@font/poppins_bold"
+                android:gravity="center"
+                android:paddingVertical="@dimen/d7"
+                android:text="@string/next"
+                android:textColor="@color/white"
+                android:textSize="@dimen/dt17"></TextView>
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/rl_bottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/d50">
+
+        <LinearLayout
+            android:id="@+id/view_bottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:orientation="horizontal">
+
+
+            <View
+                android:layout_width="@dimen/d20"
+                android:layout_height="@dimen/d6"
+                android:background="@drawable/bottom_view_unselect" />
+
+            <View
+                android:layout_width="@dimen/d35"
+                android:layout_height="@dimen/d6"
+                android:layout_marginLeft="@dimen/d5"
+                android:background="@drawable/bottom_view_select" />
+
+            <View
+                android:layout_width="@dimen/d20"
+                android:layout_height="@dimen/d6"
+                android:layout_marginLeft="@dimen/d5"
+                android:background="@drawable/bottom_view_unselect" />
+
+            <View
+                android:layout_width="@dimen/d20"
+                android:layout_height="@dimen/d6"
+                android:layout_marginLeft="@dimen/d5"
+                android:background="@drawable/bottom_view_unselect" />
+
+        </LinearLayout>
+    </RelativeLayout>
+
+
+</RelativeLayout>

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Terms_And_ConditionActivity">
+
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d40"
+        android:layout_marginTop="@dimen/d40"
+        android:src="@drawable/titlename"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"></ImageView>
+
+    <TextView
+        android:id="@+id/txt_welcome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/imageView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/d40"
+        android:fontFamily="@font/poppins_light"
+        android:text="@string/welcome_to_duzzcall"
+        android:textColor="@color/textcolor"
+        android:textSize="@dimen/dt16" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginHorizontal="@dimen/d40"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/poppins_bold"
+            android:text="@string/terms_and_condition"
+            android:textAlignment="center"
+            android:textColor="@color/appcolour"
+            android:textSize="@dimen/dt17" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/d40"
+            android:fontFamily="@font/poppins_light"
+            android:text="@string/tap_agree_and_continue"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="@dimen/dt14" />
+
+
+        <TextView
+            android:id="@+id/btn_agree_and_continue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/d50"
+            android:background="@drawable/rounded_corner"
+            android:fontFamily="@font/poppins_bold"
+            android:gravity="center"
+            android:text="@string/agree_and_continue"
+            android:textColor="@color/appcolour"
+            android:textSize="@dimen/dt17"></TextView>
+
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_bottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/d50">
+
+
+        <LinearLayout
+            android:id="@+id/view_bottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:orientation="horizontal">
+
+
+            <View
+                android:layout_width="@dimen/d35"
+                android:layout_height="@dimen/d6"
+                android:background="@drawable/bottom_view_select" />
+
+            <View
+                android:layout_width="@dimen/d20"
+                android:layout_height="@dimen/d6"
+                android:layout_marginLeft="@dimen/d5"
+                android:background="@drawable/bottom_view_unselect" />
+
+            <View
+                android:layout_width="@dimen/d20"
+                android:layout_height="@dimen/d6"
+                android:layout_marginLeft="@dimen/d5"
+                android:background="@drawable/bottom_view_unselect" />
+
+            <View
+                android:layout_width="@dimen/d20"
+                android:layout_height="@dimen/d6"
+                android:layout_marginLeft="@dimen/d5"
+                android:background="@drawable/bottom_view_unselect" />
+
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

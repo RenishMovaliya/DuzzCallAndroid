@@ -10,5 +10,5 @@
         android:right="@dimen/d9"
         android:top="@dimen/d9"></padding>
 
-    <corners android:radius="@dimen/dt12" />
+    <corners android:radius="@dimen/dt15" />
 </shape>
