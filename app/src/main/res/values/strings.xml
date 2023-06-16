@@ -61,10 +61,23 @@
     <string name="search">Search</string>
     <string name="personal">Personal</string>
     <string name="business">Business</string>
+
     <string name="recent">Recent</string>
     <string name="all">All</string>
     <string name="missed">Missed</string>
     <string name="incoming_call_txt">Incoming call</string>
     <string name="missed_call_txt">Missed call</string>
     <string name="outgoing_call_txt">Outgoing call</string>
+
+    <string name="password_validation_msg">The password must be at least 8 characters long and include a number, lowercase letter, uppercase letter and special character</string>
+    <string name="enter_mobile_number">Enter mobile number</string>
+    <string name="enter_password">Enter password</string>
+    <string name="enter_firstname">Enter First Name</string>
+    <string name="enter_lastname">Enter Last Name</string>
+    <string name="enter_email_address">Enter email address</string>
+    <string name="invalid_email_address">Invalid email address</string>
+
+
+
+
 </resources>

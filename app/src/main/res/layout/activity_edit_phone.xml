@@ -95,6 +95,7 @@
                     android:textSize="@dimen/dt14" />
 
                 <EditText
+                    android:id="@+id/et_mobile"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/d45"
                     android:layout_marginLeft="@dimen/d5"

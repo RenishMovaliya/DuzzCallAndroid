@@ -10,8 +10,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.logycraft.duzzcalll.R
 import de.hdodenhof.circleimageview.CircleImageView
 
-class Personal_Contact_Adapter(var activity: Activity?) :
-    RecyclerView.Adapter<Personal_Contact_Adapter.ViewHolder>() {
+class Business_Contact_Adapter(var activity: Activity?) :
+    RecyclerView.Adapter<Business_Contact_Adapter.ViewHolder>() {
     
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view: View = LayoutInflater.from(activity).inflate(R.layout.personal_contact_list, parent, false)
@@ -19,10 +19,13 @@ class Personal_Contact_Adapter(var activity: Activity?) :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.contact_image.setImageResource(R.drawable.srilankan_airline)
+        holder.txt_contact_name.setText("Sri Lankan Airlines")
+
     }
 
     override fun getItemCount(): Int {
-        return 15
+        return 5
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

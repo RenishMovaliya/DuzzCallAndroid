@@ -50,6 +50,7 @@
                     android:layout_toLeftOf="@+id/img_search"
                     android:background="@android:color/transparent"
                     android:hint="@string/search"
+                    android:fontFamily="@font/inter_medium"
                     android:paddingStart="@dimen/d20"
                     android:singleLine="true" />
 
@@ -66,18 +67,43 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
+                android:layout_marginLeft="@dimen/d15"
                 android:layout_height="@dimen/d50"
-                android:layout_weight="4.8">
+                android:layout_weight="4.6">
 
-                <ImageView
-                    android:layout_width="@dimen/d40"
-                    android:layout_height="@dimen/d40"
-                    android:layout_centerInParent="true"
-                    android:background="@drawable/add_background"
-                    android:padding="@dimen/d10"
-                    android:src="@drawable/ic_add" />
+                <RelativeLayout
+                    android:id="@+id/btnAdd"
+                    android:layout_width="match_parent"
+                    android:visibility="visible"
+                    android:layout_height="@dimen/d50">
 
+                    <ImageView
+                        android:layout_width="@dimen/d40"
+                        android:layout_height="@dimen/d40"
+                        android:layout_centerInParent="true"
+                        android:background="@drawable/add_background"
+                        android:padding="@dimen/d10"
+                        android:src="@drawable/ic_add" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/btn_country_select"
+                    android:layout_width="@dimen/d50"
+                    android:layout_height="@dimen/d50"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/d50"
+                        android:layout_centerInParent="true"
+                        android:background="@drawable/search_edittext_design"
+                        android:padding="@dimen/d10"
+                        android:src="@drawable/ic_flag" />
+
+                </RelativeLayout>
             </RelativeLayout>
+
         </LinearLayout>
 
         <FrameLayout
@@ -142,7 +168,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:fontFamily="@font/poppins_medium"
+                        android:fontFamily="@font/inter_semibold"
                         android:text="@string/personal"
                         android:textColor="@color/tapbar_textcolor"
                         android:textSize="18dp" />
@@ -161,7 +187,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:fontFamily="@font/poppins_medium"
+                        android:fontFamily="@font/inter_semibold"
                         android:text="@string/business"
                         android:textColor="@color/tapbar_textcolor"
                         android:textSize="18dp" />
