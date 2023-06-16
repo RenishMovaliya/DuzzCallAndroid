@@ -120,6 +120,16 @@
     <dimen name="add_event_button_foreground_size">52dp</dimen>
     <dimen name="add_event_button_background_size">85dp</dimen>
     <dimen name="add_event_button_background_bottom_margin">4dp</dimen>
+    <!-- keep these 2 values in dp to avoid scaling -->
+    <dimen name="dialpad_text_size">28dp</dimen>
+    <dimen name="dialpad_letters_text_size">12dp</dimen>
+    <dimen name="normal_icon_size">48dp</dimen>
+    <dimen name="normal_margin">12dp</dimen>
+    <dimen name="normal_text_size">14sp</dimen>
+    <dimen name="activity_margin">16dp</dimen>
+    <dimen name="dialpad_button_size">60dp</dimen>
+    <dimen name="dialpad_button_size_small">50dp</dimen>
+    <dimen name="medium_margin">8dp</dimen>
 
 
 </resources>

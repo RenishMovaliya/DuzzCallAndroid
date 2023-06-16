@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="?attr/colorPrimaryDark">
+    <item android:id="@+id/button_pill_background_holder">
+        <layer-list>
+            <item android:id="@+id/button_pill_background_shape">
+                <shape android:shape="oval">
+                    <corners android:radius="@dimen/d28" />
+                    <solid android:color="@color/white" />
+                    <stroke android:width="@dimen/d1"
+                        android:color="@color/appcolour"></stroke>
+
+                </shape>
+            </item>
+
+        </layer-list>
+    </item>
+</ripple>

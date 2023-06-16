@@ -21,4 +21,28 @@
     <string name="verify_91_777_123_456">Verify +91 777 123 456</string>
     <string name="carrier_sms_charges_may_apply">Carrier SMS charges may apply</string>
     <string name="resend_sms_in_00_54_secs">Resend SMS in 00:54 secs</string>
+    <string name="favourite">Favourite</string>
+    <string name="history">History</string>
+    <string name="contacts">Contacts</string>
+    <string name="dial_pad">Dial Pad</string>
+    <string name="setting">Setting</string>
+
+
+
+    <string name="dialpad">Dialpad</string>
+    <string name="asterisk">Asterisk</string>
+    <string name="hashtag">Hashtag</string>
+    <string name="call_number">Call number</string>
+    <string name="dialpad_beeps">Enable beeps on dialpad button clicks</string>
+    <string name="dialpad_vibrations">Enable vibrations on dialpad button clicks</string>
+    <string name="two">Two</string>
+    <string name="one">One</string>
+    <string name="three">Three</string>
+    <string name="four">Four</string>
+    <string name="five">Five</string>
+    <string name="six">Six</string>
+    <string name="seven">Seven</string>
+    <string name="eight">Eight</string>
+    <string name="nine">Nine</string>
+    <string name="zero">Zero</string>
 </resources>
