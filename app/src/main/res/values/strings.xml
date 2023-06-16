@@ -61,4 +61,10 @@
     <string name="search">Search</string>
     <string name="personal">Personal</string>
     <string name="business">Business</string>
+    <string name="recent">Recent</string>
+    <string name="all">All</string>
+    <string name="missed">Missed</string>
+    <string name="incoming_call_txt">Incoming call</string>
+    <string name="missed_call_txt">Missed call</string>
+    <string name="outgoing_call_txt">Outgoing call</string>
 </resources>

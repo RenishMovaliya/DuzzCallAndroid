@@ -80,7 +80,7 @@
             android:id="@+id/btn_forgot_pass"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/poppins_light"
+            android:fontFamily="@font/poppins_bold"
             android:gravity="right"
             android:paddingVertical="@dimen/d7"
             android:text="@string/forgot_your_password"

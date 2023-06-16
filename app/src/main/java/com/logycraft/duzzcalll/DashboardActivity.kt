@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.logycraft.duzzcalll.fragment.ContactFragment
 import com.logycraft.duzzcalll.fragment.DialFragment
+import com.logycraft.duzzcalll.fragment.HistoryFragment
 import com.logycraft.duzzcalll.fragment.SettingFragment
 
 class DashboardActivity : AppCompatActivity() {
@@ -24,7 +25,7 @@ class DashboardActivity : AppCompatActivity() {
                     true
                 }
                 R.id.history -> {
-//                    loadFragment(ChatFragment())
+                    loadFragment(HistoryFragment())
                     true
                 }
                 R.id.contact -> {
