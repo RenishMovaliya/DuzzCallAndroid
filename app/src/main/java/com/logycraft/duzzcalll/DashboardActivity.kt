@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.logycraft.duzzcalll.fragment.ContactFragment
 import com.logycraft.duzzcalll.fragment.DialFragment
+import com.logycraft.duzzcalll.fragment.SettingFragment
 
 class DashboardActivity : AppCompatActivity() {
     lateinit var bottomNav : BottomNavigationView
@@ -26,7 +28,7 @@ class DashboardActivity : AppCompatActivity() {
                     true
                 }
                 R.id.contact -> {
-//                    loadFragment(SettingFragment())
+                    loadFragment(ContactFragment())
                     true
                 }
                 R.id.dialpad -> {
@@ -34,7 +36,7 @@ class DashboardActivity : AppCompatActivity() {
                     true
                 }
                 R.id.setting -> {
-//                    loadFragment(SettingFragment())
+                    loadFragment(SettingFragment())
                     true
                 }
                 else -> {

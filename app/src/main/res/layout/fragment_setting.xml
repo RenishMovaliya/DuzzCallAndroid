@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragment.SettingFragment">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/d20">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/d20"
+            android:fontFamily="@font/poppins_bold"
+            android:includeFontPadding="false"
+            android:text="@string/settings"
+            android:textColor="@color/appcolour"
+            android:textSize="@dimen/dt22" />
+
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/topBar"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="@dimen/d20"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/d10"
+                android:layout_marginTop="@dimen/d30"
+                android:orientation="horizontal">
+
+                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/profile_image"
+                    android:layout_width="@dimen/d50"
+                    android:layout_height="@dimen/d50"
+                    android:src="@drawable/ic_profile_image" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/d20"
+                    android:fontFamily="@font/poppins_bold"
+                    android:text="@string/jhon_doe"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/dt17" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_d1"
+                android:layout_marginTop="@dimen/d10"
+                android:alpha="0.1"
+                android:background="@color/black" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/d40"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/d10"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="@dimen/d20"
+                    android:layout_height="@dimen/d20"
+                    android:layout_marginTop="@dimen/d5"
+                    android:src="@drawable/ic_key"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/d10"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/account_settings"
+                        android:textSize="@dimen/dt17"
+                        android:textColor="@color/text_color_gray"
+                        android:includeFontPadding="false"
+                        android:fontFamily="@font/poppins_medium"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/security_notifications"
+                        android:textSize="@dimen/dt14"
+                        android:includeFontPadding="false"
+                        android:textColor="@color/text_color_gray"
+                        android:fontFamily="@font/poppins_light"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/d15"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/d10"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="@dimen/d20"
+                    android:layout_height="@dimen/d20"
+                    android:layout_marginTop="@dimen/d5"
+                    android:src="@drawable/ic_notification"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/d10"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/notification"
+                        android:textSize="@dimen/dt17"
+                        android:textColor="@color/text_color_gray"
+                        android:includeFontPadding="false"
+                        android:fontFamily="@font/poppins_medium"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/message_call_tones"
+                        android:textSize="@dimen/dt14"
+                        android:includeFontPadding="false"
+                        android:textColor="@color/text_color_gray"
+                        android:fontFamily="@font/poppins_light"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/d15"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/d10"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="@dimen/d20"
+                    android:layout_height="@dimen/d20"
+                    android:layout_marginTop="@dimen/d5"
+                    android:src="@drawable/ic_privacy"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/d10"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/privacy"
+                        android:textSize="@dimen/dt17"
+                        android:textColor="@color/text_color_gray"
+                        android:includeFontPadding="false"
+                        android:fontFamily="@font/poppins_medium"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/blocked_contacts"
+                        android:textSize="@dimen/dt14"
+                        android:includeFontPadding="false"
+                        android:textColor="@color/text_color_gray"
+                        android:fontFamily="@font/poppins_light"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/d15"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/d10"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="@dimen/d20"
+                    android:layout_height="@dimen/d20"
+                    android:layout_marginTop="@dimen/d5"
+                    android:src="@drawable/ic_storage"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/d10"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/storage_and_data"
+                        android:textSize="@dimen/dt17"
+                        android:textColor="@color/text_color_gray"
+                        android:includeFontPadding="false"
+                        android:fontFamily="@font/poppins_medium"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/network_usage"
+                        android:textSize="@dimen/dt14"
+                        android:includeFontPadding="false"
+                        android:textColor="@color/text_color_gray"
+                        android:fontFamily="@font/poppins_light"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/d15"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/d10"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="@dimen/d20"
+                    android:layout_height="@dimen/d20"
+                    android:layout_marginTop="@dimen/d5"
+                    android:src="@drawable/ic_language"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/d10"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/app_language"
+                        android:textSize="@dimen/dt17"
+                        android:textColor="@color/text_color_gray"
+                        android:includeFontPadding="false"
+                        android:fontFamily="@font/poppins_medium"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/english"
+                        android:textSize="@dimen/dt14"
+                        android:includeFontPadding="false"
+                        android:textColor="@color/text_color_gray"
+                        android:fontFamily="@font/poppins_light"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/d15"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/d10"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="@dimen/d20"
+                    android:layout_height="@dimen/d20"
+                    android:layout_marginTop="@dimen/d5"
+                    android:src="@drawable/ic_help"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/d10"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/help"
+                        android:textSize="@dimen/dt17"
+                        android:textColor="@color/text_color_gray"
+                        android:includeFontPadding="false"
+                        android:fontFamily="@font/poppins_medium"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/help_center_contact_us_privacy_policy"
+                        android:textSize="@dimen/dt14"
+                        android:includeFontPadding="false"
+                        android:textColor="@color/text_color_gray"
+                        android:fontFamily="@font/poppins_light"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d30"
+                android:layout_marginTop="@dimen/d40"
+                android:src="@drawable/titlename"></ImageView>
+
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

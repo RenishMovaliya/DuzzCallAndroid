@@ -26,7 +26,7 @@
         android:layout_marginTop="@dimen/d40"
         android:fontFamily="@font/poppins_light"
         android:text="@string/welcome_to_duzzcall"
-        android:textColor="@color/textcolor"
+        android:textColor="@color/appcolour"
         android:textSize="@dimen/dt16" />
 
     <LinearLayout

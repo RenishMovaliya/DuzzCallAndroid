@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/contct_image"
+            android:layout_width="@dimen/d40"
+            android:layout_height="@dimen/d40"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_profile_image" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/d10"
+            android:layout_toLeftOf="@+id/img_star"
+            android:layout_toRightOf="@id/contct_image"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txt_contact_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_medium"
+                android:includeFontPadding="false"
+                android:text="Jane Cooper"
+                android:textColor="@color/text_color_gray"
+                android:textSize="@dimen/dt15" />
+
+            <TextView
+                android:id="@+id/txt_contact_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_regular"
+                android:includeFontPadding="false"
+                android:text="+94 2285652"
+                android:textColor="@color/text_color_gray"
+                android:textSize="@dimen/dt12" />
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/img_star"
+            android:layout_width="@dimen/d20"
+            android:layout_height="@dimen/d20"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/d10"
+            android:src="@drawable/ic_star" />
+
+    </RelativeLayout>
+
+
+</RelativeLayout>
