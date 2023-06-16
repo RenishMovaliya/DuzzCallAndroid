@@ -42,7 +42,7 @@
         android:layout_width="@dimen/d75"
         android:layout_height="@dimen/d75"
         android:gravity="center"
-        android:layout_marginBottom="@dimen/medium_margin"
+        android:layout_marginBottom="@dimen/d15"
         android:contentDescription="@string/two"
         app:layout_constraintBottom_toTopOf="@+id/dialpad_5_holder"
         app:layout_constraintEnd_toStartOf="@+id/dialpad_3_holder"
@@ -94,6 +94,7 @@
     </RelativeLayout>
 
     <RelativeLayout
+
         android:gravity="center"
         android:id="@+id/dialpad_4_holder"
         style="@style/DialpadButtonStyle"
@@ -127,7 +128,7 @@
         style="@style/DialpadButtonStyle"
         android:layout_width="@dimen/d75"
         android:layout_height="@dimen/d75"
-        android:layout_marginBottom="@dimen/medium_margin"
+        android:layout_marginBottom="@dimen/d15"
         android:contentDescription="@string/five"
         app:layout_constraintBottom_toTopOf="@+id/dialpad_8_holder"
         app:layout_constraintEnd_toStartOf="@+id/dialpad_6_holder"
@@ -212,7 +213,7 @@
         style="@style/DialpadButtonStyle"
         android:layout_width="@dimen/d75"
         android:layout_height="@dimen/d75"
-        android:layout_marginBottom="@dimen/medium_margin"
+        android:layout_marginBottom="@dimen/d15"
         android:contentDescription="@string/eight"
         app:layout_constraintBottom_toTopOf="@+id/dialpad_0_holder"
         app:layout_constraintEnd_toStartOf="@+id/dialpad_9_holder"
@@ -290,7 +291,7 @@
         style="@style/DialpadButtonStyle"
         android:layout_width="@dimen/d75"
         android:layout_height="@dimen/d75"
-        android:layout_marginBottom="@dimen/medium_margin"
+        android:layout_marginBottom="@dimen/d15"
         android:contentDescription="@string/zero"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/dialpad_hashtag_holder"

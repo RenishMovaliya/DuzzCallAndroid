@@ -7,8 +7,8 @@
                 <shape android:shape="oval">
                     <corners android:radius="@dimen/d28" />
                     <solid android:color="@color/white" />
-                    <stroke android:width="@dimen/d1"
-                        android:color="@color/appcolour"></stroke>
+                    <stroke android:width="2dp"
+                        android:color="#E6F2FF"></stroke>
 
                 </shape>
             </item>
