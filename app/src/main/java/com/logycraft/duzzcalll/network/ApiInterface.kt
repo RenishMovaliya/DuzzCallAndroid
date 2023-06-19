@@ -19,7 +19,7 @@ interface ApiInterface {
         @Field("last_name")  last_name:String,
         @Field("phone")  phone:String,
         @Field("password")  password:String,
-        @Field("email")  email:String):Call<ResponseBody>
+        @Field("email")  email:String):Call<SendOTP>
 
     @FormUrlEncoded
     @POST("token/sms")

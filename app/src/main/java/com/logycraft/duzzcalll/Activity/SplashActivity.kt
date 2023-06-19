@@ -8,6 +8,10 @@ import android.os.Looper
 import com.logycraft.duzzcalll.R
 
 class SplashActivity : AppCompatActivity() {
+    companion object{
+        lateinit var activity: SplashActivity;
+
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
