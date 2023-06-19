@@ -1,14 +1,12 @@
-package com.logycraft.duzzcalll
+package com.logycraft.duzzcalll.Activity
 
 import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.logycraft.duzzcalll.fragment.ContactFragment
-import com.logycraft.duzzcalll.fragment.DialFragment
-import com.logycraft.duzzcalll.fragment.HistoryFragment
-import com.logycraft.duzzcalll.fragment.SettingFragment
+import com.logycraft.duzzcalll.R
+import com.logycraft.duzzcalll.fragment.*
 
 class DashboardActivity : AppCompatActivity() {
     lateinit var bottomNav : BottomNavigationView
@@ -17,11 +15,12 @@ class DashboardActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
 //        loadFragment(HomeFragment())
+
         bottomNav = findViewById(R.id.bottomNav) as BottomNavigationView
         bottomNav.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.favourite -> {
-//                    loadFragment(HomeFragment())
+                    loadFragment(FavouriteFragment())
                     true
                 }
                 R.id.history -> {
@@ -45,6 +44,8 @@ class DashboardActivity : AppCompatActivity() {
                 }
             }
         }
+//        loadFragment(DialFragment())
+        bottomNav.setSelectedItemId(R.id.dialpad);
 
     }
     private  fun loadFragment(fragment: Fragment){

@@ -76,8 +76,7 @@
     <string name="enter_lastname">Enter Last Name</string>
     <string name="enter_email_address">Enter email address</string>
     <string name="invalid_email_address">Invalid email address</string>
-
-
+    <string name="favourited">Favourited</string>
 
 
 </resources>

@@ -1,16 +1,13 @@
 package com.logycraft.duzzcalll.Adapter
 
 import android.app.Activity
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.logycraft.duzzcalll.R
-import com.logycraft.duzzcalll.Terms_And_ConditionActivity
 
 class HistoryDetails_Adapter(var activity: Activity) :
     RecyclerView.Adapter<HistoryDetails_Adapter.ViewHolder>() {

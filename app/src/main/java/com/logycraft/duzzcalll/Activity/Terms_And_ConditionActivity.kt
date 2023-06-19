@@ -1,10 +1,14 @@
-package com.logycraft.duzzcalll
+package com.logycraft.duzzcalll.Activity
 
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.logycraft.duzzcalll.R
+import com.logycraft.duzzcalll.Util.Utils
+import com.logycraft.duzzcalll.Util.Utils.Companion.FROM
+import com.logycraft.duzzcalll.Util.Utils.Companion.REGISTER
 
 class Terms_And_ConditionActivity : AppCompatActivity() {
 
@@ -17,6 +21,7 @@ class Terms_And_ConditionActivity : AppCompatActivity() {
         btn_agree_and_continue.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View?) {
                 val intent = Intent(this@Terms_And_ConditionActivity, Edit_PhoneActivity::class.java)
+                intent.putExtra(FROM,REGISTER)
                 startActivity(intent)
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
             }

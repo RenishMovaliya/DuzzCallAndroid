@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Edit_PhoneActivity">
+    tools:context=".Activity.Edit_PhoneActivity">
 
 
     <ImageView
@@ -61,36 +61,59 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/d120"
+            android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/d20"
             android:orientation="vertical">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d45"
-                android:background="@drawable/rounded_corner"
+             android:visibility="gone"
                 android:fontFamily="@font/poppins_light"
                 android:text="@string/select_the_country"
                 android:paddingHorizontal="@dimen/dt20"
                 android:textColor="@color/black"
                 android:textSize="@dimen/dt14" />
+<!--            <com.hbb20.CountryPickerView-->
+<!--                android:id="@+id/countryPicker"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:foreground="?attr/selectableItemBackground"-->
+<!--                app:cpDialog_allowClearSelection="true"-->
+<!--                app:cpList_preferredCountryCodes="PK,US,CA"-->
+<!--                app:cp_initialSelectionMode="autoDetectCounty" />-->
 
+            <com.hbb20.CountryCodePicker
+                android:background="@drawable/rounded_corner_country"
+                android:id="@+id/countyCodePicker"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="@dimen/d7"
+                android:paddingVertical="@dimen/d3"
+                app:ccp_autoDetectCountry="true"
+                app:ccp_showPhoneCode="false"
+                app:ccp_showFullName="true"
+                app:ccp_textSize="@dimen/dt16"
+
+
+                />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
                 <TextView
+                    android:id="@+id/Tvcountrycode"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/d45"
                     android:layout_marginTop="@dimen/d20"
-                    android:layout_marginRight="@dimen/d5"
-                    android:layout_weight="3"
+
+                    android:layout_weight="3."
                     android:background="@drawable/rounded_corner"
                     android:fontFamily="@font/poppins_light"
                     android:gravity="center"
-                    android:text="+91"
-                    android:paddingHorizontal="@dimen/dt20"
+                    android:text=""
+
                     android:textColor="@color/black"
                     android:textSize="@dimen/dt14" />
 

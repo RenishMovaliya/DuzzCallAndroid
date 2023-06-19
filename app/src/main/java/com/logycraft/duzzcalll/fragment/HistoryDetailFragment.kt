@@ -1,16 +1,12 @@
 package com.logycraft.duzzcalll.fragment
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.logycraft.duzzcalll.Adapter.All_History_Adapter
 import com.logycraft.duzzcalll.Adapter.HistoryDetails_Adapter
 import com.logycraft.duzzcalll.R
-import com.logycraft.duzzcalll.Terms_And_ConditionActivity
-import kotlinx.android.synthetic.main.fragment_history.*
 import kotlinx.android.synthetic.main.fragment_history.recyclerview
 import kotlinx.android.synthetic.main.fragment_history_details.*
 

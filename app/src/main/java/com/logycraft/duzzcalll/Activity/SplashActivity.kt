@@ -1,10 +1,11 @@
-package com.logycraft.duzzcalll
+package com.logycraft.duzzcalll.Activity
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import com.logycraft.duzzcalll.R
 
 class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

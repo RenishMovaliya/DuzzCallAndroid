@@ -1,24 +1,26 @@
-package com.logycraft.duzzcalll
+package com.logycraft.duzzcalll.Activity
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
-import android.widget.LinearLayout
-import android.widget.TextView
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import com.example.restapiidemo.home.data.UserModel
+import com.logycraft.duzzcalll.R
 import com.logycraft.duzzcalll.Util.BaseActivity
 import com.logycraft.duzzcalll.Util.ValidationUtils
-import kotlinx.android.synthetic.main.activity_login_screen.*
 import kotlinx.android.synthetic.main.activity_portfolio.*
 import kotlinx.android.synthetic.main.activity_portfolio.et_password
 
 class PortfolioActivity : BaseActivity() {
-
+//    private lateinit var vm: HomeViewModel
+    val userModel = UserModel()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_portfolio)
 
+//        vm = ViewModelProvider(this)[HomeViewModel::class.java]
 
 
         if (intent.getStringExtra("PASS").equals("NEW_PASS")) {
@@ -42,11 +44,27 @@ class PortfolioActivity : BaseActivity() {
                 } else {
 
                     if (isValidate()) {
-                        val intent = Intent(this@PortfolioActivity, DashboardActivity::class.java)
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(intent)
-                        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
-                        finish();
+//                        vm.createUser(userModel)
+//                        vm.createPostLiveData?.observe(this@PortfolioActivity, Observer {
+//                            if (it != null) {
+//                                val intent =
+//                                    Intent(this@PortfolioActivity, DashboardActivity::class.java)
+//                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                                startActivity(intent)
+//                                overridePendingTransition(
+//                                    R.anim.slide_in_right,
+//                                    R.anim.slide_out_left
+//                                )
+//
+//                                finish();
+//                            } else {
+//                                showError("Something Went Wrong!")
+//                            }
+
+//                        })
+
+
+
                     }
                 }
 
@@ -111,6 +129,11 @@ class PortfolioActivity : BaseActivity() {
             }
 
             else -> {
+                userModel.first_name = firstname
+                userModel.last_name = lastname
+                userModel.email = email
+                userModel.phone = intent.getStringExtra("MOBILE")
+                userModel.password = password
                 return true
             }
         }

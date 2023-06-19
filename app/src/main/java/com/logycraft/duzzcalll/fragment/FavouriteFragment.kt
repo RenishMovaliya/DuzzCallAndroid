@@ -15,7 +15,7 @@ private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
 
-class ContactFragment : Fragment() {
+class FavouriteFragment : Fragment() {
 
     private var param1: String? = null
     private var param2: String? = null
@@ -42,17 +42,18 @@ class ContactFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        val adapter = Personal_Contact_Adapter(activity,false)
+        val adapter = Personal_Contact_Adapter(activity, true)
         recyclerview.setLayoutManager(LinearLayoutManager(activity))
         recyclerview.setAdapter(adapter)
-        titleTV.setText(getString(R.string.contacts))
+
+        titleTV.setText(getString(R.string.favourited))
         relative_personal.setOnClickListener(View.OnClickListener {
 
             relative_selected_btn.animate().x(0f).duration = 100
             btnAdd.visibility=View.VISIBLE
             btn_country_select.visibility=View.GONE
 
-            val adapter = Personal_Contact_Adapter(activity,false)
+            val adapter = Personal_Contact_Adapter(activity, true)
             recyclerview.setLayoutManager(LinearLayoutManager(activity))
             recyclerview.setAdapter(adapter)
 
@@ -64,7 +65,7 @@ class ContactFragment : Fragment() {
             val size: Int = relative_personal.getWidth()
 
             relative_selected_btn.animate().x(size.toFloat()).duration = 100
-            val adapter = Business_Contact_Adapter(activity,false)
+            val adapter = Business_Contact_Adapter(activity,true)
             recyclerview.setLayoutManager(LinearLayoutManager(activity))
             recyclerview.setAdapter(adapter)
 

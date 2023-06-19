@@ -1,15 +1,16 @@
-package com.logycraft.duzzcalll
+package com.logycraft.duzzcalll.Activity
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
-import android.widget.TextView
+import com.logycraft.duzzcalll.R
 import com.logycraft.duzzcalll.Util.BaseActivity
+import com.logycraft.duzzcalll.Util.Utils.Companion.FORGOT
+import com.logycraft.duzzcalll.Util.Utils.Companion.FROM
+import com.logycraft.duzzcalll.Util.Utils.Companion.LOGIN
 import com.logycraft.duzzcalll.Util.ValidationUtils
-import com.logycraft.duzzcalll.Util.ValidationUtils.isValidNumber
 import kotlinx.android.synthetic.main.activity_login_screen.*
 
 class LoginScreen : BaseActivity() {
@@ -33,7 +34,8 @@ class LoginScreen : BaseActivity() {
             override fun onClick(view: View?) {
                 if (isValidate()) {
                     val intent = Intent(this@LoginScreen, Verify_PhoneActivity::class.java)
-                    intent.putExtra("ADMIN", "LOGIN")
+                    intent.putExtra(FROM, LOGIN)
+                    intent.putExtra("MOBILE", mobileNumber)
                     startActivity(intent)
                 }
             }
@@ -44,16 +46,16 @@ class LoginScreen : BaseActivity() {
         btn_forgot_pass.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View?) {
                 val intent = Intent(this@LoginScreen, Edit_PhoneActivity::class.java)
-                intent.putExtra("ADMIN", "FORGOT")
+                intent.putExtra(FROM, FORGOT)
                 startActivity(intent)
             }
 
         })
     }
-
+    var mobileNumber=""
     private fun isValidate(): Boolean {
         val password = et_password.text.toString()
-        val mobileNumber = et_mobile_number.text.toString()
+         mobileNumber = et_mobile_number.text.toString()
 
         when {
             TextUtils.isEmpty(mobileNumber) -> {
