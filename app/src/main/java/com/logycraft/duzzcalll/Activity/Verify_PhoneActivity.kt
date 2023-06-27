@@ -4,6 +4,7 @@ import `in`.aabhasjindal.otptextview.OTPListener
 import `in`.aabhasjindal.otptextview.OtpTextView
 import android.content.Intent
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -15,11 +16,14 @@ import com.logycraft.duzzcalll.R
 import com.logycraft.duzzcalll.Util.BaseActivity
 import com.logycraft.duzzcalll.Util.Preference
 import com.logycraft.duzzcalll.Util.ProgressHelper
+import com.logycraft.duzzcalll.Util.Utils
 import com.logycraft.duzzcalll.Util.Utils.Companion.FROM
 import com.logycraft.duzzcalll.Util.Utils.Companion.LOGIN
 import com.logycraft.duzzcalll.Util.Utils.Companion.MOBILE
 import com.logycraft.duzzcalll.Util.Utils.Companion.REGISTER
+import com.logycraft.duzzcalll.data.SendOTP
 import com.logycraft.duzzcalll.viewmodel.HomeViewModel
+import kotlinx.android.synthetic.main.activity_edit_phone.*
 import kotlinx.android.synthetic.main.activity_verify_phone.*
 import okhttp3.ResponseBody
 import org.json.JSONObject
@@ -32,7 +36,7 @@ class Verify_PhoneActivity : BaseActivity() {
     lateinit var entered_otp: String
     lateinit var otpTextView: OtpTextView
     private lateinit var viewModel: HomeViewModel
-
+    private lateinit var countDownTimer: CountDownTimer
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_verify_phone)
@@ -40,6 +44,7 @@ class Verify_PhoneActivity : BaseActivity() {
         btn_next = findViewById(R.id.btn_next)
         view_bottom = findViewById(R.id.view_bottom)
         btn_next?.isEnabled = false
+        btn_next.alpha = 0.5f
 
         if (!intent.getStringExtra(FROM).equals(REGISTER)) {
             view_bottom.visibility = View.GONE
@@ -49,12 +54,15 @@ class Verify_PhoneActivity : BaseActivity() {
         otpTextView.otpListener = object : OTPListener {
             override fun onInteractionListener() {
                 // fired when user types something in the Otpbox
+                btn_next?.isEnabled = false
+                btn_next.alpha = 0.5f
             }
 
             override fun onOTPComplete(otp: String) {
                 // fired when user has entered the OTP fully.
                 entered_otp = otp;
                 btn_next?.isEnabled = true
+                btn_next.alpha = 1f
 //                Toast.makeText(this@Verify_PhoneActivity, "The OTP is $otp", Toast.LENGTH_SHORT).show()
             }
         }
@@ -85,6 +93,73 @@ class Verify_PhoneActivity : BaseActivity() {
             }
 
         })
+
+        val countdownDuration = 60000L // Duration in milliseconds (60 seconds)
+        val countdownInterval = 1000L // Interval in milliseconds (1 second)
+
+        countDownTimer = object : CountDownTimer(countdownDuration, countdownInterval) {
+            override fun onTick(millisUntilFinished: Long) {
+                val seconds = millisUntilFinished / 1000
+                val formattedTime = formatTime(seconds)
+                txt_count_down.text = "Resend SMS in " + formattedTime + " secs";
+
+            }
+
+            override fun onFinish() {
+                txt_count_down.text = "Resend OTP"
+                btn_resend_otp.visibility = View.VISIBLE
+                btn_next.visibility = View.GONE
+            }
+        }
+
+        countDownTimer.start()
+
+
+        btn_resend_otp.setOnClickListener {
+            ProgressHelper.showProgressDialog()
+            SendOTP()
+        }
+
+    }
+
+
+    private fun SendOTP() {
+
+        Preference.getNumber(this@Verify_PhoneActivity)?.let { viewModel.sentOtp(it) }
+        viewModel.sentOtpLiveData?.observe(this@Verify_PhoneActivity, Observer {
+
+            if (it.isSuccess == true && it.Responcecode == 200) {
+                ProgressHelper.dismissProgressDialog()
+                var sendOtp: SendOTP? = it.data
+                Toast.makeText(this@Verify_PhoneActivity, "" + sendOtp?.tfaCode, Toast.LENGTH_LONG)
+                    .show()
+
+            } else if (it.error != null) {
+                ProgressHelper.dismissProgressDialog()
+                var errorResponce: ResponseBody = it.error
+                val jsonObj = JSONObject(errorResponce!!.charStream().readText())
+                showError(jsonObj.getString("errors"))
+
+            } else {
+                ProgressHelper.dismissProgressDialog()
+                showError("Something Went Wrong!")
+
+            }
+            countDownTimer.start()
+            btn_next.visibility = View.VISIBLE
+            btn_resend_otp.visibility = View.GONE
+        })
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        countDownTimer.cancel()
+    }
+
+    private fun formatTime(seconds: Long): String {
+        val minutes = seconds / 60
+        val remainingSeconds = seconds % 60
+        return String.format("%02d:%02d", minutes, remainingSeconds)
     }
 
     private fun VerifyOTP() {
@@ -97,9 +172,9 @@ class Verify_PhoneActivity : BaseActivity() {
                 ProgressHelper.dismissProgressDialog()
                 var sendOtp: JsonElement? = it.data
 //                showError("" + sendOtp.toString())
-
+                Preference.setFirstUser(this@Verify_PhoneActivity, true)
                 val intent = Intent(
-                    this@Verify_PhoneActivity, PortfolioActivity::class.java
+                    this@Verify_PhoneActivity, DashboardActivity::class.java
                 )
                 intent.putExtra("PASS", "NEW_PASS")
                 intent.putExtra("MOBILE", intent.getStringExtra("MOBILE"))

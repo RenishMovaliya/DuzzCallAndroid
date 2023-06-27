@@ -6,19 +6,24 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import com.logycraft.duzzcalll.R
+import com.logycraft.duzzcalll.Util.Preference
 
 class SplashActivity : AppCompatActivity() {
-    companion object{
-        lateinit var activity: SplashActivity;
 
-    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
         Handler(Looper.getMainLooper()).postDelayed({
-            val intent = Intent(this, LoginScreen::class.java)
-            startActivity(intent)
-            finish()
+            if (Preference.getFirstUser(this@SplashActivity)){
+                val intent = Intent(this, DashboardActivity::class.java)
+                startActivity(intent)
+                finish()
+            }else{
+                val intent = Intent(this, LoginScreen::class.java)
+                startActivity(intent)
+                finish()
+            }
+
         }, 2000)
     }
 }

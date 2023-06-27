@@ -2,6 +2,7 @@ package com.example.restapiidemo.network
 
 import com.example.restapiidemo.home.data.UserModel
 import com.google.gson.JsonElement
+import com.logycraft.duzzcalll.data.LoginData
 import com.logycraft.duzzcalll.data.SendOTP
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -33,5 +34,12 @@ interface ApiInterface {
 
     @DELETE("posts/{id}")
     fun deletePost(@Path("id") id:Int):Call<String>
+
+    @FormUrlEncoded
+    @POST("login")
+    fun loginUser(
+        @Field("phone")  phone:String,
+        @Field("password")  password:String
+        ):Call<LoginData>
 
 }

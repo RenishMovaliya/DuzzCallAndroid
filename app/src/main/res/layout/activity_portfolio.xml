@@ -65,8 +65,8 @@
                     android:background="@drawable/rounded_corner"
                     android:fontFamily="@font/poppins_light"
                     android:paddingHorizontal="@dimen/dt20"
-                    android:textColor="@color/black"
                     android:singleLine="true"
+                    android:textColor="@color/black"
                     android:textColorHint="@color/black"
                     android:textSize="@dimen/dt14" />
 
@@ -89,9 +89,9 @@
                     android:background="@drawable/rounded_corner"
                     android:fontFamily="@font/poppins_light"
                     android:paddingHorizontal="@dimen/dt20"
+                    android:singleLine="true"
                     android:textColor="@color/black"
                     android:textColorHint="@color/black"
-                    android:singleLine="true"
                     android:textSize="@dimen/dt14" />
 
                 <TextView
@@ -112,8 +112,8 @@
                     android:background="@drawable/rounded_corner"
                     android:fontFamily="@font/poppins_light"
                     android:paddingHorizontal="@dimen/dt20"
-                    android:textColor="@color/black"
                     android:singleLine="true"
+                    android:textColor="@color/black"
                     android:textColorHint="@color/black"
                     android:textSize="@dimen/dt14" />
 
@@ -138,8 +138,8 @@
                 android:background="@drawable/rounded_corner"
                 android:fontFamily="@font/poppins_light"
                 android:inputType="textPassword"
-                android:singleLine="true"
                 android:paddingHorizontal="@dimen/dt20"
+                android:singleLine="true"
                 android:textColor="@color/black"
                 android:textColorHint="@color/black"
                 android:textSize="@dimen/dt14" />
@@ -174,8 +174,8 @@
         android:id="@+id/rl_bottom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         android:layout_marginBottom="@dimen/d50">
 
         <LinearLayout
@@ -198,17 +198,16 @@
                 android:background="@drawable/bottom_view_unselect" />
 
             <View
-                android:layout_width="@dimen/d20"
-                android:layout_height="@dimen/d6"
-                android:layout_marginLeft="@dimen/d5"
-                android:background="@drawable/bottom_view_unselect" />
-
-
-            <View
                 android:layout_width="@dimen/d35"
                 android:layout_height="@dimen/d6"
                 android:layout_marginLeft="@dimen/d5"
                 android:background="@drawable/bottom_view_select" />
+
+            <View
+                android:layout_width="@dimen/d20"
+                android:layout_height="@dimen/d6"
+                android:layout_marginLeft="@dimen/d5"
+                android:background="@drawable/bottom_view_unselect" />
 
 
         </LinearLayout>

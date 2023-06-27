@@ -9,15 +9,17 @@ import com.example.restapiidemo.home.data.HomeRepository
 import com.example.restapiidemo.home.data.UserModel
 import com.google.gson.JsonElement
 import com.logycraft.duzzcalll.data.GenericDataModel
+import com.logycraft.duzzcalll.data.LoginData
 import com.logycraft.duzzcalll.data.SendOTP
 
-class HomeViewModel(application: Application): AndroidViewModel(application){
+class HomeViewModel(application: Application) : AndroidViewModel(application) {
 
-    private var homeRepository:HomeRepository?=null
-    var sentOtpLiveData:LiveData<GenericDataModel<SendOTP>>?=null
-    var verifyOtpLiveData:LiveData<GenericDataModel<JsonElement>>?=null
-    var userLiveData:LiveData<GenericDataModel<SendOTP>>?=null
-    var deletePostLiveData:LiveData<Boolean>?=null
+    private var homeRepository: HomeRepository? = null
+    var sentOtpLiveData: LiveData<GenericDataModel<SendOTP>>? = null
+    var verifyOtpLiveData: LiveData<GenericDataModel<JsonElement>>? = null
+    var userLiveData: LiveData<GenericDataModel<SendOTP>>? = null
+    var loginuserLiveData: LiveData<GenericDataModel<LoginData>>? = null
+    var deletePostLiveData: LiveData<Boolean>? = null
 
     init {
         homeRepository = HomeRepository()
@@ -26,19 +28,21 @@ class HomeViewModel(application: Application): AndroidViewModel(application){
     }
 
 
-
-    fun sentOtp(postModel: String){
+    fun sentOtp(postModel: String) {
         sentOtpLiveData = homeRepository?.sentOtp(postModel)
     }
 
-    fun verifyOtp(phone: String, otp: String, context: Context){
-        verifyOtpLiveData = homeRepository?.verifyOtp(phone,otp,context)
+    fun verifyOtp(phone: String, otp: String, context: Context) {
+        verifyOtpLiveData = homeRepository?.verifyOtp(phone, otp, context)
     }
 
-  fun createUser(userModel: UserModel){
-      userLiveData = homeRepository?.createUser(userModel)
+    fun createUser(userModel: UserModel) {
+        userLiveData = homeRepository?.createUser(userModel)
     }
 
+    fun loginUser(phone: String, password: String) {
+        loginuserLiveData = homeRepository?.loginuser(phone,password)
+    }
 
 
 }

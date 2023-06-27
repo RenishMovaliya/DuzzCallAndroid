@@ -12,6 +12,7 @@
     <color name="appgray">#BF000000</color>
     <color name="unselected_icon_color">#8B8B8B</color>
     <color name="text_color_gray">#6E737A</color>
+    <color name="red">#F13A3A</color>
     <color name="tapbar_textcolor">#53536C</color>
 
 </resources>

@@ -4,43 +4,57 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Log
 import android.view.View
+import android.widget.Toast
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import com.example.restapiidemo.home.data.UserModel
 import com.logycraft.duzzcalll.R
 import com.logycraft.duzzcalll.Util.BaseActivity
+import com.logycraft.duzzcalll.Util.Preference
+import com.logycraft.duzzcalll.Util.ProgressHelper
 import com.logycraft.duzzcalll.Util.Utils.Companion.FORGOT
 import com.logycraft.duzzcalll.Util.Utils.Companion.FROM
 import com.logycraft.duzzcalll.Util.Utils.Companion.LOGIN
 import com.logycraft.duzzcalll.Util.ValidationUtils
+import com.logycraft.duzzcalll.data.LoginData
+import com.logycraft.duzzcalll.data.SendOTP
+import com.logycraft.duzzcalll.viewmodel.HomeViewModel
 import kotlinx.android.synthetic.main.activity_login_screen.*
+import okhttp3.ResponseBody
+import org.json.JSONObject
+import java.lang.String
 
 class LoginScreen : BaseActivity() {
+    private lateinit var viewModel: HomeViewModel
+    private lateinit var loggg: LoginData
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login_screen)
+        viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
 
         btnregister.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View?) {
                 val intent = Intent(this@LoginScreen, Terms_And_ConditionActivity::class.java)
+////                val intent = Intent(this@LoginScreen, DashboardActivity::class.java)
                 startActivity(intent)
-            }
 
+            }
         })
-        et_mobile_number.setText("+941234567890")
-        et_password.setText("Admin@123")
+//        et_mobile_number.setText("+94773785342")
+//        et_password.setText("1234567890")
 
         btn_login.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View?) {
                 if (isValidate()) {
-                    val intent = Intent(this@LoginScreen, Verify_PhoneActivity::class.java)
-                    intent.putExtra(FROM, LOGIN)
-                    intent.putExtra("MOBILE", mobileNumber)
-                    startActivity(intent)
+
+                    Login(et_mobile_number.text.toString(),et_password.text.toString())
+
                 }
             }
-
-
         })
 
         btn_forgot_pass.setOnClickListener(object : View.OnClickListener {
@@ -67,15 +81,47 @@ class LoginScreen : BaseActivity() {
                 showError(getString(R.string.enter_password))
                 return false
             }
-            !ValidationUtils.isValidPassword(password) -> {
-                showDialogOk(this, "", getString(R.string.password_validation_msg), "OK")
-//                showError(getString(R.string.password_validation_msg))
-                return false
-            }
+//            !ValidationUtils.isValidPassword(password) -> {
+//                showDialogOk(this, "", getString(R.string.password_validation_msg), "OK")
+////                showError(getString(R.string.password_validation_msg))
+//                return false
+//            }
 
             else -> {
                 return true
             }
         }
+    }
+
+
+
+    private fun Login(phone: kotlin.String, password: kotlin.String) {
+        viewModel.loginUser(phone,password)
+        viewModel.loginuserLiveData?.observe(this@LoginScreen, Observer {
+
+            if (it.isSuccess == true && it.Responcecode == 200) {
+                ProgressHelper.dismissProgressDialog()
+                var usedata: LoginData? = it.data
+                Preference.setLoginData(this@LoginScreen,usedata)
+                Preference.saveToken(this@LoginScreen,usedata?.extension?.accessToken)
+                val intent = Intent(this@LoginScreen, DashboardActivity::class.java)
+//                intent.putExtra(FROM, LOGIN)
+//                intent.putExtra("MOBILE", mobileNumber)
+                startActivity(intent)
+//                showError("" + usedata?.extension?.accessToken)
+
+
+            } else if (it.error != null) {
+                ProgressHelper.dismissProgressDialog()
+                var errorResponce: ResponseBody = it.error
+                val jsonObj = JSONObject(errorResponce!!.charStream().readText())
+                showError(jsonObj.getString("errors"))
+
+            } else {
+                ProgressHelper.dismissProgressDialog()
+                showError("Something Went Wrong!")
+            }
+
+        })
     }
 }

@@ -77,6 +77,9 @@
     <string name="enter_email_address">Enter email address</string>
     <string name="invalid_email_address">Invalid email address</string>
     <string name="favourited">Favourited</string>
+    <string name="logout">Logout</string>
+    <string name="to_complete_your_phone_number_nverification_please_enter_the_4_ndigit_activation_code">To complete your phone number\nverification, please enter the 4\ndigit activation code</string>
+    <string name="resend_otp">Resend OTP</string>
 
 
 </resources>

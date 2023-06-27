@@ -54,7 +54,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/d20"
             android:fontFamily="@font/poppins_light"
-            android:text="To complete your phone number\nverification, please enter the 6\ndigit activation code"
+            android:text="@string/to_complete_your_phone_number_nverification_please_enter_the_4_ndigit_activation_code"
             android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="@dimen/dt14" />
@@ -70,72 +70,74 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:orientation="horizontal">
+
                 <in.aabhasjindal.otptextview.OtpTextView
                     android:id="@+id/otp_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/appcolour"
-                    app:height="40dp"
-                    app:width="40dp"
+                    app:bar_active_color="@color/black"
                     app:bar_enabled="true"
                     app:bar_height="2dp"
-                    app:bar_active_color="@color/black"
+                    app:height="40dp"
                     app:length="4"
                     app:otp=""
-                    app:otp_text_size="24dp"/>
+                    app:otp_text_size="24dp"
+                    app:width="40dp" />
 
-<!--                <EditText-->
-<!--                    android:layout_width="@dimen/d40"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:backgroundTint="@color/black"-->
-<!--                    android:fontFamily="@font/poppins_regular"-->
-<!--                    android:textColor="@color/black" />-->
+                <!--                <EditText-->
+                <!--                    android:layout_width="@dimen/d40"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:backgroundTint="@color/black"-->
+                <!--                    android:fontFamily="@font/poppins_regular"-->
+                <!--                    android:textColor="@color/black" />-->
 
-<!--                <EditText-->
-<!--                    android:layout_width="@dimen/d40"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginLeft="@dimen/d2"-->
-<!--                    android:backgroundTint="@color/black"-->
-<!--                    android:fontFamily="@font/poppins_regular"-->
-<!--                    android:textColor="@color/black" />-->
+                <!--                <EditText-->
+                <!--                    android:layout_width="@dimen/d40"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:layout_marginLeft="@dimen/d2"-->
+                <!--                    android:backgroundTint="@color/black"-->
+                <!--                    android:fontFamily="@font/poppins_regular"-->
+                <!--                    android:textColor="@color/black" />-->
 
-<!--                <EditText-->
-<!--                    android:layout_width="@dimen/d40"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginLeft="@dimen/d2"-->
-<!--                    android:backgroundTint="@color/black"-->
-<!--                    android:fontFamily="@font/poppins_regular"-->
-<!--                    android:textColor="@color/black" />-->
+                <!--                <EditText-->
+                <!--                    android:layout_width="@dimen/d40"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:layout_marginLeft="@dimen/d2"-->
+                <!--                    android:backgroundTint="@color/black"-->
+                <!--                    android:fontFamily="@font/poppins_regular"-->
+                <!--                    android:textColor="@color/black" />-->
 
-<!--                <EditText-->
-<!--                    android:layout_width="@dimen/d40"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginLeft="@dimen/d2"-->
-<!--                    android:backgroundTint="@color/black"-->
-<!--                    android:fontFamily="@font/poppins_regular"-->
-<!--                    android:textColor="@color/black" />-->
+                <!--                <EditText-->
+                <!--                    android:layout_width="@dimen/d40"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:layout_marginLeft="@dimen/d2"-->
+                <!--                    android:backgroundTint="@color/black"-->
+                <!--                    android:fontFamily="@font/poppins_regular"-->
+                <!--                    android:textColor="@color/black" />-->
 
-<!--                <EditText-->
-<!--                    android:layout_width="@dimen/d40"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginLeft="@dimen/d2"-->
-<!--                    android:backgroundTint="@color/black"-->
-<!--                    android:fontFamily="@font/poppins_regular"-->
-<!--                    android:textColor="@color/black" />-->
+                <!--                <EditText-->
+                <!--                    android:layout_width="@dimen/d40"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:layout_marginLeft="@dimen/d2"-->
+                <!--                    android:backgroundTint="@color/black"-->
+                <!--                    android:fontFamily="@font/poppins_regular"-->
+                <!--                    android:textColor="@color/black" />-->
 
-<!--                <EditText-->
-<!--                    android:layout_width="@dimen/d40"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginLeft="@dimen/d2"-->
-<!--                    android:backgroundTint="@color/black"-->
-<!--                    android:fontFamily="@font/poppins_regular"-->
-<!--                    android:textColor="@color/black" />-->
+                <!--                <EditText-->
+                <!--                    android:layout_width="@dimen/d40"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:layout_marginLeft="@dimen/d2"-->
+                <!--                    android:backgroundTint="@color/black"-->
+                <!--                    android:fontFamily="@font/poppins_regular"-->
+                <!--                    android:textColor="@color/black" />-->
 
             </LinearLayout>
 
         </RelativeLayout>
 
         <TextView
+            android:id="@+id/txt_count_down"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -164,6 +166,21 @@
                 android:text="@string/next"
                 android:textColor="@color/white"
                 android:textSize="@dimen/dt17"></TextView>
+
+            <TextView
+                android:id="@+id/btn_resend_otp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="@dimen/d15"
+                android:background="@drawable/rounded_button_bg"
+                android:fontFamily="@font/poppins_bold"
+                android:gravity="center"
+                android:paddingVertical="@dimen/d7"
+                android:text="@string/resend_otp"
+                android:textColor="@color/white"
+                android:textSize="@dimen/dt17"
+                android:visibility="gone"></TextView>
         </RelativeLayout>
 
 
@@ -196,6 +213,11 @@
                 android:layout_marginLeft="@dimen/d5"
                 android:background="@drawable/bottom_view_unselect" />
 
+            <View
+                android:layout_width="@dimen/d20"
+                android:layout_height="@dimen/d6"
+                android:layout_marginLeft="@dimen/d5"
+                android:background="@drawable/bottom_view_unselect" />
 
             <View
                 android:layout_width="@dimen/d35"
@@ -203,16 +225,7 @@
                 android:layout_marginLeft="@dimen/d5"
                 android:background="@drawable/bottom_view_select" />
 
-
-            <View
-                android:layout_width="@dimen/d20"
-                android:layout_height="@dimen/d6"
-                android:layout_marginLeft="@dimen/d5"
-                android:background="@drawable/bottom_view_unselect" />
-
         </LinearLayout>
-
-
     </RelativeLayout>
 
 </RelativeLayout>

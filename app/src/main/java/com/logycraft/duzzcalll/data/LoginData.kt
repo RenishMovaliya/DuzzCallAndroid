@@ -1,0 +1,47 @@
+package com.logycraft.duzzcalll.data
+
+import com.google.gson.annotations.Expose
+
+import com.google.gson.annotations.SerializedName
+import java.security.cert.Extension
+
+
+class LoginData {
+    @SerializedName("extension")
+    @Expose
+    var extension: Extension? = null
+
+    class Extension {
+        @SerializedName("first_name")
+        @Expose
+        var firstName: String? = null
+
+        @SerializedName("last_name")
+        @Expose
+        var lastName: String? = null
+
+        @SerializedName("extension")
+        @Expose
+        var extension: String? = null
+
+        @SerializedName("password")
+        @Expose
+        var password: String? = null
+
+        @SerializedName("phone")
+        @Expose
+        var phone: String? = null
+
+        @SerializedName("access_token")
+        @Expose
+        var accessToken: String? = null
+
+        @SerializedName("refresh_token")
+        @Expose
+        var refreshToken: String? = null
+
+        @SerializedName("expires_at")
+        @Expose
+        var expiresAt: String? = null
+    }
+}

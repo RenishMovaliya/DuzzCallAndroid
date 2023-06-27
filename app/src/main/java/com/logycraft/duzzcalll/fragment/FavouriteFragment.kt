@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.logycraft.duzzcalll.Adapter.Business_Contact_Adapter
 import com.logycraft.duzzcalll.Adapter.Personal_Contact_Adapter
+import com.logycraft.duzzcalll.Model.ContactModel
 import com.logycraft.duzzcalll.R
 import kotlinx.android.synthetic.main.fragment_contact.*
 
@@ -20,6 +21,7 @@ class FavouriteFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
+    private val contactList: MutableList<ContactModel> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +44,7 @@ class FavouriteFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        val adapter = Personal_Contact_Adapter(activity, true)
+        val adapter = Personal_Contact_Adapter(activity, true, contactList)
         recyclerview.setLayoutManager(LinearLayoutManager(activity))
         recyclerview.setAdapter(adapter)
 
@@ -50,22 +52,22 @@ class FavouriteFragment : Fragment() {
         relative_personal.setOnClickListener(View.OnClickListener {
 
             relative_selected_btn.animate().x(0f).duration = 100
-            btnAdd.visibility=View.VISIBLE
-            btn_country_select.visibility=View.GONE
+            btnAdd.visibility = View.VISIBLE
+            btn_country_select.visibility = View.GONE
 
-            val adapter = Personal_Contact_Adapter(activity, true)
+            val adapter = Personal_Contact_Adapter(activity, true, contactList)
             recyclerview.setLayoutManager(LinearLayoutManager(activity))
             recyclerview.setAdapter(adapter)
 
         })
         relative_business.setOnClickListener(View.OnClickListener {
 
-            btnAdd.visibility=View.GONE
-            btn_country_select.visibility=View.VISIBLE
+            btnAdd.visibility = View.GONE
+            btn_country_select.visibility = View.VISIBLE
             val size: Int = relative_personal.getWidth()
 
             relative_selected_btn.animate().x(size.toFloat()).duration = 100
-            val adapter = Business_Contact_Adapter(activity,true)
+            val adapter = Business_Contact_Adapter(activity, true)
             recyclerview.setLayoutManager(LinearLayoutManager(activity))
             recyclerview.setAdapter(adapter)
 

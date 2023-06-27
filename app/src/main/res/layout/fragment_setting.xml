@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -71,16 +72,16 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/d10"
                 android:layout_marginTop="@dimen/d40"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/d10"
                 android:orientation="horizontal">
 
                 <ImageView
                     android:layout_width="@dimen/d20"
                     android:layout_height="@dimen/d20"
                     android:layout_marginTop="@dimen/d5"
-                    android:src="@drawable/ic_key"/>
+                    android:src="@drawable/ic_key" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -91,20 +92,20 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_medium"
+                        android:includeFontPadding="false"
                         android:text="@string/account_settings"
-                        android:textSize="@dimen/dt17"
                         android:textColor="@color/text_color_gray"
-                        android:includeFontPadding="false"
-                        android:fontFamily="@font/poppins_medium"/>
+                        android:textSize="@dimen/dt17" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_light"
+                        android:includeFontPadding="false"
                         android:text="@string/security_notifications"
-                        android:textSize="@dimen/dt14"
-                        android:includeFontPadding="false"
                         android:textColor="@color/text_color_gray"
-                        android:fontFamily="@font/poppins_light"/>
+                        android:textSize="@dimen/dt14" />
 
                 </LinearLayout>
 
@@ -112,16 +113,16 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_marginTop="@dimen/d15"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/d10"
+                android:layout_marginTop="@dimen/d15"
                 android:orientation="horizontal">
 
                 <ImageView
                     android:layout_width="@dimen/d20"
                     android:layout_height="@dimen/d20"
                     android:layout_marginTop="@dimen/d5"
-                    android:src="@drawable/ic_notification"/>
+                    android:src="@drawable/ic_notification" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -132,20 +133,20 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_medium"
+                        android:includeFontPadding="false"
                         android:text="@string/notification"
-                        android:textSize="@dimen/dt17"
                         android:textColor="@color/text_color_gray"
-                        android:includeFontPadding="false"
-                        android:fontFamily="@font/poppins_medium"/>
+                        android:textSize="@dimen/dt17" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_light"
+                        android:includeFontPadding="false"
                         android:text="@string/message_call_tones"
-                        android:textSize="@dimen/dt14"
-                        android:includeFontPadding="false"
                         android:textColor="@color/text_color_gray"
-                        android:fontFamily="@font/poppins_light"/>
+                        android:textSize="@dimen/dt14" />
 
                 </LinearLayout>
 
@@ -153,16 +154,16 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_marginTop="@dimen/d15"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/d10"
+                android:layout_marginTop="@dimen/d15"
                 android:orientation="horizontal">
 
                 <ImageView
                     android:layout_width="@dimen/d20"
                     android:layout_height="@dimen/d20"
                     android:layout_marginTop="@dimen/d5"
-                    android:src="@drawable/ic_privacy"/>
+                    android:src="@drawable/ic_privacy" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -173,20 +174,20 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_medium"
+                        android:includeFontPadding="false"
                         android:text="@string/privacy"
-                        android:textSize="@dimen/dt17"
                         android:textColor="@color/text_color_gray"
-                        android:includeFontPadding="false"
-                        android:fontFamily="@font/poppins_medium"/>
+                        android:textSize="@dimen/dt17" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_light"
+                        android:includeFontPadding="false"
                         android:text="@string/blocked_contacts"
-                        android:textSize="@dimen/dt14"
-                        android:includeFontPadding="false"
                         android:textColor="@color/text_color_gray"
-                        android:fontFamily="@font/poppins_light"/>
+                        android:textSize="@dimen/dt14" />
 
                 </LinearLayout>
 
@@ -194,16 +195,16 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_marginTop="@dimen/d15"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/d10"
+                android:layout_marginTop="@dimen/d15"
                 android:orientation="horizontal">
 
                 <ImageView
                     android:layout_width="@dimen/d20"
                     android:layout_height="@dimen/d20"
                     android:layout_marginTop="@dimen/d5"
-                    android:src="@drawable/ic_storage"/>
+                    android:src="@drawable/ic_storage" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -214,20 +215,20 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_medium"
+                        android:includeFontPadding="false"
                         android:text="@string/storage_and_data"
-                        android:textSize="@dimen/dt17"
                         android:textColor="@color/text_color_gray"
-                        android:includeFontPadding="false"
-                        android:fontFamily="@font/poppins_medium"/>
+                        android:textSize="@dimen/dt17" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_light"
+                        android:includeFontPadding="false"
                         android:text="@string/network_usage"
-                        android:textSize="@dimen/dt14"
-                        android:includeFontPadding="false"
                         android:textColor="@color/text_color_gray"
-                        android:fontFamily="@font/poppins_light"/>
+                        android:textSize="@dimen/dt14" />
 
                 </LinearLayout>
 
@@ -235,16 +236,16 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_marginTop="@dimen/d15"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/d10"
+                android:layout_marginTop="@dimen/d15"
                 android:orientation="horizontal">
 
                 <ImageView
                     android:layout_width="@dimen/d20"
                     android:layout_height="@dimen/d20"
                     android:layout_marginTop="@dimen/d5"
-                    android:src="@drawable/ic_language"/>
+                    android:src="@drawable/ic_language" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -255,20 +256,20 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_medium"
+                        android:includeFontPadding="false"
                         android:text="@string/app_language"
-                        android:textSize="@dimen/dt17"
                         android:textColor="@color/text_color_gray"
-                        android:includeFontPadding="false"
-                        android:fontFamily="@font/poppins_medium"/>
+                        android:textSize="@dimen/dt17" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/english"
-                        android:textSize="@dimen/dt14"
+                        android:fontFamily="@font/poppins_light"
                         android:includeFontPadding="false"
+                        android:text="@string/english"
                         android:textColor="@color/text_color_gray"
-                        android:fontFamily="@font/poppins_light"/>
+                        android:textSize="@dimen/dt14" />
 
                 </LinearLayout>
 
@@ -276,16 +277,16 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_marginTop="@dimen/d15"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/d10"
+                android:layout_marginTop="@dimen/d15"
                 android:orientation="horizontal">
 
                 <ImageView
                     android:layout_width="@dimen/d20"
                     android:layout_height="@dimen/d20"
                     android:layout_marginTop="@dimen/d5"
-                    android:src="@drawable/ic_help"/>
+                    android:src="@drawable/ic_help" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -296,25 +297,52 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/help"
-                        android:textSize="@dimen/dt17"
-                        android:textColor="@color/text_color_gray"
+                        android:fontFamily="@font/poppins_medium"
                         android:includeFontPadding="false"
-                        android:fontFamily="@font/poppins_medium"/>
+                        android:text="@string/help"
+                        android:textColor="@color/text_color_gray"
+                        android:textSize="@dimen/dt17" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/help_center_contact_us_privacy_policy"
-                        android:textSize="@dimen/dt14"
+                        android:fontFamily="@font/poppins_light"
                         android:includeFontPadding="false"
+                        android:text="@string/help_center_contact_us_privacy_policy"
                         android:textColor="@color/text_color_gray"
-                        android:fontFamily="@font/poppins_light"/>
+                        android:textSize="@dimen/dt14" />
 
                 </LinearLayout>
 
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/ll_logout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/d10"
+                android:layout_marginTop="@dimen/d15"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="@dimen/d20"
+                    android:layout_height="@dimen/d20"
+                    android:layout_gravity="center"
+                    android:src="@drawable/logout"
+                    app:tint="@color/red" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/d5"
+                    android:fontFamily="@font/poppins_medium"
+                    android:includeFontPadding="false"
+                    android:padding="@dimen/d5"
+                    android:text="@string/logout"
+                    android:textColor="@color/red"
+                    android:textSize="@dimen/dt17" />
+
+            </LinearLayout>
 
             <ImageView
                 android:id="@+id/imageView"

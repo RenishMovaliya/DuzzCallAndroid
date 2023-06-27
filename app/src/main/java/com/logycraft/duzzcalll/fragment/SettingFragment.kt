@@ -1,18 +1,23 @@
 package com.logycraft.duzzcalll.fragment
 
+import android.app.Dialog
+import android.content.Intent
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.cardview.widget.CardView
+import androidx.fragment.app.Fragment
+import com.logycraft.duzzcalll.Activity.LoginScreen
 import com.logycraft.duzzcalll.R
+import com.logycraft.duzzcalll.Util.Preference
+import kotlinx.android.synthetic.main.fragment_setting.*
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-
 class SettingFragment : Fragment() {
-    // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
 
@@ -28,8 +33,33 @@ class SettingFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        val view: View = inflater.inflate(R.layout.fragment_setting, container, false)
 
-        return inflater.inflate(R.layout.fragment_setting, container, false)
+        return view;
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        ll_logout.setOnClickListener {
+            val dialog =
+                activity?.let { it1 -> Dialog(it1, android.R.style.Theme_Light_NoTitleBar_Fullscreen) }
+            dialog?.setContentView(R.layout.logout_dialog)
+            dialog?.setCancelable(false)
+            dialog?.window!!.setBackgroundDrawable(ColorDrawable(android.R.color.transparent))
+
+            val cv_logout = dialog?.findViewById<CardView>(R.id.cv_logout)
+            val cv_cancel = dialog?.findViewById<CardView>(R.id.cv_cancel)
+            cv_logout?.setOnClickListener {
+                activity?.let { it1 -> Preference.setFirstUser(it1, false) }
+                val intent = Intent(
+                    activity, LoginScreen::class.java
+                )
+                startActivity(intent)
+                dialog?.dismiss()
+            }
+            cv_cancel?.setOnClickListener { dialog.dismiss() }
+            dialog?.show()
+        }
     }
 
     companion object {
@@ -42,5 +72,6 @@ class SettingFragment : Fragment() {
                     putString(ARG_PARAM2, param2)
                 }
             }
+
     }
 }

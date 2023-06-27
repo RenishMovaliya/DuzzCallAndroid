@@ -8,6 +8,7 @@ import com.example.restapiidemo.network.ApiInterface
 import com.google.gson.JsonElement
 import com.logycraft.duzzcalll.Util.Preference
 import com.logycraft.duzzcalll.data.GenericDataModel
+import com.logycraft.duzzcalll.data.LoginData
 import com.logycraft.duzzcalll.data.SendOTP
 import retrofit2.Call
 import retrofit2.Callback
@@ -131,5 +132,26 @@ class HomeRepository {
 
 
 
+    fun loginuser(phone: String, password: String):LiveData<GenericDataModel<LoginData>>{
+        val data = MutableLiveData<GenericDataModel<LoginData>>()
+
+        apiInterface?.loginUser(phone,password)?.enqueue(object : Callback<LoginData>{
+            override fun onFailure(call: Call<LoginData>, t: Throwable) {
+                data.value = null
+            }
+
+            override fun onResponse(call: Call<LoginData>, response: Response<LoginData>) {
+                val res = response.body()
+                if (response.isSuccessful){
+                    data.value = GenericDataModel(response.isSuccessful,response.body(),response.errorBody(),response.code())
+                }else{
+                    data.value = GenericDataModel(response.isSuccessful,null,response.errorBody(),response.code())
+                }
+            }
+        })
+
+        return data
+
+    }
 
 }

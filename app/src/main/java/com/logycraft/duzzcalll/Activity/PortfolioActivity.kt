@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.restapiidemo.home.data.UserModel
@@ -13,6 +14,7 @@ import com.logycraft.duzzcalll.Util.BaseActivity
 import com.logycraft.duzzcalll.Util.Preference
 import com.logycraft.duzzcalll.Util.ProgressHelper
 import com.logycraft.duzzcalll.Util.ValidationUtils
+import com.logycraft.duzzcalll.data.SendOTP
 import com.logycraft.duzzcalll.viewmodel.HomeViewModel
 import kotlinx.android.synthetic.main.activity_portfolio.*
 import okhttp3.ResponseBody
@@ -32,11 +34,11 @@ class PortfolioActivity : BaseActivity() {
 
         viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
 
-        et_first_name.setText("Shageevan")
-        et_last_name.setText("Sachithanandan")
-        et_email.setText("shageevan@gmail.com")
-        et_password.setText("1234567890")
-        numbers = "+94773785342"
+//        et_first_name.setText("Shageevan")
+//        et_last_name.setText("Sachithanandan")
+//        et_email.setText("shageevan@gmail.com")
+//        et_password.setText("1234567890")
+//        numbers = "+94773785342"
         if (intent.getStringExtra("PASS").equals("NEW_PASS")) {
             linear_portfolio.visibility = View.GONE
             view_bottom.visibility = View.GONE
@@ -78,18 +80,12 @@ class PortfolioActivity : BaseActivity() {
 //                            } else {
 //                                showError("Something Went Wrong!")
 //                            }
-
 //                        })
-
 
                     }
                 }
-
             }
-
         })
-
-
     }
 
 
@@ -99,64 +95,46 @@ class PortfolioActivity : BaseActivity() {
 
             if (it.isSuccess == true && it.Responcecode == 200) {
                 ProgressHelper.dismissProgressDialog()
-//                var usedata: JsonElement? = it.data
-                val intent = Intent(this@PortfolioActivity, DashboardActivity::class.java)
+                var usedata: SendOTP? = it.data
+                Preference.saveToken(
+                    this@PortfolioActivity, "Bearer " + usedata?.verificationToken.toString()
+                )
+                Toast.makeText(this@PortfolioActivity, "" + usedata?.tfaCode, Toast.LENGTH_LONG)
+                    .show()
+                val intent = Intent(this@PortfolioActivity, Verify_PhoneActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent)
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
                 finish();
-//                showError("" + usedata.toString())
-
+                showError("" + usedata?.tfaCode)
 
             } else if (it.error != null) {
                 ProgressHelper.dismissProgressDialog()
                 var errorResponce: ResponseBody = it.error
                 val jsonObj = JSONObject(errorResponce!!.charStream().readText())
-//                val keys = jsonObj.keys()
-//                val value = targetJson.optString(keys.)
-
-
 
                 val keys = jsonObj.keys()
+                while (keys.hasNext()) {
+                    val key2 = keys.next()
+                    val value = jsonObj.optJSONObject(key2)
+                    val keys: Iterator<*> = value.keys()
 
                     while (keys.hasNext()) {
                         val key2 = keys.next()
-                        val value = jsonObj.optJSONObject(key2)
-                        val keys: Iterator<*> = value.keys()
+                        val obj = JSONObject(java.lang.String.valueOf(value))
+                        Log.e("Erorrr", "====" + obj.getString(key2.toString()))
+                        val responseWithoutBrackets =
+                            obj.getString(key2.toString()).removeSurrounding("[\"", "\"]")
 
-                        while(keys.hasNext()) {
-                            val key2 = keys.next()
-                            Log.e("Erorrr", key2 as String)
-
-                        }
-
-
-//                        while (value.keys().hasNext()) {
-//
-//                            val key2 = value.keys().next()
-//                            val value = jsonObj.optString(key2)
-//                            showError(value.toString())
-//
-//                        }
+                        Toast.makeText(
+                            this@PortfolioActivity, "" + responseWithoutBrackets, Toast.LENGTH_LONG
+                        ).show()
                     }
-
-//                val iter: Iterator<String> = jsonObj.keys()
-//                while (iter.hasNext()) {
-//                    val key = iter.next()
-//                    try {
-//
-//                        val value: Any = jsonObj.get(key)
-//                        showError(value.toString())
-//                    } catch (e: JSONException) {
-//                        // Something went wrong!
-//                    }
-//                }
-//                showError(jsonObj.getString("errors"))
+                }
             } else {
                 ProgressHelper.dismissProgressDialog()
                 showError("Something Went Wrong!")
             }
-
 
         })
     }
