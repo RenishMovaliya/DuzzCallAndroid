@@ -1,5 +1,5 @@
-<resources>
-    <string name="app_name">Duzz Calll</string>
+<resources >
+    <string name="app_name">Duzz Call</string>
     <string name="login">Login</string>
     <string name="mobile_number">Mobile Number</string>
     <string name="password">Password</string>
@@ -7,7 +7,6 @@
     <string name="new_user">New User?</string>
     <string name="register">Register</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="hgh">Hello World!</string>
     <string name="welcome_to_duzzcall">Welcome to duzzcall !</string>
     <string name="terms_and_condition">Terms and Condition</string>
@@ -28,12 +27,9 @@
     <string name="setting">Setting</string>
 
 
-    <string name="dialpad">Dialpad</string>
     <string name="asterisk">Asterisk</string>
     <string name="hashtag">Hashtag</string>
     <string name="call_number">Call number</string>
-    <string name="dialpad_beeps">Enable beeps on dialpad button clicks</string>
-    <string name="dialpad_vibrations">Enable vibrations on dialpad button clicks</string>
     <string name="two">Two</string>
     <string name="one">One</string>
     <string name="three">Three</string>
@@ -80,6 +76,5 @@
     <string name="logout">Logout</string>
     <string name="to_complete_your_phone_number_nverification_please_enter_the_4_ndigit_activation_code">To complete your phone number\nverification, please enter the 4\ndigit activation code</string>
     <string name="resend_otp">Resend OTP</string>
-
 
 </resources>

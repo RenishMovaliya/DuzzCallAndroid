@@ -10,14 +10,15 @@ import com.logycraft.duzzcalll.Adapter.Business_Contact_Adapter
 import com.logycraft.duzzcalll.Adapter.Personal_Contact_Adapter
 import com.logycraft.duzzcalll.Model.ContactModel
 import com.logycraft.duzzcalll.R
-import kotlinx.android.synthetic.main.fragment_contact.*
+import com.logycraft.duzzcalll.databinding.FragmentContactBinding
+import com.logycraft.duzzcalll.databinding.FragmentSettingBinding
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
 
 class FavouriteFragment : Fragment() {
-
+    private lateinit var binding: FragmentContactBinding
     private var param1: String? = null
     private var param2: String? = null
 
@@ -35,41 +36,39 @@ class FavouriteFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view: View = inflater.inflate(R.layout.fragment_contact, container, false)
-
-
-
-        return view;
+        binding = FragmentContactBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         val adapter = Personal_Contact_Adapter(activity, true, contactList)
-        recyclerview.setLayoutManager(LinearLayoutManager(activity))
-        recyclerview.setAdapter(adapter)
+         binding.recyclerview.setLayoutManager(LinearLayoutManager(activity))
+         binding.recyclerview.setAdapter(adapter)
 
-        titleTV.setText(getString(R.string.favourited))
-        relative_personal.setOnClickListener(View.OnClickListener {
+        binding.titleTV.setText(getString(R.string.favourited))
 
-            relative_selected_btn.animate().x(0f).duration = 100
-            btnAdd.visibility = View.VISIBLE
-            btn_country_select.visibility = View.GONE
+        binding.relativePersonal.setOnClickListener(View.OnClickListener {
+
+            binding.relativeSelectedBtn.animate().x(0f).duration = 100
+            binding.btnAdd.visibility = View.VISIBLE
+            binding.btnCountrySelect.visibility = View.GONE
 
             val adapter = Personal_Contact_Adapter(activity, true, contactList)
-            recyclerview.setLayoutManager(LinearLayoutManager(activity))
-            recyclerview.setAdapter(adapter)
+            binding.recyclerview.setLayoutManager(LinearLayoutManager(activity))
+            binding.recyclerview.setAdapter(adapter)
 
         })
-        relative_business.setOnClickListener(View.OnClickListener {
+        binding.relativeBusiness.setOnClickListener(View.OnClickListener {
 
-            btnAdd.visibility = View.GONE
-            btn_country_select.visibility = View.VISIBLE
-            val size: Int = relative_personal.getWidth()
+            binding.btnAdd.visibility = View.GONE
+            binding.btnCountrySelect.visibility = View.VISIBLE
+            val size: Int = binding.relativePersonal.getWidth()
 
-            relative_selected_btn.animate().x(size.toFloat()).duration = 100
+            binding.relativeSelectedBtn.animate().x(size.toFloat()).duration = 100
             val adapter = Business_Contact_Adapter(activity, true)
-            recyclerview.setLayoutManager(LinearLayoutManager(activity))
-            recyclerview.setAdapter(adapter)
+            binding.recyclerview.setLayoutManager(LinearLayoutManager(activity))
+            binding.recyclerview.setAdapter(adapter)
 
         })
 

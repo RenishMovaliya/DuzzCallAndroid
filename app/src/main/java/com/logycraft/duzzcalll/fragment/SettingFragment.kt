@@ -1,5 +1,6 @@
 package com.logycraft.duzzcalll.fragment
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
 import android.graphics.drawable.ColorDrawable
@@ -12,7 +13,9 @@ import androidx.fragment.app.Fragment
 import com.logycraft.duzzcalll.Activity.LoginScreen
 import com.logycraft.duzzcalll.R
 import com.logycraft.duzzcalll.Util.Preference
-import kotlinx.android.synthetic.main.fragment_setting.*
+import com.logycraft.duzzcalll.databinding.FragmentContactBinding
+import com.logycraft.duzzcalll.databinding.FragmentDialBinding
+import com.logycraft.duzzcalll.databinding.FragmentSettingBinding
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -20,6 +23,7 @@ private const val ARG_PARAM2 = "param2"
 class SettingFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
+    private lateinit var binding: FragmentSettingBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,14 +37,14 @@ class SettingFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view: View = inflater.inflate(R.layout.fragment_setting, container, false)
-
-        return view;
+        binding = FragmentSettingBinding.inflate(inflater,container,false);
+        return binding.getRoot();
     }
 
+    @SuppressLint("ResourceAsColor")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        ll_logout.setOnClickListener {
+        binding.llLogout.setOnClickListener {
             val dialog =
                 activity?.let { it1 -> Dialog(it1, android.R.style.Theme_Light_NoTitleBar_Fullscreen) }
             dialog?.setContentView(R.layout.logout_dialog)

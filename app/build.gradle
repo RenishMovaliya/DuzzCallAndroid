@@ -2,9 +2,12 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-android'
-    id 'kotlin-android-extensions'
+    id 'kotlin-parcelize'
     id 'com.google.gms.google-services'
     id 'com.google.firebase.crashlytics'
+    id 'kotlin-kapt'
+    id 'org.jlleitschuh.gradle.ktlint' version '11.3.1'
+
 }
 android {
     namespace 'com.logycraft.duzzcalll'
@@ -33,11 +36,14 @@ android {
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
     }
-    flavorDimensions "variants"
-    productFlavors {
-        core {}
-        fdroid {}
-        prepaid {}
+//    flavorDimensions "variants"
+//    productFlavors {
+//        core {}
+//        fdroid {}
+//        prepaid {}
+//    }
+    buildFeatures {
+        viewBinding true
     }
 
     lintOptions {
@@ -49,12 +55,16 @@ android {
     }
 }
 
+// We need to declare this repository to be able to use Liblinphone SDK
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.8.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.navigation:navigation-runtime-ktx:2.6.0'
+//    implementation files('libs/linphone-sdk-android-5.3.0-alpha.34+984bcee-javadoc.jar')
+//    implementation files('libs/linphone-sdk-android-5.3.0.jar')
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
@@ -75,11 +85,25 @@ dependencies {
     implementation 'com.hbb20:ccp:2.5.1'
 
     //Coroutines
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.3'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.3'
-    implementation platform('com.google.firebase:firebase-bom:32.1.1')
-    implementation 'com.google.firebase:firebase-analytics-ktx'
-    implementation 'com.google.firebase:firebase-crashlytics-ktx'
+//    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.3'
+//    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.3'
+//    implementation platform('com.google.firebase:firebase-bom:32.1.1')
+//    implementation 'com.google.firebase:firebase-analytics-ktx'
+//    implementation 'com.google.firebase:firebase-crashlytics-ktx'
     implementation 'com.github.aabhasr1:OtpView:v1.1.2-ktx'
+//    implementation 'androidx.work:work-runtime-ktx:2.7.1'
 
+    //linphone
+    implementation 'org.linphone:linphone-sdk-android:5.0+'
+    implementation 'androidx.media:media:1.2.0'
+//    implementation project(":linphoneapp")
+//    implementation files('libs/linphone-sdk-android-5.3.0.jar')
+//    Implementation "org.linphone.minimal:linphone-sdk-android-debug:5.0+"
+//    implementation "org.linphone.no-video:linphone-sdk-android-debug:5.0+"
+//    def coil_version = "2.3.0"
+//    implementation("io.coil-kt:coil:$coil_version")
+//    implementation("io.coil-kt:coil-gif:$coil_version")
+//    implementation("io.coil-kt:coil-svg:$coil_version")
+//    implementation("io.coil-kt:coil-video:$coil_version")
+//    kapt "com.android.databinding:compiler:3.1.1"
 }

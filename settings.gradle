@@ -5,6 +5,9 @@ pluginManagement {
         mavenCentral()
         jcenter()
         maven { url 'https://jitpack.io' }
+        maven {
+            url "https://linphone.org/maven_repository"
+        }
     }
 }
 dependencyResolutionManagement {
@@ -13,8 +16,14 @@ dependencyResolutionManagement {
         google()
         jcenter()
         mavenCentral()
-        maven { url 'https://jitpack.io' }
+        maven {
+            url 'https://jitpack.io'
+        }
+        maven {
+            url "https://linphone.org/maven_repository"
+        }
     }
 }
 rootProject.name = "Duzz Calll"
 include ':app'
+

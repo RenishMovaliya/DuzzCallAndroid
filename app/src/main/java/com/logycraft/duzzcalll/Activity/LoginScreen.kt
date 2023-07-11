@@ -20,8 +20,9 @@ import com.logycraft.duzzcalll.Util.Utils.Companion.LOGIN
 import com.logycraft.duzzcalll.Util.ValidationUtils
 import com.logycraft.duzzcalll.data.LoginData
 import com.logycraft.duzzcalll.data.SendOTP
+import com.logycraft.duzzcalll.databinding.ActivityIncomingCallBinding
+import com.logycraft.duzzcalll.databinding.ActivityLoginScreenBinding
 import com.logycraft.duzzcalll.viewmodel.HomeViewModel
-import kotlinx.android.synthetic.main.activity_login_screen.*
 import okhttp3.ResponseBody
 import org.json.JSONObject
 import java.lang.String
@@ -29,14 +30,16 @@ import java.lang.String
 class LoginScreen : BaseActivity() {
     private lateinit var viewModel: HomeViewModel
     private lateinit var loggg: LoginData
-
+    private lateinit var binding: ActivityLoginScreenBinding
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login_screen)
+//        setContentView(R.layout.activity_login_screen)
+        binding = ActivityLoginScreenBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
 
-        btnregister.setOnClickListener(object : View.OnClickListener {
+        binding.btnregister.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View?) {
                 val intent = Intent(this@LoginScreen, Terms_And_ConditionActivity::class.java)
 ////                val intent = Intent(this@LoginScreen, DashboardActivity::class.java)
@@ -44,20 +47,21 @@ class LoginScreen : BaseActivity() {
 
             }
         })
-//        et_mobile_number.setText("+94773785342")
-//        et_password.setText("1234567890")
+        binding.etMobileNumber.setText("+94773499994")
+        binding.etMobileNumber.setText("+94773785342")
+        binding.etPassword.setText("1234567890")
 
-        btn_login.setOnClickListener(object : View.OnClickListener {
+        binding.btnLogin.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View?) {
                 if (isValidate()) {
 
-                    Login(et_mobile_number.text.toString(),et_password.text.toString())
+                    Login(binding.etMobileNumber.text.toString(), binding.etPassword.text.toString())
 
                 }
             }
         })
 
-        btn_forgot_pass.setOnClickListener(object : View.OnClickListener {
+        binding.btnForgotPass.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View?) {
                 val intent = Intent(this@LoginScreen, Edit_PhoneActivity::class.java)
                 intent.putExtra(FROM, FORGOT)
@@ -68,8 +72,8 @@ class LoginScreen : BaseActivity() {
     }
     var mobileNumber=""
     private fun isValidate(): Boolean {
-        val password = et_password.text.toString()
-         mobileNumber = et_mobile_number.text.toString()
+        val password =  binding.etPassword.text.toString()
+         mobileNumber = binding.etMobileNumber.text.toString()
 
         when {
             TextUtils.isEmpty(mobileNumber) -> {

@@ -6,7 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.logycraft.duzzcalll.Adapter.All_History_Adapter
-import kotlinx.android.synthetic.main.fragment_history.*
+import com.logycraft.duzzcalll.databinding.FragmentHistoryBinding
+import com.logycraft.duzzcalll.databinding.FragmentHistoryDetailsBinding
 
 
 private const val ARG_PARAM1 = "param1"
@@ -18,7 +19,7 @@ class HistoryFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
-
+    private lateinit var binding: FragmentHistoryBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -31,18 +32,14 @@ class HistoryFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view: View = inflater.inflate(com.logycraft.duzzcalll.R.layout.fragment_history, container, false)
-
-
-
-
-        return view;
+        binding = FragmentHistoryBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        relative_all.setOnClickListener(View.OnClickListener {
+        binding.relativeAll.setOnClickListener(View.OnClickListener {
 
-            relative_selected_btn.animate().x(0f).duration = 100
+            binding.relativeSelectedBtn.animate().x(0f).duration = 100
 //                        val fragment = HomeFragment()
 //                        val fragmentManager: FragmentManager = getSupportFragmentManager()
 //                        val fragmentTransaction = fragmentManager.beginTransaction()
@@ -51,7 +48,7 @@ class HistoryFragment : Fragment() {
             adapter?.onItemClick = { string ->
                 callDetailscreen(string)
             }
-            recyclerview.adapter = adapter
+            binding.recyclerview.adapter = adapter
 
 
         })
@@ -59,11 +56,11 @@ class HistoryFragment : Fragment() {
         adapter?.onItemClick = { string ->
             callDetailscreen(string)
         }
-        recyclerview.adapter = adapter
-        relative_missed.setOnClickListener(View.OnClickListener {
+        binding.recyclerview.adapter = adapter
+        binding.relativeMissed.setOnClickListener(View.OnClickListener {
 
-            val size: Int = relative_all.getWidth()
-            relative_selected_btn.animate().x(size.toFloat()).duration = 100
+            val size: Int =  binding.relativeAll.getWidth()
+            binding.relativeSelectedBtn.animate().x(size.toFloat()).duration = 100
 //                        val fragment = HomeFragment()
 //                        val fragmentManager: FragmentManager = getSupportFragmentManager()
 //                        val fragmentTransaction = fragmentManager.beginTransaction()
@@ -72,7 +69,7 @@ class HistoryFragment : Fragment() {
             adapter?.onItemClick = { string ->
                 callDetailscreen(string)
             }
-            recyclerview.adapter = adapter
+            binding.recyclerview.adapter = adapter
 
 
         })
@@ -85,10 +82,6 @@ class HistoryFragment : Fragment() {
         transaction.replace(com.logycraft.duzzcalll.R.id.container, HistoryDetailFragment())
         transaction.commit()
         transaction.addToBackStack(null)
-
-
-
-
     }
 
     companion object {

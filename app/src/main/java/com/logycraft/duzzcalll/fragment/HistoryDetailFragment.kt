@@ -7,8 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import com.logycraft.duzzcalll.Adapter.HistoryDetails_Adapter
 import com.logycraft.duzzcalll.R
-import kotlinx.android.synthetic.main.fragment_history.recyclerview
-import kotlinx.android.synthetic.main.fragment_history_details.*
+import com.logycraft.duzzcalll.databinding.FragmentContactBinding
+import com.logycraft.duzzcalll.databinding.FragmentHistoryDetailsBinding
+
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -18,7 +19,7 @@ class HistoryDetailFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-
+    private lateinit var binding: FragmentHistoryDetailsBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -32,14 +33,15 @@ class HistoryDetailFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        return inflater.inflate(R.layout.fragment_history_details, container, false)
+        binding = FragmentHistoryDetailsBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         val adapter = activity?.let { HistoryDetails_Adapter(it) }
-        recyclerview.adapter = adapter
+        binding.recyclerview.adapter = adapter
 
-        onBackClick.setOnClickListener(object : View.OnClickListener {
+        binding.onBackClick.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View?) {
                 activity?.supportFragmentManager!!.popBackStack()
             }

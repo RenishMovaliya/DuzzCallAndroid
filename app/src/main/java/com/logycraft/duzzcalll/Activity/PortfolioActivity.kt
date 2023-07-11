@@ -15,8 +15,9 @@ import com.logycraft.duzzcalll.Util.Preference
 import com.logycraft.duzzcalll.Util.ProgressHelper
 import com.logycraft.duzzcalll.Util.ValidationUtils
 import com.logycraft.duzzcalll.data.SendOTP
+import com.logycraft.duzzcalll.databinding.ActivityLoginScreenBinding
+import com.logycraft.duzzcalll.databinding.ActivityPortfolioBinding
 import com.logycraft.duzzcalll.viewmodel.HomeViewModel
-import kotlinx.android.synthetic.main.activity_portfolio.*
 import okhttp3.ResponseBody
 import org.json.JSONObject
 
@@ -24,12 +25,14 @@ import org.json.JSONObject
 class PortfolioActivity : BaseActivity() {
     //    private lateinit var vm: HomeViewModel
     val userModel = UserModel()
+    private lateinit var binding: ActivityPortfolioBinding
     private lateinit var viewModel: HomeViewModel
     var numbers: String = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_portfolio)
-
+//        setContentView(R.layout.activity_portfolio)
+        binding = ActivityPortfolioBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 //        vm = ViewModelProvider(this)[HomeViewModel::class.java]
 
         viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
@@ -40,14 +43,14 @@ class PortfolioActivity : BaseActivity() {
 //        et_password.setText("1234567890")
 //        numbers = "+94773785342"
         if (intent.getStringExtra("PASS").equals("NEW_PASS")) {
-            linear_portfolio.visibility = View.GONE
-            view_bottom.visibility = View.GONE
+            binding.linearPortfolio.visibility = View.GONE
+            binding.viewBottom.visibility = View.GONE
         } else {
-            linear_portfolio.visibility = View.VISIBLE
+            binding.linearPortfolio.visibility = View.VISIBLE
         }
 
 
-        btn_next.setOnClickListener(object : View.OnClickListener {
+        binding.btnNext.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View?) {
                 if (intent.getStringExtra("PASS").equals("NEW_PASS")) {
                     if (isPassValidate()) {
@@ -57,10 +60,10 @@ class PortfolioActivity : BaseActivity() {
 
                     if (isValidate()) {
 
-                        userModel.first_name = et_first_name.text.toString()
-                        userModel.last_name = et_last_name.text.toString()
-                        userModel.email = et_email.text.toString()
-                        userModel.password = et_password.text.toString()
+                        userModel.first_name = binding.etFirstName.text.toString()
+                        userModel.last_name = binding.etLastName.text.toString()
+                        userModel.email = binding.etEmail.text.toString()
+                        userModel.password = binding.etPassword.text.toString()
                         userModel.phone = Preference.getNumber(this@PortfolioActivity)
                         ProgressHelper.showProgrssDialogs(this@PortfolioActivity, "")
                         UserCreate(userModel)
@@ -140,7 +143,7 @@ class PortfolioActivity : BaseActivity() {
     }
 
     private fun isPassValidate(): Boolean {
-        val password = et_password.text.toString()
+        val password = binding.etPassword.text.toString()
         when {
             TextUtils.isEmpty(password) -> {
                 showError(getString(R.string.enter_password))
@@ -158,10 +161,10 @@ class PortfolioActivity : BaseActivity() {
 
     private fun isValidate(): Boolean {
 
-        val firstname = et_first_name.text.toString()
-        val lastname = et_last_name.text.toString()
-        val password = et_password.text.toString()
-        val email = et_email.text.toString().trim()
+        val firstname = binding.etFirstName.text.toString()
+        val lastname = binding.etLastName.text.toString()
+        val password = binding.etPassword.text.toString()
+        val email = binding.etEmail.text.toString().trim()
 
         when {
             TextUtils.isEmpty(firstname) -> {

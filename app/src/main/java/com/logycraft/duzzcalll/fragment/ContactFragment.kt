@@ -22,7 +22,8 @@ import com.logycraft.duzzcalll.Adapter.Business_Contact_Adapter
 import com.logycraft.duzzcalll.Adapter.Personal_Contact_Adapter
 import com.logycraft.duzzcalll.Model.ContactModel
 import com.logycraft.duzzcalll.R
-import kotlinx.android.synthetic.main.fragment_contact.*
+import com.logycraft.duzzcalll.databinding.ActivityVerifyPhoneBinding
+import com.logycraft.duzzcalll.databinding.FragmentContactBinding
 import java.util.*
 
 private const val ARG_PARAM1 = "param1"
@@ -31,7 +32,7 @@ private const val ARG_PARAM2 = "param2"
 
 class ContactFragment : Fragment() {
     private val READ_CONTACTS_PERMISSION_CODE = 1
-
+    private lateinit var binding: FragmentContactBinding
     private lateinit var recyclerViewContacts: RecyclerView
     private val contactList: MutableList<ContactModel> = mutableListOf()
     lateinit var contactdapter: Personal_Contact_Adapter;
@@ -53,43 +54,45 @@ class ContactFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view: View = inflater.inflate(R.layout.fragment_contact, container, false)
+//        binding = FragmentContactBinding.inflate(layoutInflater)
+//        val view: View = inflater.inflate(binding, container, false)
 
+        binding = FragmentContactBinding.inflate(inflater,container,false);
+        return binding.getRoot();
 
-
-        return view;
+//        return view;
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         contactdapter = Personal_Contact_Adapter(activity, false, contactList)
-        recyclerview.setLayoutManager(LinearLayoutManager(activity))
-        recyclerview.setAdapter(contactdapter)
-        titleTV.setText(getString(R.string.contacts))
+        binding.recyclerview.setLayoutManager(LinearLayoutManager(activity))
+        binding.recyclerview.setAdapter(contactdapter)
+        binding.titleTV.setText(getString(R.string.contacts))
 
 
 
-        relative_personal.setOnClickListener(View.OnClickListener {
+        binding.relativePersonal.setOnClickListener(View.OnClickListener {
 
-            relative_selected_btn.animate().x(0f).duration = 100
-            btnAdd.visibility = View.VISIBLE
-            btn_country_select.visibility = View.GONE
+            binding.relativeSelectedBtn.animate().x(0f).duration = 100
+            binding.btnAdd.visibility = View.VISIBLE
+            binding.btnCountrySelect.visibility = View.GONE
 
             val adapter = Personal_Contact_Adapter(activity, false, contactList)
-            recyclerview.setLayoutManager(LinearLayoutManager(activity))
-            recyclerview.setAdapter(adapter)
+            binding.recyclerview.setLayoutManager(LinearLayoutManager(activity))
+            binding.recyclerview.setAdapter(adapter)
 
         })
-        relative_business.setOnClickListener(View.OnClickListener {
+        binding.relativeBusiness.setOnClickListener(View.OnClickListener {
 
-            btnAdd.visibility = View.GONE
-            btn_country_select.visibility = View.VISIBLE
-            val size: Int = relative_personal.getWidth()
+            binding.btnAdd.visibility = View.GONE
+            binding.btnCountrySelect.visibility = View.VISIBLE
+            val size: Int = binding.relativePersonal.getWidth()
 
-            relative_selected_btn.animate().x(size.toFloat()).duration = 100
+            binding.relativeSelectedBtn.animate().x(size.toFloat()).duration = 100
             val adapter = Business_Contact_Adapter(activity, false)
-            recyclerview.setLayoutManager(LinearLayoutManager(activity))
-            recyclerview.setAdapter(adapter)
+            binding.recyclerview.setLayoutManager(LinearLayoutManager(activity))
+            binding.recyclerview.setAdapter(adapter)
 
         })
 
@@ -113,7 +116,7 @@ class ContactFragment : Fragment() {
         }
 
 
-        et_search.addTextChangedListener(object : TextWatcher {
+        binding.etSearch.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {}
             override fun beforeTextChanged(
                 s: CharSequence, start: Int, count: Int, after: Int
@@ -143,14 +146,14 @@ class ContactFragment : Fragment() {
     private fun filterData() {
 
         contactList.clear()
-        if (et_search.text.toString().isEmpty()) {
+        if (binding.etSearch.text.toString().isEmpty()) {
             contactList.addAll(listSupplier)
         } else {
             for (ClientsDetail in listSupplier) {
                 if (ClientsDetail.name.toString().toLowerCase(Locale.getDefault()).contains(
-                        et_search.text.toString().toLowerCase(Locale.getDefault())
+                        binding.etSearch.text.toString().toLowerCase(Locale.getDefault())
                     ) || ClientsDetail.number.toString().toLowerCase(Locale.getDefault())
-                        .contains(et_search.text.toString().toLowerCase(Locale.getDefault()))
+                        .contains(binding.etSearch.text.toString().toLowerCase(Locale.getDefault()))
                 ) {
                     contactList.add(ClientsDetail)
                 }

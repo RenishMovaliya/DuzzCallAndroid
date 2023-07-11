@@ -21,19 +21,21 @@ import com.logycraft.duzzcalll.Util.Utils.Companion.MOBILE
 import com.logycraft.duzzcalll.Util.Utils.Companion.OTP
 import com.logycraft.duzzcalll.Util.Utils.Companion.VERIFY_TOKEN
 import com.logycraft.duzzcalll.data.SendOTP
+import com.logycraft.duzzcalll.databinding.ActivityEditPhoneBinding
 import com.logycraft.duzzcalll.viewmodel.HomeViewModel
-import kotlinx.android.synthetic.main.activity_edit_phone.*
 import okhttp3.ResponseBody
 import org.json.JSONObject
 
 class Edit_PhoneActivity : BaseActivity() {
-
+    private lateinit var binding: ActivityEditPhoneBinding
     lateinit var btn_next: TextView
     lateinit var view_bottom: LinearLayout
     private lateinit var viewModel: HomeViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_edit_phone)
+        binding = ActivityEditPhoneBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
         viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
         btn_next = findViewById(R.id.btn_next)
         view_bottom = findViewById(R.id.view_bottom)
@@ -44,9 +46,9 @@ class Edit_PhoneActivity : BaseActivity() {
         val countryCodePicker = findViewById<CountryCodePicker>(R.id.countyCodePicker)
         val typeface = Typeface.createFromAsset(applicationContext.assets, "font/poppins_light.ttf")
         countryCodePicker.setTypeFace(typeface)
-        Tvcountrycode.setText("+" + countryCodePicker.selectedCountryCode)
+        binding.Tvcountrycode.setText("+" + countryCodePicker.selectedCountryCode)
         countryCodePicker.setOnCountryChangeListener {
-            Tvcountrycode.setText("+" + countryCodePicker.selectedCountryCode)
+            binding.Tvcountrycode.setText("+" + countryCodePicker.selectedCountryCode)
         }
 
 
@@ -59,14 +61,14 @@ class Edit_PhoneActivity : BaseActivity() {
                         val intent =
                             Intent(this@Edit_PhoneActivity, Verify_PhoneActivity::class.java)
                         intent.putExtra(FROM, intent.getStringExtra(FROM))
-                        intent.putExtra(MOBILE, Tvcountrycode.text.toString() + mobileNumber)
+                        intent.putExtra(MOBILE, binding.Tvcountrycode.text.toString() + mobileNumber)
                         startActivity(intent)
                         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
                     } else {
                         showProgrssDialogs(this@Edit_PhoneActivity, "");
 //                        SendOTP(Tvcountrycode.text.toString() + mobileNumber);
                         Preference.saveNumber(
-                            this@Edit_PhoneActivity, Tvcountrycode.text.toString() + mobileNumber
+                            this@Edit_PhoneActivity, binding.Tvcountrycode.text.toString() + mobileNumber
                         )
                         val intent = Intent(this@Edit_PhoneActivity, PortfolioActivity::class.java)
 //                        intent.putExtra(MOBILE, Tvcountrycode.text.toString() + mobileNumber)
@@ -87,7 +89,7 @@ class Edit_PhoneActivity : BaseActivity() {
     private fun SendOTP(phone: String) {
 
 
-        viewModel.sentOtp(Tvcountrycode.text.toString() + mobileNumber)
+        viewModel.sentOtp(binding.Tvcountrycode.text.toString() + mobileNumber)
         viewModel.sentOtpLiveData?.observe(this@Edit_PhoneActivity, Observer {
 
             if (it.isSuccess == true && it.Responcecode == 200) {
@@ -97,10 +99,10 @@ class Edit_PhoneActivity : BaseActivity() {
                     this@Edit_PhoneActivity, "Bearer " + sendOtp?.verificationToken.toString()
                 )
                 Preference.saveNumber(
-                    this@Edit_PhoneActivity, Tvcountrycode.text.toString() + mobileNumber
+                    this@Edit_PhoneActivity, binding.Tvcountrycode.text.toString() + mobileNumber
                 )
                 val intent = Intent(this@Edit_PhoneActivity, Verify_PhoneActivity::class.java)
-                intent.putExtra(MOBILE, Tvcountrycode.text.toString() + mobileNumber)
+                intent.putExtra(MOBILE, binding.Tvcountrycode.text.toString() + mobileNumber)
                 intent.putExtra(FROM, intent.getStringExtra(FROM))
                 intent.putExtra(OTP, sendOtp?.tfaCode.toString())
 //                VERIFY_TOKEN = Preference.getToken(this@Edit_PhoneActivity).toString()
@@ -125,7 +127,7 @@ class Edit_PhoneActivity : BaseActivity() {
 
     var mobileNumber = "";
     private fun isValidate(): Boolean {
-        mobileNumber = et_mobile.text.toString()
+        mobileNumber = binding.etMobile.text.toString()
 
         when {
             TextUtils.isEmpty(mobileNumber) -> {

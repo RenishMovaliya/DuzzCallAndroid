@@ -2,69 +2,50 @@ package com.logycraft.duzzcalll.fragment
 
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
-import android.content.Context
-import android.content.Intent
-import android.database.Cursor
 import android.graphics.Rect
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.provider.Telephony
-import android.telephony.PhoneNumberUtils
-import android.telephony.TelephonyManager
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.TypedValue
 import android.view.*
 import android.widget.EditText
-import android.widget.RelativeLayout
-import android.widget.TextView
-import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.fragment.app.Fragment
+import androidx.annotation.Nullable
 import androidx.core.content.res.ResourcesCompat
-import androidx.loader.content.CursorLoader
+import androidx.fragment.app.Fragment
 import com.logycraft.duzzcalll.R
+import com.logycraft.duzzcalll.databinding.FragmentContactBinding
+import com.logycraft.duzzcalll.databinding.FragmentDialBinding
 import com.logycraft.duzzcalll.extention.addCharacter
 import com.logycraft.duzzcalll.extention.disableKeyboard
 import com.logycraft.duzzcalll.extention.getKeyEvent
+import com.logycraft.duzzcalll.helper.CallBackListener
 import com.logycraft.duzzcalll.helper.ToneGeneratorHelper
-import kotlinx.android.synthetic.main.dialpad.*
-import kotlinx.android.synthetic.main.fragment_dial.*
+
+
 import java.util.*
 import kotlin.math.roundToInt
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-//lateinit var dialpad_1_holder : RelativeLayout
-//lateinit var dialpad_2_holder : RelativeLayout
-//lateinit var dialpad_3_holder : RelativeLayout
-//lateinit var dialpad_4_holder : RelativeLayout
-//lateinit var dialpad_5_holder : RelativeLayout
-//lateinit var dialpad_6_holder : RelativeLayout
-//lateinit var dialpad_7_holder : RelativeLayout
-//lateinit var dialpad_8_holder : RelativeLayout
-//lateinit var dialpad_9_holder : RelativeLayout
-//lateinit var dialpad_0_holder : RelativeLayout
-//lateinit var dialpad_plus_holder : RelativeLayout
-//lateinit var dialpad_asterisk_holder : RelativeLayout
-//lateinit var dialpad_hashtag_holder : RelativeLayout
-//lateinit var dialpad_input : EditText
+
 
 class DialFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
     private var hasRussianLocale = false
+    private lateinit var binding: FragmentDialBinding
     private var toneGeneratorHelper: ToneGeneratorHelper? = null
     private val longPressTimeout = ViewConfiguration.getLongPressTimeout().toLong()
     private val longPressHandler = Handler(Looper.getMainLooper())
     private val pressedKeys = mutableSetOf<Char>()
-
+    private var callBackListener: CallBackListener? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -74,17 +55,24 @@ class DialFragment : Fragment() {
 
 
     }
+    override fun onActivityCreated(@Nullable savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        //getActivity() is fully created in onActivityCreated and instanceOf differentiate it between different Activities
+        if (activity is CallBackListener) callBackListener = activity as CallBackListener?
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_dial,    container, false)
-        // Inflate the layout for this fragment
-
-
-
-        return view
+//        val view = inflater.inflate(R.layout.fragment_dial,    container, false)
+//        // Inflate the layout for this fragment
+//
+//
+//
+//        return view
+        binding = FragmentDialBinding.inflate(inflater,container,false);
+        return binding.getRoot();
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         hasRussianLocale = Locale.getDefault().language == "ru"
@@ -124,26 +112,26 @@ class DialFragment : Fragment() {
 //            dialpad_0_holder.visibility = View.INVISIBLE
 //        }
 
-        arrayOf(
-            dialpad_0_holder,
-            dialpad_1_holder,
-            dialpad_2_holder,
-            dialpad_3_holder,
-            dialpad_4_holder,
-            dialpad_5_holder,
-            dialpad_6_holder,
-            dialpad_7_holder,
-            dialpad_8_holder,
-            dialpad_9_holder,
-            dialpad_plus_holder,
-            dialpad_asterisk_holder,
-            dialpad_hashtag_holder
-        ).forEach {
-            it.background = ResourcesCompat.getDrawable(resources, R.drawable.pill_background,
-                activity?.theme
-            )
-//            it.background?.alpha = 30
-        }
+//        arrayOf(
+//            dialpad_0_holder,
+//            dialpad_1_holder,
+//            dialpad_2_holder,
+//            dialpad_3_holder,
+//            dialpad_4_holder,
+//            dialpad_5_holder,
+//            dialpad_6_holder,
+//            dialpad_7_holder,
+//            dialpad_8_holder,
+//            dialpad_9_holder,
+//            bindingdialpad_plus_holder,
+//            dialpad_asterisk_holder,
+//            dialpad_hashtag_holder
+//        ).forEach {
+//            it.background = ResourcesCompat.getDrawable(resources, R.drawable.pill_background,
+//                activity?.theme
+//            )
+////            it.background?.alpha = 30
+//        }
 
 //        setupOptionsMenu()
 //        speedDialValues = config.getSpeedDialValues()
@@ -171,32 +159,41 @@ class DialFragment : Fragment() {
 //            }
 //        }
 
-        setupCharClick(dialpad_1_holder, '1')
-        setupCharClick(dialpad_2_holder, '2')
-        setupCharClick(dialpad_3_holder, '3')
-        setupCharClick(dialpad_4_holder, '4')
-        setupCharClick(dialpad_5_holder, '5')
-        setupCharClick(dialpad_6_holder, '6')
-        setupCharClick(dialpad_7_holder, '7')
-        setupCharClick(dialpad_8_holder, '8')
-        setupCharClick(dialpad_9_holder, '9')
-        setupCharClick(dialpad_0_holder, '0')
-        setupCharClick(dialpad_plus_holder, '+', longClickable = false)
-        setupCharClick(dialpad_asterisk_holder, '*', longClickable = false)
-        setupCharClick(dialpad_hashtag_holder, '#', longClickable = false)
+        setupCharClick(binding.dialpad1Holder, '1')
+        setupCharClick(binding.dialpad2Holder, '2')
+        setupCharClick(binding.dialpad3Holder, '3')
+        setupCharClick(binding.dialpad4Holder, '4')
+        setupCharClick(binding.dialpad5Holder, '5')
+        setupCharClick(binding.dialpad6Holder, '6')
+        setupCharClick(binding.dialpad7Holder, '7')
+        setupCharClick(binding.dialpad8Holder, '8')
+        setupCharClick(binding.dialpad9Holder, '9')
+        setupCharClick(binding.dialpad0Holder, '0')
+        setupCharClick(binding.dialpadPlusHolder, '+', longClickable = false)
+        setupCharClick(binding.dialpadAsteriskHolder, '*', longClickable = false)
+        setupCharClick(binding.dialpadHashtagHolder, '#', longClickable = false)
 
-        dialpad_clear_char.setOnClickListener { clearChar(it) }
-        dialpad_clear_char.setOnLongClickListener { clearInput(); true }
-//        dialpad_call_button.setOnClickListener { initCall(dialpad_input.value, 0) }
+        binding.dialpadClearChar.setOnClickListener { clearChar(it) }
+        binding.dialpadClearChar.setOnLongClickListener { clearInput(); true }
+        binding.dialpadCallButton.setOnClickListener {
+//            outgoingCall();
+
+            if (! binding.dialpadInput.text.toString().isEmpty()){
+                callBackListener?.onCallBack(binding.dialpadInput.text.toString());
+            }
+
+        }
+        binding.dialpadInput.setText("0094773499994")
 //        dialpad_input.onTextChangeListener { dialpadValueChanged(it) }
-        dialpad_input.requestFocus()
-        dialpad_input.disableKeyboard()
+        binding.dialpadInput.requestFocus()
+        binding.dialpadInput.disableKeyboard()
 
 
 
 
-        dialpad_call_button.setImageDrawable(resources.getDrawable(R.drawable.ic_phone_vector))
+        binding.dialpadCallButton.setImageDrawable(resources.getDrawable(R.drawable.ic_phone_vector))
     }
+
     companion object {
         /**
          * Use this factory method to create a new instance of
@@ -258,17 +255,17 @@ class DialFragment : Fragment() {
     }
 
     private fun dialpadPressed(char: Char, view: View?) {
-        dialpad_input.addCharacter(char)
+        binding.dialpadInput.addCharacter(char)
         maybePerformDialpadHapticFeedback(view)
     }
 
     private fun clearChar(view: View) {
-        dialpad_input.dispatchKeyEvent(dialpad_input.getKeyEvent(KeyEvent.KEYCODE_DEL))
+        binding.dialpadInput.dispatchKeyEvent(binding.dialpadInput.getKeyEvent(KeyEvent.KEYCODE_DEL))
         maybePerformDialpadHapticFeedback(view)
     }
 
     private fun clearInput() {
-        dialpad_input.setText("")
+        binding.dialpadInput.setText("")
     }
     private fun performLongClick(view: View, char: Char) {
         if (char == '0') {

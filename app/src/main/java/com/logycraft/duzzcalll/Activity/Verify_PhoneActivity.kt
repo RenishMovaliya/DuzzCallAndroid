@@ -22,15 +22,16 @@ import com.logycraft.duzzcalll.Util.Utils.Companion.LOGIN
 import com.logycraft.duzzcalll.Util.Utils.Companion.MOBILE
 import com.logycraft.duzzcalll.Util.Utils.Companion.REGISTER
 import com.logycraft.duzzcalll.data.SendOTP
+import com.logycraft.duzzcalll.databinding.ActivityPortfolioBinding
+import com.logycraft.duzzcalll.databinding.ActivityVerifyPhoneBinding
 import com.logycraft.duzzcalll.viewmodel.HomeViewModel
-import kotlinx.android.synthetic.main.activity_edit_phone.*
-import kotlinx.android.synthetic.main.activity_verify_phone.*
+
 import okhttp3.ResponseBody
 import org.json.JSONObject
 
 
 class Verify_PhoneActivity : BaseActivity() {
-
+    private lateinit var binding: ActivityVerifyPhoneBinding
     lateinit var btn_next: TextView
     lateinit var view_bottom: LinearLayout
     lateinit var entered_otp: String
@@ -39,7 +40,9 @@ class Verify_PhoneActivity : BaseActivity() {
     private lateinit var countDownTimer: CountDownTimer
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_verify_phone)
+//        setContentView(R.layout.activity_verify_phone)
+        binding = ActivityVerifyPhoneBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
         btn_next = findViewById(R.id.btn_next)
         view_bottom = findViewById(R.id.view_bottom)
@@ -67,7 +70,7 @@ class Verify_PhoneActivity : BaseActivity() {
             }
         }
 
-        txt_number.setText("Verify " + Preference.getNumber(this@Verify_PhoneActivity))
+        binding.txtNumber.setText("Verify " + Preference.getNumber(this@Verify_PhoneActivity))
         btn_next.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View?) {
 
@@ -101,13 +104,13 @@ class Verify_PhoneActivity : BaseActivity() {
             override fun onTick(millisUntilFinished: Long) {
                 val seconds = millisUntilFinished / 1000
                 val formattedTime = formatTime(seconds)
-                txt_count_down.text = "Resend SMS in " + formattedTime + " secs";
+                binding.txtCountDown.text = "Resend SMS in " + formattedTime + " secs";
 
             }
 
             override fun onFinish() {
-                txt_count_down.text = "Resend OTP"
-                btn_resend_otp.visibility = View.VISIBLE
+                binding.txtCountDown.text = "Resend OTP"
+                binding.btnResendOtp.visibility = View.VISIBLE
                 btn_next.visibility = View.GONE
             }
         }
@@ -115,7 +118,7 @@ class Verify_PhoneActivity : BaseActivity() {
         countDownTimer.start()
 
 
-        btn_resend_otp.setOnClickListener {
+        binding.btnResendOtp.setOnClickListener {
             ProgressHelper.showProgressDialog()
             SendOTP()
         }
@@ -147,7 +150,7 @@ class Verify_PhoneActivity : BaseActivity() {
             }
             countDownTimer.start()
             btn_next.visibility = View.VISIBLE
-            btn_resend_otp.visibility = View.GONE
+            binding.btnResendOtp.visibility = View.GONE
         })
     }
 
