@@ -8,7 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
-import com.logycraft.duzzcalll.R
+import com.duzzcall.duzzcall.R
 import de.hdodenhof.circleimageview.CircleImageView
 
 class Business_Contact_Adapter(var activity: Activity?, var isfavourite: Boolean) :

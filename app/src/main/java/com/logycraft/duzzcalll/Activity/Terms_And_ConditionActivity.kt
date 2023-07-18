@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.logycraft.duzzcalll.R
+import com.duzzcall.duzzcall.R
 import com.logycraft.duzzcalll.Util.Utils
 import com.logycraft.duzzcalll.Util.Utils.Companion.FROM
 import com.logycraft.duzzcalll.Util.Utils.Companion.REGISTER

@@ -9,14 +9,14 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.restapiidemo.home.data.UserModel
-import com.logycraft.duzzcalll.R
+import com.duzzcall.duzzcall.R
 import com.logycraft.duzzcalll.Util.BaseActivity
 import com.logycraft.duzzcalll.Util.Preference
 import com.logycraft.duzzcalll.Util.ProgressHelper
 import com.logycraft.duzzcalll.Util.ValidationUtils
 import com.logycraft.duzzcalll.data.SendOTP
-import com.logycraft.duzzcalll.databinding.ActivityLoginScreenBinding
-import com.logycraft.duzzcalll.databinding.ActivityPortfolioBinding
+import com.duzzcall.duzzcall.databinding.ActivityLoginScreenBinding
+import com.duzzcall.duzzcall.databinding.ActivityPortfolioBinding
 import com.logycraft.duzzcalll.viewmodel.HomeViewModel
 import okhttp3.ResponseBody
 import org.json.JSONObject

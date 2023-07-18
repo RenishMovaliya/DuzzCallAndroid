@@ -14,5 +14,5 @@
     <color name="text_color_gray">#6E737A</color>
     <color name="red">#F13A3A</color>
     <color name="tapbar_textcolor">#53536C</color>
-
+    <color name="notification_led_color">@color/appcolour</color>
 </resources>

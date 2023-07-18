@@ -24,6 +24,6 @@ dependencyResolutionManagement {
         }
     }
 }
-rootProject.name = "Duzz Calll"
+rootProject.name = "Duzz Call"
 include ':app'
 

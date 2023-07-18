@@ -9,9 +9,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.logycraft.duzzcalll.Adapter.Business_Contact_Adapter
 import com.logycraft.duzzcalll.Adapter.Personal_Contact_Adapter
 import com.logycraft.duzzcalll.Model.ContactModel
-import com.logycraft.duzzcalll.R
-import com.logycraft.duzzcalll.databinding.FragmentContactBinding
-import com.logycraft.duzzcalll.databinding.FragmentSettingBinding
+import com.duzzcall.duzzcall.R
+import com.duzzcall.duzzcall.databinding.FragmentContactBinding
+import com.duzzcall.duzzcall.databinding.FragmentSettingBinding
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -66,9 +66,18 @@ class FavouriteFragment : Fragment() {
             val size: Int = binding.relativePersonal.getWidth()
 
             binding.relativeSelectedBtn.animate().x(size.toFloat()).duration = 100
-            val adapter = Business_Contact_Adapter(activity, true)
+            val adapter = Business_Contact_Adapter(activity, false)
             binding.recyclerview.setLayoutManager(LinearLayoutManager(activity))
             binding.recyclerview.setAdapter(adapter)
+            binding.btnCountrySelect.setOnClickListener(View.OnClickListener {
+                binding.countryCPP.launchCountrySelectionDialog()
+
+            })
+            binding.flagimg.setImageResource(binding.countryCPP.selectedCountryFlagResourceId)
+            binding.countryCPP.setOnCountryChangeListener {
+                binding.flagimg.setImageResource(binding.countryCPP.selectedCountryFlagResourceId)
+            }
+
 
         })
 

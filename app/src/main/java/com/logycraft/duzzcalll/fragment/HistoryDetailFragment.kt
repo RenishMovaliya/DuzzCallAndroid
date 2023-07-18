@@ -6,9 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.logycraft.duzzcalll.Adapter.HistoryDetails_Adapter
-import com.logycraft.duzzcalll.R
-import com.logycraft.duzzcalll.databinding.FragmentContactBinding
-import com.logycraft.duzzcalll.databinding.FragmentHistoryDetailsBinding
+import com.duzzcall.duzzcall.R
+import com.duzzcall.duzzcall.databinding.FragmentContactBinding
+import com.duzzcall.duzzcall.databinding.FragmentHistoryDetailsBinding
 
 
 private const val ARG_PARAM1 = "param1"

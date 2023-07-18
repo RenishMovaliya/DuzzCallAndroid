@@ -5,9 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.duzzcall.duzzcall.R
 import com.logycraft.duzzcalll.Adapter.All_History_Adapter
-import com.logycraft.duzzcalll.databinding.FragmentHistoryBinding
-import com.logycraft.duzzcalll.databinding.FragmentHistoryDetailsBinding
+import com.duzzcall.duzzcall.databinding.FragmentHistoryBinding
+import com.duzzcall.duzzcall.databinding.FragmentHistoryDetailsBinding
 
 
 private const val ARG_PARAM1 = "param1"
@@ -79,7 +80,7 @@ class HistoryFragment : Fragment() {
 
     private fun callDetailscreen(string: String) {
         val transaction   = activity?.supportFragmentManager!!.beginTransaction()
-        transaction.replace(com.logycraft.duzzcalll.R.id.container, HistoryDetailFragment())
+        transaction.replace(R.id.container, HistoryDetailFragment())
         transaction.commit()
         transaction.addToBackStack(null)
     }

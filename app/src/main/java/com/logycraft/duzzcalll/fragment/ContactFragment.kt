@@ -21,9 +21,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.logycraft.duzzcalll.Adapter.Business_Contact_Adapter
 import com.logycraft.duzzcalll.Adapter.Personal_Contact_Adapter
 import com.logycraft.duzzcalll.Model.ContactModel
-import com.logycraft.duzzcalll.R
-import com.logycraft.duzzcalll.databinding.ActivityVerifyPhoneBinding
-import com.logycraft.duzzcalll.databinding.FragmentContactBinding
+import com.duzzcall.duzzcall.R
+import com.duzzcall.duzzcall.databinding.ActivityVerifyPhoneBinding
+import com.duzzcall.duzzcall.databinding.FragmentContactBinding
+import com.hbb20.CountryCodePicker
 import java.util.*
 
 private const val ARG_PARAM1 = "param1"
@@ -93,6 +94,15 @@ class ContactFragment : Fragment() {
             val adapter = Business_Contact_Adapter(activity, false)
             binding.recyclerview.setLayoutManager(LinearLayoutManager(activity))
             binding.recyclerview.setAdapter(adapter)
+            binding.btnCountrySelect.setOnClickListener(View.OnClickListener {
+                binding.countryCPP.launchCountrySelectionDialog()
+
+            })
+            binding.flagimg.setImageResource(binding.countryCPP.selectedCountryFlagResourceId)
+            binding.countryCPP.setOnCountryChangeListener {
+                binding.flagimg.setImageResource(binding.countryCPP.selectedCountryFlagResourceId)
+            }
+
 
         })
 

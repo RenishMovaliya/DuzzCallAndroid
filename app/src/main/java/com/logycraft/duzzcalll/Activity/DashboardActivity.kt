@@ -10,22 +10,35 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProvider
+import com.duzzcall.duzzcall.R
+import com.fondesa.kpermissions.PermissionStatus
+import com.fondesa.kpermissions.allGranted
+import com.fondesa.kpermissions.anyPermanentlyDenied
+import com.fondesa.kpermissions.anyShouldShowRationale
+import com.fondesa.kpermissions.extension.permissionsBuilder
+import com.fondesa.kpermissions.request.PermissionRequest
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.logycraft.duzzcalll.R
+import com.logycraft.duzzcalll.LinphoneContext
+import com.logycraft.duzzcalll.LinphoneManager
+import com.logycraft.duzzcalll.LinphonePreferences
 import com.logycraft.duzzcalll.Util.Preference
 import com.logycraft.duzzcalll.fragment.*
 import com.logycraft.duzzcalll.helper.CallBackListener
-
+import com.logycraft.duzzcalll.helper.showGrantedToast
+import com.logycraft.duzzcalll.helper.showPermanentlyDeniedDialog
+import com.logycraft.duzzcalll.helper.showRationaleDialog
+import com.logycraft.duzzcalll.service.LinphoneService
 import org.linphone.core.*
 
 //import com.logycraft.duzzcalll.core.*
 
-class DashboardActivity : AppCompatActivity(), CallBackListener {
+class DashboardActivity : AppCompatActivity(), CallBackListener,  PermissionRequest.Listener{
     lateinit var bottomNav: BottomNavigationView
      lateinit var core: Core
 
-
+    private val request by lazy {
+        permissionsBuilder(Manifest.permission.RECORD_AUDIO).build()
+    }
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,7 +82,8 @@ class DashboardActivity : AppCompatActivity(), CallBackListener {
         bottomNav.setSelectedItemId(R.id.dialpad);
         val factory = Factory.instance()
         factory.setDebugMode(true, "Hello Linphone")
-        core = factory.createCore(null, null, this)
+        core = LinphoneManager.getCore()
+//        core = factory.createCore(null, null, this)
 
 //        findViewById<Button>(org.linphone.core.R.id.connect).setOnClickListener {
 //            login()
@@ -114,49 +128,6 @@ class DashboardActivity : AppCompatActivity(), CallBackListener {
     private fun loginLinphone() {
         var usedata = Preference.getLoginData(this@DashboardActivity)
         waitForServerAnswer.value = true
-//        coreContext.core.addListener(coreListener)
-//
-//        viewModel.accountCreator.username = usedata?.extension?.extension
-//        viewModel.accountCreator.password = usedata?.extension?.password
-//        viewModel.accountCreator.domain = "dzcl.et.lk"
-//        viewModel.accountCreator.displayName = usedata?.extension?.firstName+" "+usedata?.extension?.lastName
-//        viewModel.accountCreator.transport = TransportType.Udp
-
-
-//        val account = viewModel.accountCreator.createAccountInCore()
-//        accountToCheck = account
-//
-//        if (account == null) {
-//            org.linphone.core.tools.Log.e("")
-//            Log.i("SipTest", "[Assistant] [Generic Login] Account creator couldn't create account")
-//
-//            coreContext.core.removeListener(coreListener)
-////            onErrorEvent.value = Event("")
-//            Log.i("SipTest", "Error: Failed to create account object")
-//
-//            waitForServerAnswer.value = false
-//            return
-//        }
-//
-//        org.linphone.core.tools.Log.i("[Assistant] [Generic Login] Account created")
-//        Log.i("SipTest", "[Assistant] [Generic Login] Account created")
-
-//        val username = findViewById<EditText>(org.linphone.core.R.id.username).text.toString()
-//        val password = findViewById<EditText>(org.linphone.core.R.id.password).text.toString()
-//        val domain = findViewById<EditText>(org.linphone.core.R.id.domain).text.toString()
-//        val transportType = when (findViewById<RadioGroup>(org.linphone.core.R.id.transport).checkedRadioButtonId) {
-//            org.linphone.core.R.id.udp -> TransportType.Udp
-//            org.linphone.core.R.id.tcp -> TransportType.Tcp
-//            else -> TransportType.Tls
-//        }
-//        var usedata = Preference.getLoginData(this@DashboardActivity)
-//        Preference.setLoginData(this@LoginScreen,usedata)
-//        val username = "radhe210"
-//        val password = "Rc@99740"
-//        val domain = "sip.antisip.com"
-//        val username = "renish210"
-//        val password = "Rc@99740"
-//        val domain = "sip.linphone.org"
         val username = usedata?.extension?.extension
         val password = usedata?.extension?.password
         val domain = "dzcl.et.lk"
@@ -193,9 +164,14 @@ class DashboardActivity : AppCompatActivity(), CallBackListener {
                 packageName
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            requestPermissions(arrayOf(Manifest.permission.RECORD_AUDIO), 0)
+            request.send()
+//            requestPermissions(arrayOf(Manifest.permission.RECORD_AUDIO), 0)
             return
         }
+        LinphonePreferences.instance().setServiceNotificationVisibility(true)
+//        LinphoneService().onCreate();
+        LinphoneContext.instance().getNotificationManager().startForeground()
+        request.addListener(this)
     }
 
         private val coreListener = object : CoreListenerStub() {
@@ -350,14 +326,22 @@ class DashboardActivity : AppCompatActivity(), CallBackListener {
 //        core.inviteAddressWithParams(remoteAddress, params)
 //        coreContext.startCall(remoteAddress)
         core.inviteAddressWithParams(remoteAddress, params)
-        val intentAction = Intent(this, OutgoingActivity::class.java)
-        startActivity(intentAction)
+//        val intentAction = Intent(this, OutgoingActivity::class.java)
+//        startActivity(intentAction)
         // Call process can be followed in onCallStateChanged callback from core listener
     }
 
     override fun onCallBack(remoteid:String) {
         outgoingCall(remoteid);
 
+    }
+
+    override fun onPermissionsResult(result: List<PermissionStatus>) {
+        when {
+            result.anyPermanentlyDenied() -> showPermanentlyDeniedDialog(result)
+            result.anyShouldShowRationale() -> showRationaleDialog(result, request)
+            result.allGranted() -> showGrantedToast(result)
+        }
     }
 
 

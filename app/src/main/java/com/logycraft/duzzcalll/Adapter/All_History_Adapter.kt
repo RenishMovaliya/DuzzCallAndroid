@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
-import com.logycraft.duzzcalll.R
+import com.duzzcall.duzzcall.R
 
 class All_History_Adapter(var activity: Activity,var from: Int) :
     RecyclerView.Adapter<All_History_Adapter.ViewHolder>() {

@@ -14,9 +14,9 @@ import android.widget.EditText
 import androidx.annotation.Nullable
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
-import com.logycraft.duzzcalll.R
-import com.logycraft.duzzcalll.databinding.FragmentContactBinding
-import com.logycraft.duzzcalll.databinding.FragmentDialBinding
+import com.duzzcall.duzzcall.R
+import com.duzzcall.duzzcall.databinding.FragmentContactBinding
+import com.duzzcall.duzzcall.databinding.FragmentDialBinding
 import com.logycraft.duzzcalll.extention.addCharacter
 import com.logycraft.duzzcalll.extention.disableKeyboard
 import com.logycraft.duzzcalll.extention.getKeyEvent
@@ -183,7 +183,7 @@ class DialFragment : Fragment() {
             }
 
         }
-        binding.dialpadInput.setText("0094773499994")
+//        binding.dialpadInput.setText("0094773499994")
 //        dialpad_input.onTextChangeListener { dialpadValueChanged(it) }
         binding.dialpadInput.requestFocus()
         binding.dialpadInput.disableKeyboard()

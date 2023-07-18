@@ -1,4 +1,4 @@
-<resources >
+<resources>
     <string name="app_name">Duzz Call</string>
     <string name="login">Login</string>
     <string name="mobile_number">Mobile Number</string>
@@ -24,7 +24,7 @@
     <string name="history">History</string>
     <string name="contacts">Contacts</string>
     <string name="dial_pad">Dial Pad</string>
-    <string name="setting">Setting</string>
+    <string name="setting">Settings</string>
 
 
     <string name="asterisk">Asterisk</string>
@@ -45,7 +45,7 @@
     <string name="account_settings">Account Settings</string>
     <string name="notification">Notification</string>
     <string name="security_notifications">Security notifications, change\nnumber</string>
-    <string name="message_call_tones">Message, call tones</string>
+    <string name="message_call_tones">Call tones</string>
     <string name="privacy">Privacy</string>
     <string name="blocked_contacts">Blocked contacts</string>
     <string name="storage_and_data">Storage and Data</string>
@@ -77,4 +77,46 @@
     <string name="to_complete_your_phone_number_nverification_please_enter_the_4_ndigit_activation_code">To complete your phone number\nverification, please enter the 4\ndigit activation code</string>
     <string name="resend_otp">Resend OTP</string>
 
+    <string name="granted_permissions">Granted: %s</string>
+    <string name="permanently_denied_permissions">Permanently denied: %s</string>
+    <string name="permissions_required">Permissions required</string>
+    <string name="rationale_permissions">Rationale: %s</string>
+    <string name="request_again">Request again</string>
+    <string name="action_settings">Settings</string>
+
+
+    <string name="resend">Resend</string>
+    <string name="notification_channel_id">linphone_notification_id</string>
+    <string name="notification_reply_label">Reply</string>
+    <string name="notification_mark_as_read_label">Mark as read</string>
+    <string name="notification_replied_label">Sent reply: %s</string>
+    <string name="incall_notif_incoming">Call incoming</string>
+    <string name="incall_notif_outgoing">Call outgoing</string>
+    <string name="notification_call_answer_label">Answer</string>
+    <string name="notification_call_hangup_label">Hangup</string>
+    <string name="unread_messages">%i unread messages</string>
+    <string name="notification_service_channel_id">linphone_notification_service_id</string>
+    <string name="content_title_notification">Linphone instant messages notifications</string>
+    <string name="content_title_notification_service">Linphone service notification</string>
+    <string name="service_name">DuzzCall Service</string>
+    <string name="missed_calls_notif_body">%i missed calls</string>
+    <string name="missed_calls_notif_title">Missed call</string>
+    <string name="incall_notif_paused">Paused call ongoing</string>
+    <string name="linphone_sdk_version">4.4.35</string>
+    <string name="linphone_sdk_branch">tags/4.4.35^0</string>
+    <string name="user_agent">CALLJU</string>
+    <string name="default_conference_factory_uri">sip:conference-factory@sip.linphone.org</string>
+    <string name="default_lime_x3dh_server_url">https://lime.linphone.org/lime-server/lime-server.php</string>
+    <string name="link_account_popup">Do you want to link the account %s with your phone number?</string>
+    <string name="link">Link</string>
+    <string name="maybe_later">Maybe later</string>
+    <string name="default_domain">sip.linphone.org</string>
+    <string name="tunnel_mode_entry_value_disabled">disabled</string>
+    <string name="tunnel_mode_entry_value_3G_only">3G_only</string>
+    <string name="tunnel_mode_entry_value_always">always</string>
+    <string name="tunnel_mode_entry_value_auto">auto</string>
+    <string name="today_date_format">HH:mm</string>
+    <string name="content_description_accept">Accept</string>
+    <string name="error_network_unreachable">Network is unreachable</string>
+    <string name="error_call_declined">Call declined</string>
 </resources>

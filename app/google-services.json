@@ -7,6 +7,42 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:23586126081:android:3c7ac31b3f6adaaaef8300",
+        "android_client_info": {
+          "package_name": "com.duzzcall.duzzcall"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "23586126081-6k09o9j994b29ce4h1t8ddr8rlljv4lo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDnwMKfx0OVyst17P7XcV3FOxB1UDgVnI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "23586126081-6k09o9j994b29ce4h1t8ddr8rlljv4lo.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "23586126081-e6j9qs08vleqqtma4vo1f1uou68bikut.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.logycraft.duzzcall"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:23586126081:android:735744094783d3aeef8300",
         "android_client_info": {
           "package_name": "com.logycraft.duzzcalll"
@@ -29,6 +65,13 @@
             {
               "client_id": "23586126081-6k09o9j994b29ce4h1t8ddr8rlljv4lo.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "23586126081-e6j9qs08vleqqtma4vo1f1uou68bikut.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.logycraft.duzzcall"
+              }
             }
           ]
         }

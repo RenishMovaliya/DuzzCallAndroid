@@ -37,7 +37,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.logycraft.duzzcalll.Activity.IncomingActivity
-import com.logycraft.duzzcalll.R
+import com.duzzcall.duzzcall.R
 import org.linphone.core.Address
 import org.linphone.core.Call
 import org.linphone.core.Core
@@ -321,7 +321,7 @@ class CoreService : CoreService() {
             .setContentIntent(pendingIntent1)
             .setAutoCancel(true)
             .addAction(
-                R.mipmap.ic_launcher,
+                R.drawable.app_logo_notification,
                 ActonButton,
                 PendingIntent.getActivity(this,3,Acceptclick, FLAG_IMMUTABLE)
 //                PendingIntent.getBroadcast(this, 1, intentAction, ints)
@@ -366,9 +366,7 @@ class CoreService : CoreService() {
         )
     }
 
-    /*
-     * This method is called when the service should be stopped as foreground.
-     */
+
     override fun hideForegroundServiceNotification() {
         stopForeground(true)
     }

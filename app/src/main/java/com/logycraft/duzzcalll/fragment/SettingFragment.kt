@@ -11,11 +11,11 @@ import android.view.ViewGroup
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import com.logycraft.duzzcalll.Activity.LoginScreen
-import com.logycraft.duzzcalll.R
+import com.duzzcall.duzzcall.R
 import com.logycraft.duzzcalll.Util.Preference
-import com.logycraft.duzzcalll.databinding.FragmentContactBinding
-import com.logycraft.duzzcalll.databinding.FragmentDialBinding
-import com.logycraft.duzzcalll.databinding.FragmentSettingBinding
+import com.duzzcall.duzzcall.databinding.FragmentContactBinding
+import com.duzzcall.duzzcall.databinding.FragmentDialBinding
+import com.duzzcall.duzzcall.databinding.FragmentSettingBinding
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"

@@ -20,7 +20,7 @@
             android:layout_height="@dimen/d22"
             android:layout_centerVertical="true"
             android:src="@drawable/ic_missed_call"
-            android:layout_marginLeft="@dimen/d10"
+
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -35,13 +35,12 @@
             android:src="@drawable/ic_profile_image"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/ic_call_action"
-            app:layout_constraintTop_toTopOf="parent" ></de.hdodenhof.circleimageview.CircleImageView>
+            app:layout_constraintTop_toTopOf="parent"></de.hdodenhof.circleimageview.CircleImageView>
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/linearLayout2"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
-            android:gravity="center_vertical"
             android:orientation="vertical"
             android:layout_marginLeft="@dimen/d15"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -49,7 +48,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
-
+                android:layout_marginTop="@dimen/d5"
                 android:id="@+id/txt_contact_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -60,6 +59,8 @@
                 android:textSize="@dimen/dt15" />
 
             <TextView
+                android:layout_alignParentBottom="true"
+                android:layout_gravity="bottom"
                 android:id="@+id/txt_contact_number"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -69,7 +70,7 @@
                 android:textColor="@color/text_color_gray"
                 android:textSize="@dimen/dt12" />
 
-        </LinearLayout>
+        </RelativeLayout>
 
         <ImageView
             android:id="@+id/img_star"

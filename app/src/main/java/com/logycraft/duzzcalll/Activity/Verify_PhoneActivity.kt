@@ -12,7 +12,7 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.gson.JsonElement
-import com.logycraft.duzzcalll.R
+import com.duzzcall.duzzcall.R
 import com.logycraft.duzzcalll.Util.BaseActivity
 import com.logycraft.duzzcalll.Util.Preference
 import com.logycraft.duzzcalll.Util.ProgressHelper
@@ -22,8 +22,8 @@ import com.logycraft.duzzcalll.Util.Utils.Companion.LOGIN
 import com.logycraft.duzzcalll.Util.Utils.Companion.MOBILE
 import com.logycraft.duzzcalll.Util.Utils.Companion.REGISTER
 import com.logycraft.duzzcalll.data.SendOTP
-import com.logycraft.duzzcalll.databinding.ActivityPortfolioBinding
-import com.logycraft.duzzcalll.databinding.ActivityVerifyPhoneBinding
+import com.duzzcall.duzzcall.databinding.ActivityPortfolioBinding
+import com.duzzcall.duzzcall.databinding.ActivityVerifyPhoneBinding
 import com.logycraft.duzzcalll.viewmodel.HomeViewModel
 
 import okhttp3.ResponseBody

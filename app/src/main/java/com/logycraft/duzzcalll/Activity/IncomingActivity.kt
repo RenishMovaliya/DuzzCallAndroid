@@ -11,9 +11,10 @@ import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
-import com.logycraft.duzzcalll.R
-import com.logycraft.duzzcalll.databinding.ActivityEditPhoneBinding
-import com.logycraft.duzzcalll.databinding.ActivityIncomingCallBinding
+import com.duzzcall.duzzcall.R
+import com.duzzcall.duzzcall.databinding.ActivityEditPhoneBinding
+import com.duzzcall.duzzcall.databinding.ActivityIncomingCallBinding
+import com.logycraft.duzzcalll.LinphoneManager
 
 import org.linphone.core.Account
 import org.linphone.core.AudioDevice
@@ -22,7 +23,7 @@ import org.linphone.core.Core
 import org.linphone.core.CoreListenerStub
 import org.linphone.core.Factory
 import org.linphone.core.RegistrationState
-import org.linphone.core.tools.service.CoreManager
+//import org.linphone.core.tools.service.CoreManager
 
 class IncomingActivity : AppCompatActivity() {
     private lateinit var binding: ActivityIncomingCallBinding
@@ -111,8 +112,8 @@ class IncomingActivity : AppCompatActivity() {
                         val z2: Boolean = !mIsSpeakerEnabled
                         mIsSpeakerEnabled = z2
                         binding.imageViewSpeakerphone.setSelected(z2)
-                        if (CoreManager.isReady()) {
-                            val core = CoreManager.instance().core
+//                        if (CoreManager.isReady()) {
+                            val core =  LinphoneManager.getCore()
                             val currentAudioDevice = core.currentCall?.outputAudioDevice
                             val speakerEnabled = currentAudioDevice?.type == AudioDevice.Type.Speaker
                             for (audioDevice in core.audioDevices) {
@@ -124,18 +125,18 @@ class IncomingActivity : AppCompatActivity() {
                                     break
                                 }
                             }
-                        }
+//                        }
                     })
                     binding.imageViewAudioOff.setOnClickListener(View.OnClickListener {
-                        if (CoreManager.isReady()) {
-                            val core = CoreManager.instance().core
+//                        if (CoreManager.isReady()) {
+                            val core =  LinphoneManager.getCore()
                             val z: Boolean = !mIsMicMuted
                             mIsMicMuted = z
                             binding.imageViewAudioOff.setSelected(z)
                             core.enableMic(!mIsMicMuted)
-                        }
+//                        }
                     })
-
+                    binding.activeCallTimer.visibility=View.VISIBLE
                     val timer = binding.activeCallTimer
                     timer.base =
                         SystemClock.elapsedRealtime() - (1000 * call.duration) // Linphone timestamps are in seconds
@@ -165,8 +166,8 @@ class IncomingActivity : AppCompatActivity() {
     }
     private fun addCoreListener() {
         org.linphone.core.tools.Log.i("[Incoming Call] Trying to add the Service's CoreListener to the Core...")
-        if (CoreManager.isReady()) {
-            val core = CoreManager.instance().core
+//        if (CoreManager.isReady()) {
+            val core =  LinphoneManager.getCore()
             if (core != null) {
                 org.linphone.core.tools.Log.i("[Incoming Call] Core Manager found, adding our listener")
                 core.addListener(coreListener)
@@ -200,8 +201,8 @@ class IncomingActivity : AppCompatActivity() {
             } else {
                 org.linphone.core.tools.Log.e("[Incoming Call] CoreManager instance found but Core is null!")
             }
-        } else {
-            org.linphone.core.tools.Log.w("[Incoming Call] CoreManager isn't ready yet...")
-        }
+//        } else {
+//            org.linphone.core.tools.Log.w("[Incoming Call] CoreManager isn't ready yet...")
+//        }
     }
 }

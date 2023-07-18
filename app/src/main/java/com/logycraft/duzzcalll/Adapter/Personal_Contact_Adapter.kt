@@ -10,7 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.logycraft.duzzcalll.Model.ContactModel
-import com.logycraft.duzzcalll.R
+import com.duzzcall.duzzcall.R
 import com.simplemobiletools.commons.adapters.MyRecyclerViewAdapter
 import com.simplemobiletools.commons.helpers.SimpleContactsHelper
 import de.hdodenhof.circleimageview.CircleImageView

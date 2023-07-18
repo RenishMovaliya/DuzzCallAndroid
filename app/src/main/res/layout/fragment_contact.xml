@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -84,6 +85,7 @@
                         android:src="@drawable/ic_add" />
                 </RelativeLayout>
 
+
                 <RelativeLayout
                     android:id="@+id/btn_country_select"
                     android:layout_width="@dimen/d50"
@@ -91,6 +93,7 @@
                     android:visibility="gone">
 
                     <ImageView
+                        android:id="@+id/flagimg"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/d50"
                         android:layout_centerInParent="true"
@@ -99,6 +102,22 @@
                         android:src="@drawable/ic_flag" />
 
                 </RelativeLayout>
+
+                <com.hbb20.CountryCodePicker
+                    android:id="@+id/countryCPP"
+                    android:layout_width="@dimen/d50"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/rounded_corner_country"
+                    android:gravity="center"
+                    android:visibility="gone"
+                    app:ccp_autoDetectCountry="true"
+                    app:ccp_showFlag="true"
+                    app:ccp_showFullName="false"
+                    app:ccp_showNameCode="false"
+                    app:ccp_showPhoneCode="false"
+
+
+                    />
             </RelativeLayout>
         </LinearLayout>
 

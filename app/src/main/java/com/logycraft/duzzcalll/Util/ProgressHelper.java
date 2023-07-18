@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 
-import com.logycraft.duzzcalll.R;
+import com.duzzcall.duzzcall.R;
 
 public class ProgressHelper {
     private static AlertDialog dialog = null;
