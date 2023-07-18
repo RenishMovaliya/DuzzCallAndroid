@@ -44,9 +44,9 @@ class LoginScreen : BaseActivity() ,ServiceWaitThreadListener{
 
             }
         })
-//        binding.etMobileNumber.setText("+94773499994")
+        binding.etMobileNumber.setText("+919909799097")
 //        binding.etMobileNumber.setText("+94773785342")
-//        binding.etPassword.setText("1234567890")
+        binding.etPassword.setText("12345678")
 
         binding.btnLogin.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View?) {

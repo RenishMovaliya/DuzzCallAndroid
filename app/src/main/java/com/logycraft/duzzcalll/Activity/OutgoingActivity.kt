@@ -29,6 +29,8 @@ class OutgoingActivity : AppCompatActivity() {
         factory.setDebugMode(true, "Hello Linphone")
         binding.imageViewDecline.visibility = View.VISIBLE
         binding.imageViewAccept.visibility = View.GONE
+        binding.txtAnswer.visibility = View.GONE
+        binding.txtDecline.visibility = View.GONE
         binding.imageViewEnd.visibility = View.GONE
         addCoreListener();
         binding.imageViewSpeakerphone.setOnClickListener(View.OnClickListener {

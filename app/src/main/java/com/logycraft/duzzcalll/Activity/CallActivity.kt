@@ -1,6 +1,7 @@
 package com.logycraft.duzzcalll.Activity
 
 import android.os.Bundle
+import android.os.Handler
 import android.os.SystemClock
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -10,22 +11,18 @@ import com.logycraft.duzzcalll.LinphonePreferences
 import com.logycraft.duzzcalll.Util.CallActivityInterface
 import com.logycraft.duzzcalll.Util.LinphoneUtils
 import com.logycraft.duzzcalll.service.LinphoneService
-import org.linphone.core.Account
-import org.linphone.core.AudioDevice
-import org.linphone.core.Call
-import org.linphone.core.ChatMessage
-import org.linphone.core.ChatRoom
-import org.linphone.core.Core
-import org.linphone.core.CoreListener
-import org.linphone.core.CoreListenerStub
-import org.linphone.core.RegistrationState
+import org.linphone.core.*
 import org.linphone.core.tools.Log
+import java.util.*
 
-class CallActivity : AppCompatActivity() , CallActivityInterface {
+class CallActivity : AppCompatActivity(), CallActivityInterface {
     lateinit var mCore: Core
     private lateinit var binding: ActivityCallBinding
     private var mListener: CoreListener? = null
     private var mIsSpeakerEnabled = false
+    private var seconds = 0
+    private var running = false
+    private var wasRunning = false
     private var mIsMicMuted = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,7 +51,7 @@ class CallActivity : AppCompatActivity() , CallActivityInterface {
         })
         binding.imageViewAudioOff.setOnClickListener(View.OnClickListener {
 //            if (CoreManager.isReady()) {
-            val core =  LinphoneManager.getCore()
+            val core = LinphoneManager.getCore()
             val z: Boolean = !mIsMicMuted
             mIsMicMuted = z
             binding.imageViewAudioOff.setSelected(z)
@@ -64,22 +61,55 @@ class CallActivity : AppCompatActivity() , CallActivityInterface {
 
         val core = LinphoneManager.getCore()
         mCore = core
+        if (savedInstanceState != null) {
+            seconds = savedInstanceState.getInt("seconds")
+            running = savedInstanceState.getBoolean("running")
+            wasRunning = savedInstanceState.getBoolean("wasRunning")
+        }
+
+        running = true
+        val handler = Handler()
+        handler.post(object : Runnable {
+            override fun run() {
+//                val hours = seconds / 3600
+                val minutes = seconds % 3600 / 60
+                val secs = seconds % 60
+                val time = String.format(
+                    Locale.getDefault(),
+                    "%02d:%02d",
+
+                    minutes,
+                    secs
+                )
+                binding.txtTime.setText(time)
+                if (running) {
+                    seconds++
+                }
+                handler.postDelayed(this, 1000)
+            }
+        })
+
     }
+
     fun acceptCallUpdate() {
 //        val countDownTimer: CountDownTimer = mCallUpdateCountDownTimer
 //        if (countDownTimer != null) {
 //            countDownTimer.cancel()
 //        }
         LinphoneManager.getCallManager().acceptCallUpdate(false)
+
+
     }
+
     override fun refreshInCallActions() {
         updateButtons()
     }
 
+
     private fun addCoreListener() {
         org.linphone.core.tools.Log.i("[outgoingCall] Trying to add the Service's CoreListener to the Core...")
 //        if (CoreManager.isReady()) {
-        val core =  LinphoneManager.getCore()
+        val core = LinphoneManager.getCore()
         binding.imageViewDecline.setOnClickListener(View.OnClickListener {
             hangUp()
         })
@@ -155,12 +185,14 @@ class CallActivity : AppCompatActivity() , CallActivityInterface {
                 Call.State.Connected -> {
                     android.util.Log.d("outgoingCall", "Connectedsss")
                     binding.textViewRinging.setText("Connected")
-                    binding.activeCallTimer.visibility=View.VISIBLE
                     binding.textViewUserName.text = call.remoteAddress.username
-                    val timer = binding.activeCallTimer
-                    timer.base =
-                        SystemClock.elapsedRealtime() - (1000 * call.duration) // Linphone timestamps are in seconds
-                    timer.start()
+                    binding.activeCallTimer.visibility = View.VISIBLE
+//                    val timer = binding.activeCallTimer
+//                    timer.base =
+//                        SystemClock.elapsedRealtime() - (1000 * call.duration) // Linphone timestamps are in seconds
+                    binding.activeCallTimer.start()
+
+
                 }
 
                 Call.State.Released -> {
@@ -186,14 +218,15 @@ class CallActivity : AppCompatActivity() , CallActivityInterface {
             }
         }
     }
+
     private fun updateButtons() {
 
 
-
     }
+
     private fun hangUp() {
 //        if (CoreManager.isReady()) {
-        val core =  LinphoneManager.getCore()
+        val core = LinphoneManager.getCore()
         if (core.callsNb == 0) return
 
         // If the call state isn't paused, we can get it using core.currentCall
@@ -209,8 +242,6 @@ class CallActivity : AppCompatActivity() , CallActivityInterface {
 //        LinphoneUtils.removeFromUIThreadDispatcher(mHideControlsRunnable)
 //        LinphoneUtils.dispatchOnUIThreadAfter(mHideControlsRunnable, 4000L)
     }
-
-
 
 
     override fun onStart() {
@@ -276,6 +307,7 @@ class CallActivity : AppCompatActivity() , CallActivityInterface {
 //        ContactAvatar.displayAvatar(displayName, mContactAvatar as View?, true)
         binding.textViewUserName.setText(displayName)
     }
+
     private fun updateCurrentCallTimer() {
         val call = mCore.currentCall ?: return
         binding.activeCallTimer.setBase(SystemClock.elapsedRealtime() - call.duration * 1000)

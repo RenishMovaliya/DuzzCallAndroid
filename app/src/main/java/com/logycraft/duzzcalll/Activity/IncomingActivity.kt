@@ -2,6 +2,7 @@ package com.logycraft.duzzcalll.Activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.os.SystemClock
 import android.util.Log
 import android.view.View
@@ -29,6 +30,8 @@ class IncomingActivity : AppCompatActivity() {
     private lateinit var binding: ActivityIncomingCallBinding
     private var mIsSpeakerEnabled = false
     private var mIsMicMuted = false
+    private lateinit var countDownTimer: CountDownTimer
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 //        setContentView(R.layout.activity_incoming_call)
@@ -103,6 +106,8 @@ class IncomingActivity : AppCompatActivity() {
                     Log.d("IncomingCall","Connectedsss")
                     binding.imageViewAccept.visibility= View.GONE
                     binding.imageViewEnd.visibility= View.GONE
+                    binding.txtAnswer.visibility= View.GONE
+                    binding.txtDecline.visibility= View.GONE
                     binding.imageViewDecline.visibility= View.VISIBLE
                     binding.optionview.visibility= View.VISIBLE
                     binding.imageViewDecline.setOnClickListener(View.OnClickListener {

@@ -5,69 +5,91 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
-        android:id="@+id/linear_layout_info"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="64dp"
-        android:layout_marginLeft="24dp"
-        android:layout_marginRight="24dp"
-        android:gravity="center_horizontal">
-
-
-        <TextView
-            android:id="@+id/text_view_ringing"
+        android:layout_above="@+id/linear_layout_connecting_buttons"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+        <ImageView
+            android:id="@+id/image_view_profile"
+            android:layout_width="170dp"
+            android:layout_height="170dp"
+            android:layout_centerInParent="true"
+            android:background="@drawable/user_icon" />
+        <LinearLayout
+            android:id="@+id/linear_layout_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:fontFamily="@font/poppins_regular"
-            android:lineSpacingExtra="6sp"
-            android:text="Connected"
-            android:textColor="#072860"
-            android:textSize="14sp" />
-        <TextView
-            android:id="@+id/text_view_user_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/poppins_medium"
-            android:textSize="24sp"
-            android:textColor="@color/black"
-            android:text=""
-            android:gravity="center_horizontal"
-            android:layout_marginBottom="5dp" />
+            android:orientation="vertical"
+            android:layout_marginTop="@dimen/dt10"
+            android:layout_marginLeft="24dp"
+            android:layout_marginRight="24dp"
+            android:gravity="center_horizontal">
 
-        <TextView
-            android:id="@+id/text_view_user_sipaddress"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:text=""
-            android:fontFamily="@font/poppins_regular"
 
-            android:visibility="visible"
-            android:textColor="@color/black"
-            android:alpha="0.7"
-            android:textSize="14sp" />
+            <TextView
+                android:id="@+id/text_view_ringing"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:fontFamily="@font/poppins_regular"
+                android:lineSpacingExtra="6sp"
+                android:text="Connected"
+                android:visibility="visible"
+                android:textColor="#072860"
+                android:textSize="14sp" />
+            <TextView
+                android:id="@+id/text_view_user_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_medium"
+                android:textSize="24sp"
+                android:includeFontPadding="false"
+                android:textColor="@color/black"
+                android:text="Harshit Khunt"
+                android:gravity="center_horizontal" />
 
-        <Chronometer
-            android:id="@+id/active_call_timer"
-            android:textColor="@color/unselected_icon_color"
-            android:textSize="@dimen/dt18"
-            android:fontFamily="@font/poppins_bold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="visible"
-            />
+            <TextView
+                android:id="@+id/text_view_user_sipaddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="Ourgoing"
+                android:fontFamily="@font/poppins_regular"
+                android:visibility="visible"
+                android:textColor="@color/black"
+                android:alpha="0.7"
+                android:textSize="14sp" />
+
+            <Chronometer
+                android:id="@+id/active_call_timer"
+                android:textColor="@color/unselected_icon_color"
+                android:textSize="@dimen/dt18"
+                android:fontFamily="@font/poppins_bold"
+                android:layout_width="wrap_content"
+                android:layout_marginTop="@dimen/d15"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                />
+
+            <TextView
+                android:id="@+id/txt_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:fontFamily="@font/inter_semibold"
+                android:paddingHorizontal="40dp"
+                android:layout_marginTop="@dimen/d10"
+                android:text="00(00)"
+                android:textColor="@color/text_color_gray"
+                android:textSize="18dp" />
+
+        </LinearLayout>
+
 
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/image_view_profile"
-        android:layout_width="170dp"
-        android:layout_height="170dp"
-        android:layout_centerInParent="true"
-        android:layout_marginBottom="24dp"
-        android:background="@drawable/user_icon" />
+
     <LinearLayout
         android:id="@+id/linear_layout_remote_mute"
         android:layout_width="match_parent"
@@ -118,16 +140,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_alignParentBottom="true"
+        android:layout_above="@+id/relative_layout_ringing_buttons"
         android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp"
-        android:layout_marginBottom="40dp">
+        android:layout_marginRight="50dp">
 
         <RelativeLayout
             android:visibility="visible"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="35dp">
+            android:layout_marginBottom="25dp">
 
             <ImageView
                 android:id="@+id/image_view_audio_off"
