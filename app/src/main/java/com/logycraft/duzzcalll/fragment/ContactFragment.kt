@@ -106,7 +106,7 @@ class ContactFragment : Fragment() {
 
         })
 
-
+        binding.relativeBusiness.performClick()
         if (activity?.let {
                 ContextCompat.checkSelfPermission(
                     it, android.Manifest.permission.READ_CONTACTS

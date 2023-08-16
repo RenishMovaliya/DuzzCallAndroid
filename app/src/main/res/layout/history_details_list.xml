@@ -91,7 +91,6 @@
             android:text="2m 56s"
             android:textColor="@color/text_color_gray"
             android:textSize="@dimen/dt12"
-
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/img_star"
             app:layout_constraintTop_toTopOf="parent" />

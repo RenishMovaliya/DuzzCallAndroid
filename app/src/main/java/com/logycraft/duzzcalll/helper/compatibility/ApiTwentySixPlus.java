@@ -93,7 +93,7 @@ public class ApiTwentySixPlus {
     }
 
     public static Notification createInCallNotification(Context context, int callId, String msg, int iconID, Bitmap contactIcon, String contactName, PendingIntent intent) {
-        return new Notification.Builder(context, context.getString(R.string.notification_service_channel_id)).setContentTitle(contactName).setContentText(msg).setSmallIcon(iconID).setAutoCancel(false).setContentIntent(intent).setLargeIcon(contactIcon).setCategory(NotificationCompat.CATEGORY_CALL).setVisibility(Notification.VISIBILITY_PUBLIC).setPriority(Notification.PRIORITY_LOW).setWhen(System.currentTimeMillis()).setShowWhen(true).setOngoing(true).setColor(context.getColor(R.color.notification_led_color)).addAction(Compatibility.getCallDeclineAction(context, callId)).build();
+        return new NotificationCompat.Builder(context, context.getString(R.string.notification_service_channel_id)).setContentTitle(contactName).setContentText(msg).setSmallIcon(iconID).setAutoCancel(false).setContentIntent(intent).setLargeIcon(contactIcon).setCategory(NotificationCompat.CATEGORY_CALL).setVisibility(Notification.VISIBILITY_PUBLIC).setPriority(Notification.PRIORITY_LOW).setWhen(System.currentTimeMillis()).setShowWhen(true).setOngoing(true).setColor(context.getColor(R.color.notification_led_color)).addAction(Compatibility.getCallDeclineAction(context, callId)).build();
     }
 
     public static Notification createIncomingCallNotification(Context context, int callId, Bitmap contactIcon, String contactName, String sipUri, PendingIntent intent) {
@@ -104,7 +104,7 @@ public class ApiTwentySixPlus {
         if (contactIcon != null) {
             notificationLayoutHeadsUp.setImageViewBitmap(R.id.caller_picture, contactIcon);
         }
-        return new Notification.Builder(context, context.getString(R.string.notification_channel_id)).setStyle(new Notification.DecoratedCustomViewStyle()).setSmallIcon(R.drawable.app_logo).setContentTitle(contactName).setContentText(context.getString(R.string.incall_notif_incoming)).setContentIntent(intent).setCategory(NotificationCompat.CATEGORY_CALL).setVisibility(Notification.VISIBILITY_PUBLIC).setPriority(Notification.PRIORITY_HIGH)
+        return new NotificationCompat.Builder(context, context.getString(R.string.notification_channel_id)).setStyle(new NotificationCompat.DecoratedCustomViewStyle()).setSmallIcon(R.drawable.app_logo).setContentTitle(contactName).setContentText(context.getString(R.string.incall_notif_incoming)).setContentIntent(intent).setCategory(NotificationCompat.CATEGORY_CALL).setVisibility(Notification.VISIBILITY_PUBLIC).setPriority(Notification.PRIORITY_HIGH)
                 .setWhen(System.currentTimeMillis()).setAutoCancel(false).setShowWhen(true).setOngoing(true)
                 .setColor(context.getColor(R.color.notification_led_color)).setFullScreenIntent(intent, true)
                 .addAction(Compatibility.getCallDeclineAction(context, callId)).addAction(Compatibility.getCallAnswerAction(context, callId))

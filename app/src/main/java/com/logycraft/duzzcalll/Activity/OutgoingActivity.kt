@@ -1,10 +1,15 @@
 package com.logycraft.duzzcalll.Activity
 
+import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
 import android.util.Log
 import android.view.View
+import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import com.adwardstark.mtextdrawable.MaterialTextDrawable
+import com.duzzcall.duzzcall.R
 import com.duzzcall.duzzcall.databinding.ActivityOutgoingCallBinding
 import com.logycraft.duzzcalll.LinphoneManager
 import org.linphone.core.Account
@@ -23,7 +28,14 @@ class OutgoingActivity : AppCompatActivity() {
     private lateinit var binding: ActivityOutgoingCallBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         binding = ActivityOutgoingCallBinding.inflate(layoutInflater)
+        if (Build.VERSION.SDK_INT >= 21) {
+            val window = this.window
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            window.statusBarColor = ContextCompat.getColor(this, R.color.white)
+        }
+
         setContentView(binding.root)
         val factory = Factory.instance()
         factory.setDebugMode(true, "Hello Linphone")
@@ -32,6 +44,7 @@ class OutgoingActivity : AppCompatActivity() {
         binding.txtAnswer.visibility = View.GONE
         binding.txtDecline.visibility = View.GONE
         binding.imageViewEnd.visibility = View.GONE
+        binding.imageViewDialpad.isEnabled=false
         addCoreListener();
         binding.imageViewSpeakerphone.setOnClickListener(View.OnClickListener {
             val z2: Boolean = !mIsSpeakerEnabled
@@ -106,6 +119,9 @@ class OutgoingActivity : AppCompatActivity() {
                         SystemClock.elapsedRealtime() - (1000 * call.duration) // Linphone timestamps are in seconds
                     timer.start()
                     finish()
+                    MaterialTextDrawable.with(this@OutgoingActivity)
+                        .text(call.remoteAddress.username?.substring(0,2) ?: "DC")
+                        .into(binding.imageViewProfile)
                 }
 
                 Call.State.Released -> {
@@ -124,12 +140,18 @@ class OutgoingActivity : AppCompatActivity() {
                 Call.State.OutgoingRinging -> {
                     Log.d("outgoingCall", "outgoig ringing")
                     binding.textViewRinging.setText("Connecting..")
+                    MaterialTextDrawable.with(this@OutgoingActivity)
+                        .text(call.remoteAddress.username?.substring(0,2) ?: "DC")
+                        .into(binding.imageViewProfile)
 //                    finish();
                 }
 
                 Call.State.OutgoingEarlyMedia -> {
                     Log.d("outgoingCall", "outgoig ringing")
                     binding.textViewRinging.setText("Ringing")
+                    MaterialTextDrawable.with(this@OutgoingActivity)
+                        .text(call.remoteAddress.username?.substring(0,2) ?: "DC")
+                        .into(binding.imageViewProfile)
 
                 }
 
@@ -178,6 +200,9 @@ class OutgoingActivity : AppCompatActivity() {
                     org.linphone.core.tools.Log.w("[outgoingCall] Call Nulled !")
                     binding.textViewUserName.setText(call.remoteAddress.username)
                     binding.textViewUserSipaddress.setText("Outgoing Call")
+                    MaterialTextDrawable.with(this@OutgoingActivity)
+                        .text(call.remoteAddress.username?.substring(0,2) ?: "DC")
+                        .into(binding.imageViewProfile)
                     // Starting Android 10 foreground service is a requirement to be able to vibrate if app is in background
                     if (call.dir == Call.Dir.Incoming && call.state == Call.State.IncomingReceived && core.isVibrationOnIncomingCallEnabled) {
 //                            vibrate(call.remoteAddress)

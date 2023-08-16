@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.logycraft.duzzcalll.Activity.NewContactActivity">
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d40"
+        android:layout_marginTop="@dimen/d40"
+        android:src="@drawable/titlename"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"></ImageView>
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_bold"
+        android:gravity="center"
+        android:text="@string/add_contact"
+        android:textColor="@color/appcolour"
+        android:textSize="@dimen/dt18"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintTop_toBottomOf="@+id/imageView"></TextView>
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/d40"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_light"
+            android:gravity="left"
+            android:text="@string/name"
+            android:textColor="@color/appgray"
+            android:textSize="@dimen/dt13"></TextView>
+
+        <EditText
+            android:id="@+id/et_mobile_number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_corner"
+            android:fontFamily="@font/poppins_regular"
+            android:singleLine="true"
+            android:maxLength="14"
+            android:textSize="@dimen/dt16"></EditText>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dt15"
+            android:fontFamily="@font/poppins_light"
+            android:gravity="left"
+            android:text="Phone Number"
+            android:textColor="@color/appgray"
+            android:textSize="@dimen/dt13"></TextView>
+
+
+        <EditText
+            android:id="@+id/et_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_corner"
+            android:inputType="phone"
+            android:fontFamily="@font/poppins_regular"
+            android:textSize="@dimen/dt16"></EditText>
+
+
+
+        <TextView
+            android:id="@+id/btn_add_to_contact"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/d50"
+            android:background="@drawable/rounded_button_bg"
+            android:fontFamily="@font/poppins_bold"
+            android:gravity="center"
+            android:paddingVertical="@dimen/d7"
+            android:text="@string/add_to_contacts"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dt17"></TextView>
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

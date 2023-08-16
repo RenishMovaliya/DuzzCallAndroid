@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Build;
 
 import androidx.annotation.RequiresApi;
+import androidx.core.app.NotificationCompat;
 
 import com.duzzcall.duzzcall.R;
 import com.logycraft.duzzcalll.helper.notifications.Notifiable;
@@ -39,19 +40,19 @@ public class ApiTwentyNinePlus {
         return new Notification.Action.Builder((int) R.drawable.chat_send_over, context.getString(R.string.notification_mark_as_read_label), markAsReadPendingIntent).setSemanticAction(Notification.Action.SEMANTIC_ACTION_MARK_AS_READ).build();
     }
 
-    public static Notification.Action getCallAnswerAction(Context context, int callId) {
+    public static NotificationCompat.Action getCallAnswerAction(Context context, int callId) {
         Intent answerIntent = new Intent(context, NotificationBroadcastReceiver.class);
         answerIntent.setAction(Compatibility.INTENT_ANSWER_CALL_NOTIF_ACTION);
         answerIntent.putExtra(Compatibility.INTENT_NOTIF_ID, callId);
         PendingIntent answerPendingIntent = PendingIntent.getBroadcast(context, callId, answerIntent, 201326592);
-        return new Notification.Action.Builder((int) R.drawable.call_audio_start, context.getString(R.string.notification_call_answer_label), answerPendingIntent).build();
+        return new NotificationCompat.Action.Builder((int) R.drawable.rounded_button__accept, context.getString(R.string.notification_call_answer_label), answerPendingIntent).build();
     }
 
-    public static Notification.Action getCallDeclineAction(Context context, int callId) {
+    public static NotificationCompat.Action getCallDeclineAction(Context context, int callId) {
         Intent hangupIntent = new Intent(context, NotificationBroadcastReceiver.class);
         hangupIntent.setAction(Compatibility.INTENT_HANGUP_CALL_NOTIF_ACTION);
         hangupIntent.putExtra(Compatibility.INTENT_NOTIF_ID, callId);
         PendingIntent hangupPendingIntent = PendingIntent.getBroadcast(context, callId, hangupIntent, 201326592);
-        return new Notification.Action.Builder((int) R.drawable.call_hangup, context.getString(R.string.notification_call_hangup_label), hangupPendingIntent).build();
+        return new NotificationCompat.Action.Builder((int)  R.drawable.rounded_button_decline, context.getString(R.string.notification_call_hangup_label), hangupPendingIntent).build();
     }
 }

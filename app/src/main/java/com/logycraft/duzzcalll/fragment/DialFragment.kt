@@ -65,12 +65,6 @@ class DialFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-//        val view = inflater.inflate(R.layout.fragment_dial,    container, false)
-//        // Inflate the layout for this fragment
-//
-//
-//
-//        return view
         binding = FragmentDialBinding.inflate(inflater,container,false);
         return binding.getRoot();
     }
@@ -213,6 +207,17 @@ class DialFragment : Fragment() {
                 }
             }
     }
+
+
+    private fun dialpadPressed(char: Char, view: View?) {
+        binding.dialpadInput.addCharacter(char)
+        maybePerformDialpadHapticFeedback(view)
+    }
+
+    private fun clearChar(view: View) {
+        binding.dialpadInput.dispatchKeyEvent(binding.dialpadInput.getKeyEvent(KeyEvent.KEYCODE_DEL))
+        maybePerformDialpadHapticFeedback(view)
+    }
     @SuppressLint("ClickableViewAccessibility")
     private fun setupCharClick(view: View, char: Char, longClickable: Boolean = true) {
         view.isClickable = true
@@ -253,17 +258,6 @@ class DialFragment : Fragment() {
             false
         }
     }
-
-    private fun dialpadPressed(char: Char, view: View?) {
-        binding.dialpadInput.addCharacter(char)
-        maybePerformDialpadHapticFeedback(view)
-    }
-
-    private fun clearChar(view: View) {
-        binding.dialpadInput.dispatchKeyEvent(binding.dialpadInput.getKeyEvent(KeyEvent.KEYCODE_DEL))
-        maybePerformDialpadHapticFeedback(view)
-    }
-
     private fun clearInput() {
         binding.dialpadInput.setText("")
     }

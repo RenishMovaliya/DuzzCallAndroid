@@ -1,22 +1,18 @@
 package com.logycraft.duzzcalll.Activity
 
-import androidx.appcompat.app.AppCompatActivity
+import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.SystemClock
 import android.util.Log
 import android.view.View
-import android.widget.Button
-import android.widget.Chronometer
-import android.widget.EditText
-import android.widget.LinearLayout
-import android.widget.RelativeLayout
-import android.widget.TextView
+import android.view.WindowManager
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import com.adwardstark.mtextdrawable.MaterialTextDrawable
 import com.duzzcall.duzzcall.R
-import com.duzzcall.duzzcall.databinding.ActivityEditPhoneBinding
 import com.duzzcall.duzzcall.databinding.ActivityIncomingCallBinding
 import com.logycraft.duzzcalll.LinphoneManager
-
 import org.linphone.core.Account
 import org.linphone.core.AudioDevice
 import org.linphone.core.Call
@@ -24,6 +20,8 @@ import org.linphone.core.Core
 import org.linphone.core.CoreListenerStub
 import org.linphone.core.Factory
 import org.linphone.core.RegistrationState
+
+
 //import org.linphone.core.tools.service.CoreManager
 
 class IncomingActivity : AppCompatActivity() {
@@ -32,8 +30,30 @@ class IncomingActivity : AppCompatActivity() {
     private var mIsMicMuted = false
     private lateinit var countDownTimer: CountDownTimer
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+            setShowWhenLocked(true)
+            setTurnScreenOn(true)
+
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+
+        } else {
+            window.addFlags(
+                WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+                        or WindowManager.LayoutParams.FLAG_ALLOW_LOCK_WHILE_SCREEN_ON
+            )
+        }
+
+        if (Build.VERSION.SDK_INT >= 21) {
+            val window = this.window
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            window.statusBarColor = ContextCompat.getColor(this, R.color.white)
+        }
+
+
+
 //        setContentView(R.layout.activity_incoming_call)
         binding = ActivityIncomingCallBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -101,6 +121,9 @@ class IncomingActivity : AppCompatActivity() {
 //                    findViewById<Button>(org.linphone.core.R.id.answer).isEnabled = true
                     binding.textViewUserName.setText(call.remoteAddress.asStringUriOnly())
                     binding.textViewUserSipaddress.setText("Incoming Call")
+                    MaterialTextDrawable.with(this@IncomingActivity)
+                        .text(call.remoteAddress.username?.substring(0,2) ?: "DC")
+                        .into(binding.imageViewProfile)
                 }
                 Call.State.Connected -> {
                     Log.d("IncomingCall","Connectedsss")
@@ -109,7 +132,7 @@ class IncomingActivity : AppCompatActivity() {
                     binding.txtAnswer.visibility= View.GONE
                     binding.txtDecline.visibility= View.GONE
                     binding.imageViewDecline.visibility= View.VISIBLE
-                    binding.optionview.visibility= View.VISIBLE
+//                    binding.optionview.visibility= View.VISIBLE
                     binding.imageViewDecline.setOnClickListener(View.OnClickListener {
                         call.terminate()
                     })
@@ -187,6 +210,9 @@ class IncomingActivity : AppCompatActivity() {
 //                        binding.textViewUserSipaddress.setText(call.remoteAddress.displayName)
                         binding.textViewUserName.setText(call.remoteAddress.displayName)
                         binding.textViewUserSipaddress.setText("Incoming Call")
+                        MaterialTextDrawable.with(this@IncomingActivity)
+                            .text(call.remoteAddress.username?.substring(0,2) ?: "DC")
+                            .into(binding.imageViewProfile)
                         // Starting Android 10 foreground service is a requirement to be able to vibrate if app is in background
                         if (call.dir == Call.Dir.Incoming && call.state == Call.State.IncomingReceived && core.isVibrationOnIncomingCallEnabled) {
 //                            vibrate(call.remoteAddress)

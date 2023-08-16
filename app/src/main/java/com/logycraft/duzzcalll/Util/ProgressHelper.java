@@ -17,7 +17,7 @@ import com.duzzcall.duzzcall.R;
 public class ProgressHelper {
     private static AlertDialog dialog = null;
 
-    public static void showProgrssDialogs(Context context, String message) {
+    public static void showProgrssDialogs(Context context) {
         if(dialog == null){
             int llPadding = 30;
             LinearLayout ll = new LinearLayout(context);
@@ -39,7 +39,7 @@ public class ProgressHelper {
                     ViewGroup.LayoutParams.WRAP_CONTENT);
             llParam.gravity = Gravity.CENTER;
             TextView tvText = new TextView(context);
-            tvText.setText(message);
+            tvText.setText("Loading...");
             tvText.setTextColor(Color.parseColor("#000000"));
             tvText.setTextSize(20);
             tvText.setLayoutParams(llParam);

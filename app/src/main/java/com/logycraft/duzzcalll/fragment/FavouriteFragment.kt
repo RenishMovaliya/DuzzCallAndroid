@@ -1,5 +1,6 @@
 package com.logycraft.duzzcalll.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,8 @@ import com.logycraft.duzzcalll.Model.ContactModel
 import com.duzzcall.duzzcall.R
 import com.duzzcall.duzzcall.databinding.FragmentContactBinding
 import com.duzzcall.duzzcall.databinding.FragmentSettingBinding
+import com.logycraft.duzzcalll.Activity.NewContactActivity
+import com.logycraft.duzzcalll.Activity.Verify_PhoneActivity
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -58,6 +61,11 @@ class FavouriteFragment : Fragment() {
             binding.recyclerview.setLayoutManager(LinearLayoutManager(activity))
             binding.recyclerview.setAdapter(adapter)
 
+
+        })
+        binding.btnAdd.setOnClickListener(View.OnClickListener {
+            val intent = Intent(activity, NewContactActivity::class.java)
+            startActivity(intent)
         })
         binding.relativeBusiness.setOnClickListener(View.OnClickListener {
 

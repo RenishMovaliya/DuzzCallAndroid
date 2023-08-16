@@ -14,7 +14,7 @@
     <string name="verify_your_phone_number">Verify your phone number</string>
     <string name="tap_agree_and_continue">Tap “Agree and continue” to accept\nthe duzzcall Terms of Service and\nPrivacy Policy</string>
     <string name="duzzcall_will_send_an_sms_message">Duzzcall will send an SMS message\nto verify your phone number</string>
-    <string name="select_the_country">Select the country</string>
+    <string name="select_the_country">Select the Country</string>
     <string name="enter_your_country">Enter your country and\nphone number</string>
     <string name="next">Next</string>
     <string name="verify_91_777_123_456">Verify +91 777 123 456</string>
@@ -93,7 +93,7 @@
     <string name="incall_notif_incoming">Call incoming</string>
     <string name="incall_notif_outgoing">Call outgoing</string>
     <string name="notification_call_answer_label">Answer</string>
-    <string name="notification_call_hangup_label">Hangup</string>
+    <string name="notification_call_hangup_label">Hangup </string>
     <string name="unread_messages">%i unread messages</string>
     <string name="notification_service_channel_id">linphone_notification_service_id</string>
     <string name="content_title_notification">Linphone instant messages notifications</string>
@@ -119,4 +119,8 @@
     <string name="content_description_accept">Accept</string>
     <string name="error_network_unreachable">Network is unreachable</string>
     <string name="error_call_declined">Call declined</string>
+    <string name="add_contact">Add Contact</string>
+    <string name="add_to_contacts">Add to Contacts</string>
+    <string name="duzzcall_incoming_call">Duzzcall Incoming Call</string>
+    <string name="hide">Hide</string>
 </resources>

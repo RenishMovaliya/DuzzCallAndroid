@@ -114,4 +114,7 @@ dependencies {
     implementation 'com.github.fondesa:kpermissions-rx3:3.4.0'
     // If you want the extensions for the Kotlin coroutines.
     implementation 'com.github.fondesa:kpermissions-coroutines:3.4.0'
+
+        implementation 'com.github.adwardstark:materialtextdrawable-for-android:1.0.0'
+
 }

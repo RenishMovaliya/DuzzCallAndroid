@@ -65,7 +65,7 @@ class PortfolioActivity : BaseActivity() {
                         userModel.email = binding.etEmail.text.toString()
                         userModel.password = binding.etPassword.text.toString()
                         userModel.phone = Preference.getNumber(this@PortfolioActivity)
-                        ProgressHelper.showProgrssDialogs(this@PortfolioActivity, "")
+                        ProgressHelper.showProgrssDialogs(this@PortfolioActivity)
                         UserCreate(userModel)
 //                        vm.createUser(userModel)
 //                        vm.createPostLiveData?.observe(this@PortfolioActivity, Observer {
@@ -102,8 +102,8 @@ class PortfolioActivity : BaseActivity() {
                 Preference.saveToken(
                     this@PortfolioActivity, "Bearer " + usedata?.verificationToken.toString()
                 )
-                Toast.makeText(this@PortfolioActivity, "" + usedata?.tfaCode, Toast.LENGTH_LONG)
-                    .show()
+//                Toast.makeText(this@PortfolioActivity, "" + usedata?.tfaCode, Toast.LENGTH_LONG)
+//                    .show()
                 val intent = Intent(this@PortfolioActivity, Verify_PhoneActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent)

@@ -47,10 +47,14 @@ class Edit_PhoneActivity : BaseActivity() {
         val typeface = Typeface.createFromAsset(applicationContext.assets, "font/poppins_light.ttf")
         countryCodePicker.setTypeFace(typeface)
         binding.Tvcountrycode.setText("+" + countryCodePicker.selectedCountryCode)
+        binding.tvCountryname.setText( countryCodePicker.selectedCountryName)
         countryCodePicker.setOnCountryChangeListener {
             binding.Tvcountrycode.setText("+" + countryCodePicker.selectedCountryCode)
+            binding.tvCountryname.setText( countryCodePicker.selectedCountryName)
         }
-
+        binding.tvCountryname.setOnClickListener {
+            countryCodePicker.launchCountrySelectionDialog()
+        }
 
         btn_next.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View?) {
@@ -61,14 +65,18 @@ class Edit_PhoneActivity : BaseActivity() {
                         val intent =
                             Intent(this@Edit_PhoneActivity, Verify_PhoneActivity::class.java)
                         intent.putExtra(FROM, intent.getStringExtra(FROM))
-                        intent.putExtra(MOBILE, binding.Tvcountrycode.text.toString() + mobileNumber)
+                        intent.putExtra(
+                            MOBILE,
+                            binding.Tvcountrycode.text.toString() + mobileNumber
+                        )
                         startActivity(intent)
                         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
                     } else {
-                        showProgrssDialogs(this@Edit_PhoneActivity, "");
+                        showProgrssDialogs(this@Edit_PhoneActivity);
 //                        SendOTP(Tvcountrycode.text.toString() + mobileNumber);
                         Preference.saveNumber(
-                            this@Edit_PhoneActivity, binding.Tvcountrycode.text.toString() + mobileNumber
+                            this@Edit_PhoneActivity,
+                            binding.Tvcountrycode.text.toString() + mobileNumber
                         )
                         val intent = Intent(this@Edit_PhoneActivity, PortfolioActivity::class.java)
 //                        intent.putExtra(MOBILE, Tvcountrycode.text.toString() + mobileNumber)
@@ -106,9 +114,9 @@ class Edit_PhoneActivity : BaseActivity() {
                 intent.putExtra(FROM, intent.getStringExtra(FROM))
                 intent.putExtra(OTP, sendOtp?.tfaCode.toString())
 //                VERIFY_TOKEN = Preference.getToken(this@Edit_PhoneActivity).toString()
-                Toast.makeText(
-                    this@Edit_PhoneActivity, sendOtp?.tfaCode.toString(), Toast.LENGTH_LONG
-                ).show()
+//                Toast.makeText(
+//                    this@Edit_PhoneActivity, sendOtp?.tfaCode.toString(), Toast.LENGTH_LONG
+//                ).show()
                 startActivity(intent)
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
             } else if (it.error != null) {
@@ -134,6 +142,7 @@ class Edit_PhoneActivity : BaseActivity() {
                 showError(getString(R.string.enter_mobile_number))
                 return false
             }
+
             else -> {
                 return true
             }

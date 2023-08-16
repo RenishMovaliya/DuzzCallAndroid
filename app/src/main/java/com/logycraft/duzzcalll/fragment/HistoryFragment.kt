@@ -1,5 +1,6 @@
 package com.logycraft.duzzcalll.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,7 @@ import com.duzzcall.duzzcall.R
 import com.logycraft.duzzcalll.Adapter.All_History_Adapter
 import com.duzzcall.duzzcall.databinding.FragmentHistoryBinding
 import com.duzzcall.duzzcall.databinding.FragmentHistoryDetailsBinding
+import com.logycraft.duzzcalll.Activity.NewContactActivity
 
 
 private const val ARG_PARAM1 = "param1"
@@ -52,6 +54,10 @@ class HistoryFragment : Fragment() {
             binding.recyclerview.adapter = adapter
 
 
+        })
+        binding.btnAdd.setOnClickListener(View.OnClickListener {
+            val intent = Intent(activity, NewContactActivity::class.java)
+            startActivity(intent)
         })
         val adapter = activity?.let { All_History_Adapter(it,0) }
         adapter?.onItemClick = { string ->

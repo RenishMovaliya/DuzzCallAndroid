@@ -14,7 +14,7 @@
         android:title="@string/contacts" />
     <item
         android:id="@+id/dialpad"
-        android:icon="@drawable/ic_dialpad"
+        android:icon="@drawable/dialpad"
         android:title="@string/dial_pad" />
     <item
         android:id="@+id/setting"

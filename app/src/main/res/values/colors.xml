@@ -15,4 +15,7 @@
     <color name="red">#F13A3A</color>
     <color name="tapbar_textcolor">#53536C</color>
     <color name="notification_led_color">@color/appcolour</color>
+    <color name="missedcall_color">#FF586C</color>
+    <color name="regular_txt_colour">#6E737A</color>
+    <color name="dialpad_transparent">#59000000</color>
 </resources>

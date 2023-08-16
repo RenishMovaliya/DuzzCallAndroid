@@ -66,37 +66,44 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/tv_countryname"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d45"
-             android:visibility="gone"
-                android:fontFamily="@font/poppins_light"
-                android:text="@string/select_the_country"
+                android:fontFamily="@font/inter_regular"
                 android:paddingHorizontal="@dimen/dt20"
+                android:text="@string/select_the_country"
                 android:textColor="@color/black"
-                android:textSize="@dimen/dt14" />
-<!--            <com.hbb20.CountryPickerView-->
-<!--                android:id="@+id/countryPicker"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:foreground="?attr/selectableItemBackground"-->
-<!--                app:cpDialog_allowClearSelection="true"-->
-<!--                app:cpList_preferredCountryCodes="PK,US,CA"-->
-<!--                app:cp_initialSelectionMode="autoDetectCounty" />-->
+                android:textSize="@dimen/dt14"
+
+                android:gravity="center_vertical"
+                android:alpha="0.75"
+                android:background="@drawable/rounded_corner_country"
+                android:visibility="visible" />
+            <!--            <com.hbb20.CountryPickerView-->
+            <!--                android:id="@+id/countryPicker"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:foreground="?attr/selectableItemBackground"-->
+            <!--                app:cpDialog_allowClearSelection="true"-->
+            <!--                app:cpList_preferredCountryCodes="PK,US,CA"-->
+            <!--                app:cp_initialSelectionMode="autoDetectCounty" />-->
 
             <com.hbb20.CountryCodePicker
-                android:background="@drawable/rounded_corner_country"
                 android:id="@+id/countyCodePicker"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/rounded_corner_country"
                 android:paddingHorizontal="@dimen/d7"
                 android:paddingVertical="@dimen/d3"
+                android:visibility="gone"
                 app:ccp_autoDetectCountry="true"
-                app:ccp_showPhoneCode="false"
                 app:ccp_showFullName="true"
+                app:ccp_showPhoneCode="false"
                 app:ccp_textSize="@dimen/dt16"
 
 
                 />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -107,8 +114,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/d45"
                     android:layout_marginTop="@dimen/d20"
-
-                    android:layout_weight="3."
+                    android:layout_weight="3"
                     android:background="@drawable/rounded_corner"
                     android:fontFamily="@font/poppins_light"
                     android:gravity="center"
@@ -126,9 +132,9 @@
                     android:layout_weight="1"
                     android:background="@drawable/rounded_corner"
                     android:fontFamily="@font/poppins_light"
-                    android:maxLength="10"
                     android:hint="777  123  456"
                     android:inputType="number"
+                    android:maxLength="10"
                     android:paddingHorizontal="@dimen/dt20"
                     android:textColor="@color/black"
                     android:textColorHint="@color/black"

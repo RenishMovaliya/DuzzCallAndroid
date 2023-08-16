@@ -89,7 +89,7 @@ class Verify_PhoneActivity : BaseActivity() {
 //                    startActivity(intent)
 //                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
 
-                    ProgressHelper.showProgrssDialogs(this@Verify_PhoneActivity, "");
+                    ProgressHelper.showProgrssDialogs(this@Verify_PhoneActivity);
                     VerifyOTP();
                 }
 
@@ -119,7 +119,7 @@ class Verify_PhoneActivity : BaseActivity() {
 
 
         binding.btnResendOtp.setOnClickListener {
-            ProgressHelper.showProgressDialog()
+            ProgressHelper.showProgrssDialogs(this@Verify_PhoneActivity)
             SendOTP()
         }
 

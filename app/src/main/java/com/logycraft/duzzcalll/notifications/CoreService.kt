@@ -55,8 +55,8 @@ var NOTIFICATION_CHANNEL_NAME = "Linphone Core Service"
 var NOTIFICATION_CHANNEL_DESC = "Used to keep the call(s) alive"
 var NOTIFICATION_TITLE = "Duzzcall"
 var NOTIFICATION_CONTENT = "Duzzcall user calling you"
-var ActonButton = "Accept"
-var ActonButton2 = "Decline"
+var ActonButton = " Accept "
+var ActonButton2 = " Decline "
 var mIsInForegroundMode = false
 var mServiceNotification: Notification? = null
 
@@ -264,11 +264,11 @@ class CoreService : CoreService() {
      */
     override fun createServiceNotification() {
         var intentAction = Intent(this, IncomingActivity::class.java)
-
+        intentAction.flags = Intent.FLAG_ACTIVITY_NO_USER_ACTION or Intent.FLAG_ACTIVITY_NEW_TASK
         var Acceptclick = Intent(this, IncomingActivity::class.java)
         var Declineclick = Intent(this, IncomingActivity::class.java)
-        Acceptclick.putExtra("action","Acceptclick");
-        Declineclick.putExtra("action","Declineclick");
+        Acceptclick.putExtra("action", "Acceptclick");
+        Declineclick.putExtra("action", "Declineclick");
         notificationChannel()
         var ints: Int
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -281,7 +281,7 @@ class CoreService : CoreService() {
         Acceptclick.apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
-        val pendingIntent = PendingIntent.getActivity(this,0,Acceptclick,0)
+        val pendingIntent = PendingIntent.getActivity(this, 0, Acceptclick, 0)
 
         if (CoreManager.isReady()) {
             val core = CoreManager.instance().core
@@ -294,11 +294,11 @@ class CoreService : CoreService() {
 //                            vibrate(call.remoteAddress)
                     NOTIFICATION_TITLE = "Duzzcall"
                     NOTIFICATION_CONTENT = "Duzzcall user calling you"
-                     ActonButton = "Accept"
-                     ActonButton2 = "Decline"
+                    ActonButton = "Accept"
+                    ActonButton2 = "Decline"
                     intentAction = Intent(this, IncomingActivity::class.java)
 
-                } else  {
+                } else {
                     NOTIFICATION_TITLE = "Duzzcall"
                     NOTIFICATION_CONTENT = "Outgoing Call Running"
                     ActonButton = ""
@@ -316,19 +316,22 @@ class CoreService : CoreService() {
             // adding notification SmallIcon
             .setSmallIcon(applicationInfo.icon)
             // adding notification Priority
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
             // making the notification clickable
             .setContentIntent(pendingIntent1)
+            .setFullScreenIntent(pendingIntent1, true)
             .setAutoCancel(true)
             .addAction(
-                R.drawable.app_logo_notification,
+                R.drawable.rounded_button__accept,
                 ActonButton,
-                PendingIntent.getActivity(this,3,Acceptclick, FLAG_IMMUTABLE)
+                PendingIntent.getActivity(this, 3, Acceptclick, FLAG_IMMUTABLE)
 //                PendingIntent.getBroadcast(this, 1, intentAction, ints)
             )
             // adding action button
-            .addAction(0, ActonButton2,
-                PendingIntent.getActivity(this, 1, Declineclick, FLAG_UPDATE_CURRENT))
+            .addAction(
+                R.drawable.rounded_button_decline, ActonButton2,
+                PendingIntent.getActivity(this, 1, Declineclick, FLAG_UPDATE_CURRENT)
+            )
             .setAutoCancel(true)
             .build()
     }
@@ -377,7 +380,7 @@ class CoreService : CoreService() {
         mIsInForegroundMode = true
         if (CoreManager.isReady()) {
 //            CoreManager.instance().isServiceRunningAsForeground =
-                mIsInForegroundMode
+            mIsInForegroundMode
         }
     }
 
@@ -391,7 +394,7 @@ class CoreService : CoreService() {
         mIsInForegroundMode = false
         if (CoreManager.isReady()) {
 //            CoreManager.instance().isServiceRunningAsForeground =
-                mIsInForegroundMode
+            mIsInForegroundMode
         }
     }
 
@@ -409,7 +412,7 @@ class CoreService : CoreService() {
 ////                        org.linphone.core.tools.Log.i("[Core Service] Do not vibrate as ringer mode is set to silent and calling username / SIP address isn't part of a favorite contact");
 //                    }
 //                } else {
-                    true
+                true
 //                                    Log.i("[Core Service] Do not vibrate as ringer mode is set to silent");
 //                }
             } else {

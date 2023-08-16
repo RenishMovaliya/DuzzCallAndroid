@@ -20,6 +20,7 @@
             android:fontFamily="@font/poppins_bold"
             android:includeFontPadding="false"
             android:text="@string/recent"
+            android:layout_gravity="center_horizontal"
             android:textColor="@color/appcolour"
             android:textSize="@dimen/dt22" />
 
@@ -40,7 +41,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="42dp"
                 android:layout_weight="1"
                 android:background="@drawable/search_edittext_design">
 
@@ -66,16 +67,17 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/btnAdd"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/d50"
+                android:layout_height="42dp"
                 android:layout_weight="4.8">
 
                 <ImageView
-                    android:layout_width="@dimen/d40"
-                    android:layout_height="@dimen/d40"
+                    android:layout_width="@dimen/d50"
+                    android:layout_height="42dp"
                     android:layout_centerInParent="true"
-                    android:background="@drawable/add_background"
-                    android:padding="@dimen/d10"
+                    android:background="@drawable/search_edittext_design"
+                    android:padding="@dimen/d12"
                     android:src="@drawable/ic_add" />
 
             </RelativeLayout>

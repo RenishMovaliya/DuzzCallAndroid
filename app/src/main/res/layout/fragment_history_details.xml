@@ -25,7 +25,8 @@
                 android:layout_width="@dimen/d40"
                 android:layout_height="@dimen/d40"
                 android:layout_gravity="center_vertical"
-                android:src="@drawable/ic_back"></ImageView>
+                android:padding="@dimen/d6"
+                android:src="@drawable/ic_back_aerrows"></ImageView>
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/profile_image"
@@ -60,7 +61,12 @@
             </LinearLayout>
 
         </LinearLayout>
-
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_d1"
+            android:layout_marginTop="@dimen/d10"
+            android:alpha="0.1"
+            android:background="@color/black" />
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerview"
             android:layout_width="match_parent"

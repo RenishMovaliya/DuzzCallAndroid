@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,7 +10,7 @@
         android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="@dimen/d40"
-        android:layout_marginTop="@dimen/d40"
+        android:layout_marginTop="@dimen/d30"
         android:src="@drawable/titlename"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -20,7 +20,7 @@
         android:id="@+id/dialpad_holder"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@id/imageView"
         android:focusableInTouchMode="true">
 
 
@@ -81,8 +81,9 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/dialpad_wrapper"
             android:layout_width="match_parent"
+            android:layout_marginHorizontal="@dimen/d30"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/d30"
+            android:layout_marginBottom="@dimen/d10"
             app:layout_constraintBottom_toTopOf="@+id/dialpad_call_button"
             android:layout_alignParentBottom="true"
             android:focusableInTouchMode="true"
@@ -455,4 +456,4 @@
             app:layout_constraintStart_toStartOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</FrameLayout>
+</RelativeLayout>

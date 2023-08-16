@@ -2,6 +2,7 @@ package com.logycraft.duzzcalll.Activity
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
@@ -44,9 +45,20 @@ class LoginScreen : BaseActivity() ,ServiceWaitThreadListener{
 
             }
         })
-        binding.etMobileNumber.setText("+919909799097")
-//        binding.etMobileNumber.setText("+94773785342")
-        binding.etPassword.setText("12345678")
+//        Xiaomi
+//        OnePlus
+        val deviceMan = Build.MANUFACTURER
+        Log.d("DeviceCompany",deviceMan);
+//        if(deviceMan.equals("OnePlus")){
+//            binding.etMobileNumber.setText("+919909799097")
+//            binding.etPassword.setText("12345678")
+//        }else{
+//            binding.etMobileNumber.setText("+919909699096")
+//            binding.etPassword.setText("1234567890")
+//        }
+//        binding.etMobileNumber.setText("+919909799097")
+//////        binding.etMobileNumber.setText("+94773785342")
+//        binding.etPassword.setText("12345678")
 
         binding.btnLogin.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View?) {

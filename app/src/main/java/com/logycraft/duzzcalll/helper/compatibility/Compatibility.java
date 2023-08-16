@@ -20,6 +20,7 @@ import android.service.notification.StatusBarNotification;
 
 import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
 
 import org.linphone.mediastream.Version;
 import com.logycraft.duzzcalll.helper.notifications.Notifiable;
@@ -266,7 +267,7 @@ public class Compatibility {
         return null;
     }
 
-    public static Notification.Action getCallAnswerAction(Context context, int callId) {
+    public static NotificationCompat.Action getCallAnswerAction(Context context, int callId) {
         if (Version.sdkAboveOrEqual(29)) {
             return ApiTwentyNinePlus.getCallAnswerAction(context, callId);
         }
@@ -276,7 +277,7 @@ public class Compatibility {
         return null;
     }
 
-    public static Notification.Action getCallDeclineAction(Context context, int callId) {
+    public static NotificationCompat.Action getCallDeclineAction(Context context, int callId) {
         if (Version.sdkAboveOrEqual(29)) {
             return ApiTwentyNinePlus.getCallDeclineAction(context, callId);
         }
