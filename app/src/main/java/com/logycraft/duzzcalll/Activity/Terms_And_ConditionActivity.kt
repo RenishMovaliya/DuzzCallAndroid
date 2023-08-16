@@ -20,7 +20,7 @@ class Terms_And_ConditionActivity : AppCompatActivity() {
         btn_agree_and_continue = findViewById(R.id.btn_agree_and_continue)
         btn_agree_and_continue.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View?) {
-                val intent = Intent(this@Terms_And_ConditionActivity, Edit_PhoneActivity::class.java)
+                val intent = Intent(this@Terms_And_ConditionActivity, PortfolioActivity::class.java)
                 intent.putExtra(FROM,REGISTER)
                 startActivity(intent)
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)

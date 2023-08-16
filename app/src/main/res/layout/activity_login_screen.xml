@@ -40,24 +40,68 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
+            android:id="@+id/tv_countryname"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/d45"
+            android:fontFamily="@font/inter_regular"
+            android:paddingHorizontal="@dimen/dt20"
+            android:text="@string/select_the_country"
+            android:textColor="@color/black"
+            android:textSize="@dimen/dt14"
+            android:gravity="center_vertical"
+            android:alpha="0.75"
+            android:background="@drawable/rounded_corner_country"
+            android:visibility="visible" />
+
+
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins_light"
             android:gravity="left"
+            android:layout_marginTop="@dimen/d10"
+            android:layout_marginBottom="@dimen/d5"
             android:text="@string/mobile_number"
             android:textColor="@color/appgray"
+            android:visibility="gone"
             android:textSize="@dimen/dt13"></TextView>
 
-        <EditText
-            android:id="@+id/et_mobile_number"
+
+        <LinearLayout
             android:layout_width="match_parent"
+            android:layout_marginTop="@dimen/d10"
             android:layout_height="wrap_content"
-            android:background="@drawable/rounded_corner"
-            android:fontFamily="@font/poppins_regular"
-            android:singleLine="true"
-            android:maxLength="14"
-            android:inputType="text"
-            android:textSize="@dimen/dt16"></EditText>
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/Tvcountrycode"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d45"
+                android:layout_weight="3"
+                android:background="@drawable/rounded_corner"
+                android:fontFamily="@font/poppins_light"
+                android:gravity="center"
+                android:text=""
+                android:textColor="@color/black"
+                android:textSize="@dimen/dt14" />
+
+            <EditText
+                android:id="@+id/et_mobile_number"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d45"
+                android:layout_marginLeft="@dimen/d5"
+                android:layout_weight="1"
+                android:background="@drawable/rounded_corner"
+                android:fontFamily="@font/poppins_light"
+                android:hint="777  123  456"
+                android:inputType="number"
+                android:maxLength="10"
+                android:paddingHorizontal="@dimen/dt20"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
+                android:textSize="@dimen/dt14" />
+
+        </LinearLayout>
 
         <TextView
             android:layout_width="match_parent"
@@ -66,6 +110,7 @@
             android:fontFamily="@font/poppins_light"
             android:gravity="left"
             android:text="@string/password"
+            android:visibility="gone"
             android:textColor="@color/appgray"
             android:textSize="@dimen/dt13"></TextView>
 
@@ -73,6 +118,7 @@
         <EditText
             android:id="@+id/et_password"
             android:layout_width="match_parent"
+            android:visibility="gone"
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_corner"
             android:inputType="textPassword"
@@ -87,6 +133,7 @@
             android:gravity="right"
             android:paddingVertical="@dimen/d7"
             android:text="@string/forgot_your_password"
+            android:visibility="gone"
             android:textColor="@color/appgray"
             android:textSize="@dimen/dt13"></TextView>
 
@@ -94,7 +141,7 @@
             android:id="@+id/btn_login"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/d15"
+            android:layout_marginTop="@dimen/d50"
             android:background="@drawable/rounded_button_bg"
             android:fontFamily="@font/poppins_bold"
             android:gravity="center"
@@ -105,11 +152,11 @@
     </LinearLayout>
 
     <LinearLayout
-
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/d40"
         android:layout_marginTop="@dimen/d50"
+        android:visibility="gone"
         android:orientation="vertical"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout"
         tools:layout_editor_absoluteX="40dp">

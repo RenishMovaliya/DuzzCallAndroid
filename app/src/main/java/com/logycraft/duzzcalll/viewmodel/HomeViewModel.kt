@@ -6,10 +6,8 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.restapiidemo.home.data.HomeRepository
-import com.example.restapiidemo.home.data.UserModel
 import com.google.gson.JsonElement
 import com.logycraft.duzzcalll.data.GenericDataModel
-import com.logycraft.duzzcalll.data.LoginData
 import com.logycraft.duzzcalll.data.SendOTP
 
 class HomeViewModel(application: Application) : AndroidViewModel(application) {
@@ -17,8 +15,8 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     private var homeRepository: HomeRepository? = null
     var sentOtpLiveData: LiveData<GenericDataModel<SendOTP>>? = null
     var verifyOtpLiveData: LiveData<GenericDataModel<JsonElement>>? = null
-    var userLiveData: LiveData<GenericDataModel<SendOTP>>? = null
-    var loginuserLiveData: LiveData<GenericDataModel<LoginData>>? = null
+    var userLiveData: LiveData<GenericDataModel<JsonElement>>? = null
+    var loginuserLiveData: LiveData<GenericDataModel<JsonElement>>? = null
     var deletePostLiveData: LiveData<Boolean>? = null
 
     init {
@@ -32,16 +30,16 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         sentOtpLiveData = homeRepository?.sentOtp(postModel)
     }
 
-    fun verifyOtp(phone: String, otp: String, context: Context) {
-        verifyOtpLiveData = homeRepository?.verifyOtp(phone, otp, context)
+    fun verifyOtp(element: JsonElement, context: Context) {
+        verifyOtpLiveData = homeRepository?.verifyOtp(element, context)
     }
 
-    fun createUser(userModel: UserModel) {
-        userLiveData = homeRepository?.createUser(userModel)
+    fun createUser(element: JsonElement, context: Context) {
+        userLiveData = homeRepository?.createUser(element,context)
     }
 
-    fun loginUser(phone: String, password: String) {
-        loginuserLiveData = homeRepository?.loginuser(phone,password)
+    fun loginUser(element: JsonElement) {
+        loginuserLiveData = homeRepository?.loginuser(element)
     }
 
 

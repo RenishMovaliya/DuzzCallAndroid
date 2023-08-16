@@ -13,33 +13,35 @@ interface ApiInterface {
     @GET("posts")
     fun fetchAllPosts(): Call<List<UserModel>>
 
-    @FormUrlEncoded
-    @POST("new")
+//    @FormUrlEncoded
+//    @POST("new")
+//    fun createUser(
+//        @Field("first_name")  firstname:String,
+//        @Field("last_name")  last_name:String,
+//        @Field("phone")  phone:String,
+//        @Field("password")  password:String,
+//        @Field("email")  email:String):Call<SendOTP>
+
+    @PATCH("update")
     fun createUser(
-        @Field("first_name")  firstname:String,
-        @Field("last_name")  last_name:String,
-        @Field("phone")  phone:String,
-        @Field("password")  password:String,
-        @Field("email")  email:String):Call<SendOTP>
+        @Body jsonElement: JsonElement?,@Header("Authorization") authHeader:String):Call<JsonElement>
+
 
     @FormUrlEncoded
     @POST("token/sms")
     fun sendOtp(
         @Field("phone")  phone:String):Call<SendOTP>
 
-    @FormUrlEncoded
     @POST("token/verify")
     fun verifyOtp(
-        @Field("phone")  phone:String, @Field("code")  code:String,@Header("Authorization") authHeader:String):Call<JsonElement>
+        @Body jsonElement: JsonElement?,@Header("Authorization") authHeader:String):Call<JsonElement>
 
     @DELETE("posts/{id}")
     fun deletePost(@Path("id") id:Int):Call<String>
 
-    @FormUrlEncoded
+
     @POST("login")
     fun loginUser(
-        @Field("phone")  phone:String,
-        @Field("password")  password:String
-        ):Call<LoginData>
-
+        @Body jsonElement: JsonElement?
+    ): Call<JsonElement>
 }

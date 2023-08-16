@@ -90,22 +90,18 @@
             android:orientation="horizontal">
 
 
+
+            <View
+                android:layout_width="@dimen/d20"
+                android:layout_height="@dimen/d6"
+                android:background="@drawable/bottom_view_unselect" />
+
+
             <View
                 android:layout_width="@dimen/d35"
                 android:layout_height="@dimen/d6"
+                android:layout_marginLeft="@dimen/d5"
                 android:background="@drawable/bottom_view_select" />
-
-            <View
-                android:layout_width="@dimen/d20"
-                android:layout_height="@dimen/d6"
-                android:layout_marginLeft="@dimen/d5"
-                android:background="@drawable/bottom_view_unselect" />
-
-            <View
-                android:layout_width="@dimen/d20"
-                android:layout_height="@dimen/d6"
-                android:layout_marginLeft="@dimen/d5"
-                android:background="@drawable/bottom_view_unselect" />
 
             <View
                 android:layout_width="@dimen/d20"

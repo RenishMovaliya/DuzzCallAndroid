@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
+        android:layout_centerInParent="true"
+        android:layout_margin="@dimen/d20"
+        app:cardCornerRadius="@dimen/d10"
+        app:cardBackgroundColor="@color/white"
+        app:cardElevation="@dimen/d10">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/d10"
+                android:layout_marginTop="@dimen/d10"
+                android:fontFamily="@font/poppins_light"
+                android:text="Select a Country"
+                android:textColor="@color/black"
+                android:textSize="@dimen/d22" />
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginVertical="10dp"
+                android:background="@drawable/serchview_design">
+
+                <ImageView
+                    android:id="@+id/img_search"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:padding="4dp"
+                    android:src="@drawable/ic_search"
+                    app:tint="@color/appcolour" />
+
+                <EditText
+                    android:id="@+id/et_search"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/d40"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/img_search"
+                    android:background="@color/white"
+                    android:fontFamily="@font/poppins_medium"
+                    android:hint="Search Country"
+                    android:singleLine="true"
+                    android:layout_centerVertical="true"
+                    android:lines="1"
+                    android:maxLines="1"
+                    android:layout_marginRight="@dimen/d10"
+                    android:text=""
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/grey"
+                    android:textSize="16dp" />
+            </RelativeLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/d20"
+                android:layout_marginVertical="@dimen/d10" />
+
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</RelativeLayout>

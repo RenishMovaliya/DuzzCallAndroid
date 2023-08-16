@@ -32,6 +32,10 @@ class LoginData {
         @Expose
         var phone: String? = null
 
+        @SerializedName("country_code")
+        @Expose
+        var country_code: String? = null
+
         @SerializedName("access_token")
         @Expose
         var accessToken: String? = null
@@ -43,5 +47,11 @@ class LoginData {
         @SerializedName("expires_at")
         @Expose
         var expiresAt: String? = null
+
+        @SerializedName("verification_token")
+        var verificationToken: String? = null
+
+        @SerializedName("tfa_code")
+        var tfaCode: Int? = null
     }
 }

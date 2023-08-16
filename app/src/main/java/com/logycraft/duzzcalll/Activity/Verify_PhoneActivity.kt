@@ -16,14 +16,13 @@ import com.duzzcall.duzzcall.R
 import com.logycraft.duzzcalll.Util.BaseActivity
 import com.logycraft.duzzcalll.Util.Preference
 import com.logycraft.duzzcalll.Util.ProgressHelper
-import com.logycraft.duzzcalll.Util.Utils
 import com.logycraft.duzzcalll.Util.Utils.Companion.FROM
 import com.logycraft.duzzcalll.Util.Utils.Companion.LOGIN
-import com.logycraft.duzzcalll.Util.Utils.Companion.MOBILE
 import com.logycraft.duzzcalll.Util.Utils.Companion.REGISTER
 import com.logycraft.duzzcalll.data.SendOTP
-import com.duzzcall.duzzcall.databinding.ActivityPortfolioBinding
 import com.duzzcall.duzzcall.databinding.ActivityVerifyPhoneBinding
+import com.google.gson.Gson
+import com.logycraft.duzzcalll.Util.Utils.Companion.COUNTRY_CODE
 import com.logycraft.duzzcalll.viewmodel.HomeViewModel
 
 import okhttp3.ResponseBody
@@ -35,6 +34,7 @@ class Verify_PhoneActivity : BaseActivity() {
     lateinit var btn_next: TextView
     lateinit var view_bottom: LinearLayout
     lateinit var entered_otp: String
+    lateinit var country_code: String
     lateinit var otpTextView: OtpTextView
     private lateinit var viewModel: HomeViewModel
     private lateinit var countDownTimer: CountDownTimer
@@ -53,6 +53,8 @@ class Verify_PhoneActivity : BaseActivity() {
             view_bottom.visibility = View.GONE
 
         }
+
+        country_code = intent.getStringExtra(COUNTRY_CODE).toString()
         otpTextView = findViewById(R.id.otp_view)
         otpTextView.otpListener = object : OTPListener {
             override fun onInteractionListener() {
@@ -70,13 +72,12 @@ class Verify_PhoneActivity : BaseActivity() {
             }
         }
 
-        binding.txtNumber.setText("Verify " + Preference.getNumber(this@Verify_PhoneActivity))
+        binding.txtNumber.setText("Verify " + country_code + " " + Preference.getNumber(this@Verify_PhoneActivity))
         btn_next.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View?) {
 
                 if (intent.getStringExtra(FROM).equals(LOGIN)) {
-                    val intent = Intent(this@Verify_PhoneActivity, DashboardActivity::class.java)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    val intent = Intent(this@Verify_PhoneActivity, Terms_And_ConditionActivity::class.java)
                     startActivity(intent)
                     finish();
 
@@ -90,7 +91,7 @@ class Verify_PhoneActivity : BaseActivity() {
 //                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
 
                     ProgressHelper.showProgrssDialogs(this@Verify_PhoneActivity);
-                    VerifyOTP();
+                    VerifyOTP(country_code);
                 }
 
             }
@@ -134,8 +135,8 @@ class Verify_PhoneActivity : BaseActivity() {
             if (it.isSuccess == true && it.Responcecode == 200) {
                 ProgressHelper.dismissProgressDialog()
                 var sendOtp: SendOTP? = it.data
-                Toast.makeText(this@Verify_PhoneActivity, "" + sendOtp?.tfaCode, Toast.LENGTH_LONG)
-                    .show()
+//                Toast.makeText(this@Verify_PhoneActivity, "" + sendOtp?.tfaCode, Toast.LENGTH_LONG)
+//                    .show()
 
             } else if (it.error != null) {
                 ProgressHelper.dismissProgressDialog()
@@ -165,20 +166,29 @@ class Verify_PhoneActivity : BaseActivity() {
         return String.format("%02d:%02d", minutes, remainingSeconds)
     }
 
-    private fun VerifyOTP() {
-        Preference.getNumber(this@Verify_PhoneActivity)
-            ?.let { viewModel.verifyOtp(it, entered_otp, this@Verify_PhoneActivity) }
-//        intent.getStringExtra(MOBILE)?.let { viewModel.verifyOtp(it, entered_otp,this@Verify_PhoneActivity) }
+    private fun VerifyOTP(country_code: String) {
+        var element: JsonElement? = null
+        val `object` = JSONObject()
+        `object`.put("country_code", country_code)
+        `object`.put("phone", Preference.getNumber(this@Verify_PhoneActivity))
+        `object`.put("tfa_code", entered_otp)
+        element = Gson().fromJson(`object`.toString(), JsonElement::class.java)
+
+
+        viewModel.verifyOtp(element, this@Verify_PhoneActivity)
+
         viewModel.verifyOtpLiveData?.observe(this@Verify_PhoneActivity, Observer {
 
             if (it.isSuccess == true && it.Responcecode == 200) {
                 ProgressHelper.dismissProgressDialog()
-                var sendOtp: JsonElement? = it.data
+
+                var usedata: JsonElement? = it.data
+                val `objecsst` = JSONObject(usedata.toString())
 //                showError("" + sendOtp.toString())
-                Preference.setFirstUser(this@Verify_PhoneActivity, true)
                 val intent = Intent(
-                    this@Verify_PhoneActivity, DashboardActivity::class.java
+                    this@Verify_PhoneActivity, Terms_And_ConditionActivity::class.java
                 )
+                Preference.saveAccessToken(this@Verify_PhoneActivity,objecsst.getString("access_token"))
                 intent.putExtra("PASS", "NEW_PASS")
                 intent.putExtra("MOBILE", intent.getStringExtra("MOBILE"))
                 startActivity(intent)
@@ -187,8 +197,8 @@ class Verify_PhoneActivity : BaseActivity() {
             } else if (it.error != null) {
                 ProgressHelper.dismissProgressDialog()
                 var errorResponce: ResponseBody = it.error
-                val jsonObj = JSONObject(errorResponce!!.charStream().readText())
-                showError(jsonObj.getString("errors"))
+//                val jsonObj = JSONObject(errorResponce!!.charStream().readText())
+//                showError(jsonObj.getString("errors"))
             } else {
                 ProgressHelper.dismissProgressDialog()
                 showError("Something Went Wrong!")

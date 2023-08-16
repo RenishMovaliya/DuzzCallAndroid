@@ -8,6 +8,7 @@ public  class Utils {
         val FORGOT: String = "FORGOT"
         val MOBILE: String = "MOBILE"
         val OTP: String = "OTP"
+        val COUNTRY_CODE: String = "COUNTRY_CODE"
         val LOGIN: String = "LOGIN"
         var VERIFY_TOKEN: String = "VERIFY_TOKEN"
     }

@@ -74,7 +74,6 @@
                 android:text="@string/select_the_country"
                 android:textColor="@color/black"
                 android:textSize="@dimen/dt14"
-
                 android:gravity="center_vertical"
                 android:alpha="0.75"
                 android:background="@drawable/rounded_corner_country"
@@ -118,8 +117,7 @@
                     android:background="@drawable/rounded_corner"
                     android:fontFamily="@font/poppins_light"
                     android:gravity="center"
-                    android:text=""
-
+                    android:text="+00"
                     android:textColor="@color/black"
                     android:textSize="@dimen/dt14" />
 

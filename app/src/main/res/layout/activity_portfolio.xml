@@ -120,31 +120,6 @@
 
             </LinearLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/d20"
-                android:fontFamily="@font/poppins_light"
-                android:includeFontPadding="false"
-                android:text="Password"
-                android:textAlignment="center"
-                android:textColor="@color/black"
-                android:textSize="@dimen/dt12" />
-
-            <EditText
-                android:id="@+id/et_password"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/d45"
-                android:background="@drawable/rounded_corner"
-                android:fontFamily="@font/poppins_light"
-                android:inputType="textPassword"
-                android:paddingHorizontal="@dimen/dt20"
-                android:singleLine="true"
-                android:textColor="@color/black"
-                android:textColorHint="@color/black"
-                android:textSize="@dimen/dt14" />
-
-
         </LinearLayout>
 
         <RelativeLayout
@@ -186,6 +161,7 @@
             android:orientation="horizontal">
 
 
+
             <View
                 android:layout_width="@dimen/d20"
                 android:layout_height="@dimen/d6"
@@ -202,12 +178,6 @@
                 android:layout_height="@dimen/d6"
                 android:layout_marginLeft="@dimen/d5"
                 android:background="@drawable/bottom_view_select" />
-
-            <View
-                android:layout_width="@dimen/d20"
-                android:layout_height="@dimen/d6"
-                android:layout_marginLeft="@dimen/d5"
-                android:background="@drawable/bottom_view_unselect" />
 
 
         </LinearLayout>

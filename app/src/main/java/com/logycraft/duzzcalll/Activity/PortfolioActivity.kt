@@ -17,6 +17,8 @@ import com.logycraft.duzzcalll.Util.ValidationUtils
 import com.logycraft.duzzcalll.data.SendOTP
 import com.duzzcall.duzzcall.databinding.ActivityLoginScreenBinding
 import com.duzzcall.duzzcall.databinding.ActivityPortfolioBinding
+import com.google.gson.Gson
+import com.google.gson.JsonElement
 import com.logycraft.duzzcalll.viewmodel.HomeViewModel
 import okhttp3.ResponseBody
 import org.json.JSONObject
@@ -52,21 +54,10 @@ class PortfolioActivity : BaseActivity() {
 
         binding.btnNext.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View?) {
-                if (intent.getStringExtra("PASS").equals("NEW_PASS")) {
-                    if (isPassValidate()) {
-//                        UserCreate()
-                    }
-                } else {
-
                     if (isValidate()) {
 
-                        userModel.first_name = binding.etFirstName.text.toString()
-                        userModel.last_name = binding.etLastName.text.toString()
-                        userModel.email = binding.etEmail.text.toString()
-                        userModel.password = binding.etPassword.text.toString()
-                        userModel.phone = Preference.getNumber(this@PortfolioActivity)
                         ProgressHelper.showProgrssDialogs(this@PortfolioActivity)
-                        UserCreate(userModel)
+                        UserCreate()
 //                        vm.createUser(userModel)
 //                        vm.createPostLiveData?.observe(this@PortfolioActivity, Observer {
 //                            if (it != null) {
@@ -86,54 +77,63 @@ class PortfolioActivity : BaseActivity() {
 //                        })
 
                     }
-                }
+
             }
         })
     }
 
 
-    private fun UserCreate(userModel: UserModel) {
-        viewModel.createUser(userModel)
+    private fun UserCreate() {
+
+        var element: JsonElement? = null
+        val `object` = JSONObject()
+        `object`.put("first_name", binding.etFirstName.text.toString())
+        `object`.put("last_name", binding.etLastName.text.toString())
+        `object`.put("email", binding.etEmail.text.toString())
+        element = Gson().fromJson(`object`.toString(), JsonElement::class.java)
+
+
+        viewModel.createUser(element,this@PortfolioActivity)
         viewModel.userLiveData?.observe(this@PortfolioActivity, Observer {
 
             if (it.isSuccess == true && it.Responcecode == 200) {
                 ProgressHelper.dismissProgressDialog()
-                var usedata: SendOTP? = it.data
-                Preference.saveToken(
-                    this@PortfolioActivity, "Bearer " + usedata?.verificationToken.toString()
-                )
+                var usedata: JsonElement? = it.data
+
 //                Toast.makeText(this@PortfolioActivity, "" + usedata?.tfaCode, Toast.LENGTH_LONG)
 //                    .show()
-                val intent = Intent(this@PortfolioActivity, Verify_PhoneActivity::class.java)
+                Preference.setFirstUser(this@PortfolioActivity, true)
+
+                val intent = Intent(this@PortfolioActivity, DashboardActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent)
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
                 finish();
-                showError("" + usedata?.tfaCode)
 
             } else if (it.error != null) {
                 ProgressHelper.dismissProgressDialog()
                 var errorResponce: ResponseBody = it.error
                 val jsonObj = JSONObject(errorResponce!!.charStream().readText())
+                showError(jsonObj.getString("errors"))
 
-                val keys = jsonObj.keys()
-                while (keys.hasNext()) {
-                    val key2 = keys.next()
-                    val value = jsonObj.optJSONObject(key2)
-                    val keys: Iterator<*> = value.keys()
-
-                    while (keys.hasNext()) {
-                        val key2 = keys.next()
-                        val obj = JSONObject(java.lang.String.valueOf(value))
-                        Log.e("Erorrr", "====" + obj.getString(key2.toString()))
-                        val responseWithoutBrackets =
-                            obj.getString(key2.toString()).removeSurrounding("[\"", "\"]")
-
-                        Toast.makeText(
-                            this@PortfolioActivity, "" + responseWithoutBrackets, Toast.LENGTH_LONG
-                        ).show()
-                    }
-                }
+//                val keys = jsonObj.keys()
+//                while (keys.hasNext()) {
+//                    val key2 = keys.next()
+//                    val value = jsonObj.optJSONObject(key2)
+//                    val keys: Iterator<*> = value.keys()
+//
+//                    while (keys.hasNext()) {
+//                        val key2 = keys.next()
+//                        val obj = JSONObject(java.lang.String.valueOf(value))
+//                        Log.e("Erorrr", "====" + obj.getString(key2.toString()))
+//                        val responseWithoutBrackets =
+//                            obj.getString(key2.toString()).removeSurrounding("[\"", "\"]")
+//
+//                        Toast.makeText(
+//                            this@PortfolioActivity, "" + responseWithoutBrackets, Toast.LENGTH_LONG
+//                        ).show()
+//                    }
+//                }
             } else {
                 ProgressHelper.dismissProgressDialog()
                 showError("Something Went Wrong!")
@@ -142,28 +142,11 @@ class PortfolioActivity : BaseActivity() {
         })
     }
 
-    private fun isPassValidate(): Boolean {
-        val password = binding.etPassword.text.toString()
-        when {
-            TextUtils.isEmpty(password) -> {
-                showError(getString(R.string.enter_password))
-                return false
-            }
-            !ValidationUtils.isValidPassword(password) -> {
-                showDialogOk(this, "", getString(R.string.password_validation_msg), "OK")
-                return false
-            }
-            else -> {
-                return true
-            }
-        }
-    }
 
     private fun isValidate(): Boolean {
 
         val firstname = binding.etFirstName.text.toString()
         val lastname = binding.etLastName.text.toString()
-        val password = binding.etPassword.text.toString()
         val email = binding.etEmail.text.toString().trim()
 
         when {
@@ -186,21 +169,11 @@ class PortfolioActivity : BaseActivity() {
                 return false
             }
 
-            TextUtils.isEmpty(password) -> {
-                showError(getString(R.string.enter_password))
-                return false
-            }
-//            !ValidationUtils.isValidPassword(password) -> {
-//                showDialogOk(this, "", getString(R.string.password_validation_msg), "OK")
-//                return false
-//            }
-
             else -> {
                 userModel.first_name = firstname
                 userModel.last_name = lastname
                 userModel.email = email
                 userModel.phone = intent.getStringExtra("MOBILE")
-                userModel.password = password
                 return true
             }
         }

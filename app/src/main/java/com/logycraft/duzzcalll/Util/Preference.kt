@@ -24,10 +24,36 @@ object Preference {
         return sharedpreferences.getString("Value", "")
     }
 
+    fun saveAccessToken(activity: Context, value: String?) {
+        val sharedpreferences = activity.getSharedPreferences("MyPREFERENCES2", Context.MODE_PRIVATE)
+        val editor = sharedpreferences.edit()
+        editor.putString("Value2", value)
+        editor.apply()
+    }
+
+    fun getAccessToken(activity: Context): String? {
+        val sharedpreferences = activity.getSharedPreferences("MyPREFERENCES2", Context.MODE_PRIVATE)
+        return sharedpreferences.getString("Value2", "")
+    }
+
+
+
     fun saveNumber(activity: Context, value: String?) {
         val sharedpreferences = activity.getSharedPreferences("Number", Context.MODE_PRIVATE)
         val editor = sharedpreferences.edit()
         editor.putString("Phone", value)
+        editor.apply()
+    }
+
+    fun getOTP(activity: Context): String? {
+        val sharedpreferences = activity.getSharedPreferences("OTP", Context.MODE_PRIVATE)
+        return sharedpreferences.getString("V_OTP", "")
+    }
+
+    fun saveOTP(activity: Context, value: String?) {
+        val sharedpreferences = activity.getSharedPreferences("OTP", Context.MODE_PRIVATE)
+        val editor = sharedpreferences.edit()
+        editor.putString("V_OTP", value)
         editor.apply()
     }
 
