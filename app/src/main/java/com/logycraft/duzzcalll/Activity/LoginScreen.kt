@@ -76,17 +76,18 @@ class LoginScreen : BaseActivity(), ServiceWaitThreadListener {
         val deviceMan = Build.MANUFACTURER
         Log.d("DeviceCompany", deviceMan);
 //        if(deviceMan.equals("OnePlus")){
-//            binding.etMobileNumber.setText("+919909799097")
-//            binding.etPassword.setText("12345678")
-//        }else{
+////            binding.etMobileNumber.setText("+919909799097")
+////            binding.etPassword.setText("12345678")
+//            binding.etMobileNumber.setText("773785342")
+//            binding.Tvcountrycode.setText("+94")
+//        }
+//        else{
 //            binding.etMobileNumber.setText("+919909699096")
 //            binding.etPassword.setText("1234567890")
 //        }
 //        binding.etMobileNumber.setText("+919909799097")
 //////        binding.etMobileNumber.setText("+94773785342")
 //        binding.etPassword.setText("12345678")
-
-
 
 
         binding.tvCountryname.setOnClickListener {
@@ -233,7 +234,6 @@ class LoginScreen : BaseActivity(), ServiceWaitThreadListener {
     }
 
 
-
     var mobileNumber = ""
     private fun isValidate(): Boolean {
         val password = binding.etPassword.text.toString()
@@ -320,20 +320,26 @@ class LoginScreen : BaseActivity(), ServiceWaitThreadListener {
 //                    Toast.LENGTH_LONG
 //                ).show()
 
-                if (`objecsst`.getString("is_new").equals("false")) {
-                    val intent = Intent(this@LoginScreen, DashboardActivity::class.java)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent)
-                } else {
-                    val intent = Intent(this@LoginScreen, Verify_PhoneActivity::class.java)
-                    Preference.saveNumber(this@LoginScreen, binding.etMobileNumber.text.toString())
+//                if (`objecsst`.getString("is_new").equals("false")) {
+//                    val intent = Intent(this@LoginScreen, DashboardActivity::class.java)
+//                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                    startActivity(intent)
+//                } else {
+                val intent = Intent(this@LoginScreen, Verify_PhoneActivity::class.java)
+                Preference.saveNumber(this@LoginScreen, binding.etMobileNumber.text.toString())
 
-                    intent.putExtra(
-                        Utils.COUNTRY_CODE,
-                        binding.Tvcountrycode.text.toString()
-                    )
-                    startActivity(intent)
-                }
+                intent.putExtra(
+                    Utils.COUNTRY_CODE,
+                    binding.Tvcountrycode.text.toString()
+                )
+                Log.d("OTP_is_HERE",binding.etMobileNumber.text.toString()+"   "+`objecsst`.getString("tfa_code")+`objecsst`.getString("is_new"))
+                intent.putExtra(Utils.OTP, `objecsst`.getString("tfa_code"))
+//                Toast.makeText(
+//                            this@LoginScreen, ""+`objecsst`.getString("tfa_code"), Toast.LENGTH_LONG
+//                        ).show()
+                intent.putExtra("isNew", `objecsst`.getString("is_new"))
+                startActivity(intent)
+//                }
 //                val intent = Intent(this@LoginScreen, DashboardActivity::class.java)
 
 //                intent.putExtra(FROM, LOGIN)

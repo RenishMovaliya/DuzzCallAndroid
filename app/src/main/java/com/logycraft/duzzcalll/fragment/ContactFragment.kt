@@ -2,6 +2,7 @@ package com.logycraft.duzzcalll.fragment
 
 import android.Manifest.permission.READ_CONTACTS
 import android.content.ContentResolver
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.Cursor
 import android.net.Uri
@@ -12,10 +13,14 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.database.getStringOrNull
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.logycraft.duzzcalll.Adapter.Business_Contact_Adapter
@@ -24,7 +29,22 @@ import com.logycraft.duzzcalll.Model.ContactModel
 import com.duzzcall.duzzcall.R
 import com.duzzcall.duzzcall.databinding.ActivityVerifyPhoneBinding
 import com.duzzcall.duzzcall.databinding.FragmentContactBinding
+import com.google.gson.Gson
+import com.google.gson.JsonElement
 import com.hbb20.CountryCodePicker
+import com.logycraft.duzzcalll.Activity.Terms_And_ConditionActivity
+import com.logycraft.duzzcalll.Adapter.BusinessContact_Adapter
+import com.logycraft.duzzcalll.Util.Preference
+import com.logycraft.duzzcalll.Util.ProgressHelper
+import com.logycraft.duzzcalll.data.BusinessResponce
+import com.logycraft.duzzcalll.data.GenericDataModel
+import com.logycraft.duzzcalll.data.SendOTP
+import com.logycraft.duzzcalll.viewmodel.HomeViewModel
+import okhttp3.ResponseBody
+import org.json.JSONObject
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.util.*
 
 private const val ARG_PARAM1 = "param1"
@@ -41,7 +61,7 @@ class ContactFragment : Fragment() {
 
     private var param1: String? = null
     private var param2: String? = null
-
+    private lateinit var viewModel: HomeViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,6 +79,7 @@ class ContactFragment : Fragment() {
 //        val view: View = inflater.inflate(binding, container, false)
 
         binding = FragmentContactBinding.inflate(inflater,container,false);
+        viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
         return binding.getRoot();
 
 //        return view;
@@ -91,9 +112,8 @@ class ContactFragment : Fragment() {
             val size: Int = binding.relativePersonal.getWidth()
 
             binding.relativeSelectedBtn.animate().x(size.toFloat()).duration = 100
-            val adapter = Business_Contact_Adapter(activity, false)
-            binding.recyclerview.setLayoutManager(LinearLayoutManager(activity))
-            binding.recyclerview.setAdapter(adapter)
+            getbusinessList()
+
             binding.btnCountrySelect.setOnClickListener(View.OnClickListener {
                 binding.countryCPP.launchCountrySelectionDialog()
 
@@ -144,6 +164,57 @@ class ContactFragment : Fragment() {
 
 
     }
+
+    private fun getbusinessList() {
+
+
+        activity?.let { viewModel.getBusiness(it) }
+
+        activity?.let {
+            viewModel.getbusinessLiveData?.observe(it, androidx.lifecycle.Observer {
+
+                if (it.isSuccess == true && it.Responcecode == 200) {
+                    ProgressHelper.dismissProgressDialog()
+
+                    var businessresponce: List<BusinessResponce>? = it.data
+                    val adapter =
+                        businessresponce?.let { it1 ->
+                            BusinessContact_Adapter(activity,
+                                it1, false)
+                        }
+                    binding.recyclerview.setLayoutManager(LinearLayoutManager(activity))
+                    binding.recyclerview.setAdapter(adapter)
+
+    //                val `objecsst` = JSONObject(usedata.toString())
+    ////                showError("" + sendOtp.toString())
+    //                val intent = Intent(
+    //                    this@Verify_PhoneActivity, Terms_And_ConditionActivity::class.java
+    //                )
+    //                Preference.saveAccessToken(this@Verify_PhoneActivity,objecsst.getString("access_token"))
+    //                intent.putExtra("PASS", "NEW_PASS")
+    //                intent.putExtra("MOBILE", intent.getStringExtra("MOBILE"))
+    //                startActivity(intent)
+    //                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+    //                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+                } else if (it.error != null) {
+                    ProgressHelper.dismissProgressDialog()
+                    var errorResponce: ResponseBody = it.error
+                    val jsonObj = JSONObject(errorResponce!!.charStream().readText())
+                    showMessage(jsonObj.getString("errors"))
+                } else {
+                    ProgressHelper.dismissProgressDialog()
+                    showMessage("Something Went Wrong!")
+                }
+
+
+            })
+        }
+
+    }
+    fun showMessage(message: String?) {
+        Toast.makeText(activity, "$message", Toast.LENGTH_LONG).show()
+    }
+
 
     private fun setDataInList() {
 

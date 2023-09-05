@@ -64,6 +64,9 @@ class SettingFragment : Fragment() {
             cv_cancel?.setOnClickListener { dialog.dismiss() }
             dialog?.show()
         }
+        binding.linAccountsetting.setOnClickListener {
+
+        }
     }
 
     companion object {

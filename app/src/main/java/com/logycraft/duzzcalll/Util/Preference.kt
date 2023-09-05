@@ -36,6 +36,29 @@ object Preference {
         return sharedpreferences.getString("Value2", "")
     }
 
+  fun saveExtension(activity: Context, value: String?) {
+        val sharedpreferences = activity.getSharedPreferences("Extenction", Context.MODE_PRIVATE)
+        val editor = sharedpreferences.edit()
+        editor.putString("Value3", value)
+        editor.apply()
+    }
+
+    fun getExtension(activity: Context): String? {
+        val sharedpreferences = activity.getSharedPreferences("Extenction", Context.MODE_PRIVATE)
+        return sharedpreferences.getString("Value3", "")
+    }
+    fun saveExtension_password(activity: Context, value: String?) {
+        val sharedpreferences = activity.getSharedPreferences("extension_password", Context.MODE_PRIVATE)
+        val editor = sharedpreferences.edit()
+        editor.putString("Value4", value)
+        editor.apply()
+    }
+
+    fun getExtension_password(activity: Context): String? {
+        val sharedpreferences = activity.getSharedPreferences("extension_password", Context.MODE_PRIVATE)
+        return sharedpreferences.getString("Value4", "")
+    }
+
 
 
     fun saveNumber(activity: Context, value: String?) {

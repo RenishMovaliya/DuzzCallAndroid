@@ -28,5 +28,15 @@
         app:itemIconTint="@color/bottom_nav_color"
         app:itemTextAppearanceActive="@style/BottomNavigationViewTextStyle"
         app:itemTextAppearanceInactive="@style/BottomNavigationViewTextStyle"></com.google.android.material.bottomnavigation.BottomNavigationView>
+    <TextView
+        android:id="@+id/statusTV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:gravity="center"
+
+        android:textColor="@color/white"
+
+        android:textSize="11dp"></TextView>
 </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

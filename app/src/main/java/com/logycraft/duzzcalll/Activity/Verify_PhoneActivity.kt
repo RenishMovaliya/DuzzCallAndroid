@@ -23,6 +23,7 @@ import com.logycraft.duzzcalll.data.SendOTP
 import com.duzzcall.duzzcall.databinding.ActivityVerifyPhoneBinding
 import com.google.gson.Gson
 import com.logycraft.duzzcalll.Util.Utils.Companion.COUNTRY_CODE
+import com.logycraft.duzzcalll.data.LoginData
 import com.logycraft.duzzcalll.viewmodel.HomeViewModel
 
 import okhttp3.ResponseBody
@@ -76,23 +77,23 @@ class Verify_PhoneActivity : BaseActivity() {
         btn_next.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View?) {
 
-                if (intent.getStringExtra(FROM).equals(LOGIN)) {
-                    val intent = Intent(this@Verify_PhoneActivity, Terms_And_ConditionActivity::class.java)
-                    startActivity(intent)
-                    finish();
-
-                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
-                } else {
-
-//                    val intent = Intent(this@Verify_PhoneActivity, PortfolioActivity::class.java)
-//                    intent.putExtra("PASS", "NEW_PASS")
-//                    intent.putExtra("MOBILE", intent.getStringExtra("MOBILE"))
+//                if (intent.getStringExtra(FROM).equals(LOGIN)) {
+//                    val intent = Intent(this@Verify_PhoneActivity, Terms_And_ConditionActivity::class.java)
 //                    startActivity(intent)
+//                    finish();
+//
 //                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+//                } else {
+//
+////                    val intent = Intent(this@Verify_PhoneActivity, PortfolioActivity::class.java)
+////                    intent.putExtra("PASS", "NEW_PASS")
+////                    intent.putExtra("MOBILE", intent.getStringExtra("MOBILE"))
+////                    startActivity(intent)
+////                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
 
-                    ProgressHelper.showProgrssDialogs(this@Verify_PhoneActivity);
-                    VerifyOTP(country_code);
-                }
+                ProgressHelper.showProgrssDialogs(this@Verify_PhoneActivity);
+                VerifyOTP(country_code);
+//                }
 
             }
 
@@ -182,18 +183,33 @@ class Verify_PhoneActivity : BaseActivity() {
             if (it.isSuccess == true && it.Responcecode == 200) {
                 ProgressHelper.dismissProgressDialog()
 
-                var usedata: JsonElement? = it.data
-                val `objecsst` = JSONObject(usedata.toString())
+                var userdata: LoginData? = it.data
+//                val `objecsst` = JSONObject(usedata.toString())
 //                showError("" + sendOtp.toString())
-                val intent = Intent(
-                    this@Verify_PhoneActivity, Terms_And_ConditionActivity::class.java
+                Preference.saveAccessToken(
+                    this@Verify_PhoneActivity, userdata?.extension?.accessToken
                 )
-                Preference.saveAccessToken(this@Verify_PhoneActivity,objecsst.getString("access_token"))
-                intent.putExtra("PASS", "NEW_PASS")
-                intent.putExtra("MOBILE", intent.getStringExtra("MOBILE"))
-                startActivity(intent)
-                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
-                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+                Preference.setLoginData(this@Verify_PhoneActivity,userdata)
+                if (intent.getStringExtra("isNew").toString().equals("false")) {
+                    val intent = Intent(
+                        this@Verify_PhoneActivity, DashboardActivity::class.java
+                    )
+                    startActivity(intent)
+                    finish()
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+                } else {
+                    val intent = Intent(
+                        this@Verify_PhoneActivity, Terms_And_ConditionActivity::class.java
+                    )
+
+                    intent.putExtra("PASS", "NEW_PASS")
+                    intent.putExtra("MOBILE", intent.getStringExtra("MOBILE"))
+                    startActivity(intent)
+                    finish()
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+                }
             } else if (it.error != null) {
                 ProgressHelper.dismissProgressDialog()
                 var errorResponce: ResponseBody = it.error

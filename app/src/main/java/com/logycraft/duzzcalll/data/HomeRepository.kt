@@ -1,13 +1,16 @@
 package com.example.restapiidemo.home.data
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.restapiidemo.network.ApiClient
 import com.example.restapiidemo.network.ApiInterface
 import com.google.gson.JsonElement
 import com.logycraft.duzzcalll.Util.Preference
+import com.logycraft.duzzcalll.data.BusinessResponce
 import com.logycraft.duzzcalll.data.GenericDataModel
+import com.logycraft.duzzcalll.data.LoginData
 import com.logycraft.duzzcalll.data.SendOTP
 import retrofit2.Call
 import retrofit2.Callback
@@ -49,28 +52,34 @@ class HomeRepository {
 
     }
 
-    fun createUser(jsonElement: JsonElement, context: Context): LiveData<GenericDataModel<JsonElement>> {
+    fun createUser(
+        jsonElement: JsonElement,
+        context: Context
+    ): LiveData<GenericDataModel<JsonElement>> {
         val data = MutableLiveData<GenericDataModel<JsonElement>>()
 
-        Preference.getToken(context)?.let {
-            apiInterface?.createUser(jsonElement, it)?.enqueue(object : Callback<JsonElement> {
-                override fun onFailure(call: Call<JsonElement>, t: Throwable) {
-                    data.value = null
-                }
+//        Preference.getAccessToken(context)?.let {
+//
+//        }
+        var usedata = Preference.getLoginData(context)
+        var token ="Bearer " +usedata?.extension?.accessToken
+        Log.d("Token",token)
+        apiInterface?.createUser(jsonElement, token)?.enqueue(object : Callback<JsonElement> {
+            override fun onFailure(call: Call<JsonElement>, t: Throwable) {
+                data.value = null
+            }
 
-                override fun onResponse(call: Call<JsonElement>, response: Response<JsonElement>) {
-    //                val res = response.body()
-    //                if (response.isSuccessful){
-                    data.value = GenericDataModel(
-                        response.isSuccessful, response.body(), response.errorBody(), response.code()
-                    )
-    //                }else{
-    //                    data.value = GenericDataModel(response.isSuccessful,null,response.errorBody(),response.code())
-    //                }
-                }
-            })
-        }
-
+            override fun onResponse(call: Call<JsonElement>, response: Response<JsonElement>) {
+                //                val res = response.body()
+                //                if (response.isSuccessful){
+                data.value = GenericDataModel(
+                    response.isSuccessful, response.body(), response.errorBody(), response.code()
+                )
+                //                }else{
+                //                    data.value = GenericDataModel(response.isSuccessful,null,response.errorBody(),response.code())
+                //                }
+            }
+        })
         return data
 
     }
@@ -116,20 +125,21 @@ class HomeRepository {
 
     }
 
-    fun verifyOtp(element: JsonElement, context: Context): LiveData<GenericDataModel<JsonElement>> {
-        val data = MutableLiveData<GenericDataModel<JsonElement>>()
+    fun verifyOtp(element: JsonElement, context: Context): LiveData<GenericDataModel<LoginData>> {
+        val data = MutableLiveData<GenericDataModel<LoginData>>()
 
         Preference.getToken(context)?.let {
             apiInterface?.verifyOtp(element, it)
-                ?.enqueue(object : Callback<JsonElement> {
-                    override fun onFailure(call: Call<JsonElement>, t: Throwable) {
+                ?.enqueue(object : Callback<LoginData> {
+                    override fun onFailure(call: Call<LoginData>, t: Throwable) {
                         data.value = null
                     }
 
                     override fun onResponse(
-                        call: Call<JsonElement>, response: Response<JsonElement>
+                        call: Call<LoginData>, response: Response<LoginData>
                     ) {
                         val res = response.body()
+                        Log.d("Token",res.toString())
                         if (response.isSuccessful) {
                             data.value = GenericDataModel(
                                 response.isSuccessful,
@@ -142,7 +152,6 @@ class HomeRepository {
                                 response.isSuccessful, null, response.errorBody(), response.code()
                             )
                         }
-
                     }
                 })
         }
@@ -174,6 +183,41 @@ class HomeRepository {
                         response.isSuccessful, null, response.errorBody(), response.code()
                     )
                 }
+            }
+        })
+
+        return data
+
+    }
+
+    fun getBusinessContact(context: Context): LiveData<GenericDataModel<List<BusinessResponce>>> {
+
+
+        val data = MutableLiveData<GenericDataModel<List<BusinessResponce>>>()
+        var usedata = Preference.getLoginData(context)
+        var token ="Bearer " +usedata?.extension?.accessToken
+        Log.d("Token","Business Token "+token)
+
+        apiInterface?.getBusiness(token)?.enqueue(object : Callback<List<BusinessResponce>> {
+            override fun onFailure(call: Call<List<BusinessResponce>>, t: Throwable) {
+                data.value = null
+            }
+
+            override fun onResponse(
+                call: Call<List<BusinessResponce>>,
+                response: Response<List<BusinessResponce>>
+            ) {
+                //                val res = response.body()
+                //                if (response.isSuccessful){
+                data.value = GenericDataModel(
+                    response.isSuccessful,
+                    response.body(),
+                    response.errorBody(),
+                    response.code()
+                )
+                //                }else{
+                //                    data.value = GenericDataModel(response.isSuccessful,null,response.errorBody(),response.code())
+                //                }
             }
         })
 

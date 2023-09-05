@@ -11,22 +11,26 @@ class LoginData {
     @Expose
     var extension: Extension? = null
 
-    class Extension {
-        @SerializedName("first_name")
-        @Expose
-        var firstName: String? = null
+    @SerializedName("verified")
+    @Expose
+    var verified: Boolean? = null
 
-        @SerializedName("last_name")
-        @Expose
-        var lastName: String? = null
+    class Extension {
+//        @SerializedName("first_name")
+//        @Expose
+//        var firstName: String? = null
+
+//        @SerializedName("last_name")
+//        @Expose
+//        var lastName: String? = null
 
         @SerializedName("extension")
         @Expose
         var extension: String? = null
 
-        @SerializedName("password")
+        @SerializedName("extension_password")
         @Expose
-        var password: String? = null
+        var extensionpassword: String? = null
 
         @SerializedName("phone")
         @Expose
@@ -48,10 +52,10 @@ class LoginData {
         @Expose
         var expiresAt: String? = null
 
-        @SerializedName("verification_token")
-        var verificationToken: String? = null
-
-        @SerializedName("tfa_code")
-        var tfaCode: Int? = null
+//        @SerializedName("verification_token")
+//        var verificationToken: String? = null
+//
+//        @SerializedName("tfa_code")
+//        var tfaCode: Int? = null
     }
 }

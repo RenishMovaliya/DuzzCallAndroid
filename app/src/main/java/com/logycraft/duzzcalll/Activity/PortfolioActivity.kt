@@ -112,9 +112,9 @@ class PortfolioActivity : BaseActivity() {
 
             } else if (it.error != null) {
                 ProgressHelper.dismissProgressDialog()
-                var errorResponce: ResponseBody = it.error
-                val jsonObj = JSONObject(errorResponce!!.charStream().readText())
-                showError(jsonObj.getString("errors"))
+//                var errorResponce: ResponseBody = it.error
+//                val jsonObj = JSONObject(errorResponce!!.charStream().readText())
+                showError("Something went Wrong!")
 
 //                val keys = jsonObj.keys()
 //                while (keys.hasNext()) {

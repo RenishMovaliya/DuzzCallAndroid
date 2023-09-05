@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -34,6 +35,7 @@ import org.linphone.core.*
 
 class DashboardActivity : AppCompatActivity(), CallBackListener,  PermissionRequest.Listener{
     lateinit var bottomNav: BottomNavigationView
+    lateinit var statusTV: TextView
      lateinit var core: Core
 
     private val request by lazy {
@@ -44,36 +46,42 @@ class DashboardActivity : AppCompatActivity(), CallBackListener,  PermissionRequ
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
 //        loadFragment(HomeFragment())
-
+        statusTV = findViewById(R.id.statusTV)
         bottomNav = findViewById(R.id.bottomNav) as BottomNavigationView
         bottomNav.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.favourite -> {
+                    statusTV.visibility= View.GONE
                     loadFragment(FavouriteFragment())
                     true
                 }
 
                 R.id.history -> {
+                    statusTV.visibility= View.GONE
                     loadFragment(HistoryFragment())
                     true
                 }
 
                 R.id.contact -> {
+                    statusTV.visibility= View.GONE
                     loadFragment(ContactFragment())
                     true
                 }
 
                 R.id.dialpad -> {
+                    statusTV.visibility= View.VISIBLE
                     loadFragment(DialFragment())
                     true
                 }
 
                 R.id.setting -> {
+                    statusTV.visibility= View.GONE
                     loadFragment(SettingFragment())
                     true
                 }
 
                 else -> {
+                    statusTV.visibility= View.GONE
                     true
                 }
             }
@@ -82,35 +90,13 @@ class DashboardActivity : AppCompatActivity(), CallBackListener,  PermissionRequ
         bottomNav.setSelectedItemId(R.id.dialpad);
         val factory = Factory.instance()
         factory.setDebugMode(true, "Hello Linphone")
-        core = LinphoneManager.getCore()
-//        core = factory.createCore(null, null, this)
+        if( LinphoneManager.getCore()!=null){
+            core = LinphoneManager.getCore()
+            core.videoActivationPolicy.automaticallyAccept = true
+            loginLinphone()
+        }
 
-//        findViewById<Button>(org.linphone.core.R.id.connect).setOnClickListener {
-//            login()
-//            it.isEnabled = false
-//        }
 
-        // For video to work, we need two TextureViews:
-        // one for the remote video and one for the local preview
-//        core.nativeVideoWindowId = findViewById(org.linphone.core.R.id.remote_video_surface)
-        // The local preview is a org.linphone.mediastream.video.capture.CaptureTextureView
-        // which inherits from TextureView and contains code to keep the ratio of the capture video
-//        core.nativePreviewWindowId = findViewById(org.linphone.core.R.id.local_preview_video_surface)
-
-        // Here we enable the video capture & display at Core level
-        // It doesn't mean calls will be made with video automatically,
-        // But it allows to use it later
-//        core.setVideoCaptureEnabled(true)
-//        core.setVideoDisplayEnabled(true)
-//        core.enableVideoCapture(true)
-//        core.enableVideoDisplay(true)
-        // When enabling the video, the remote will either automatically answer the update request
-        // or it will ask it's user depending on it's policy.
-        // Here we have configured the policy to always automatically accept video requests
-        core.videoActivationPolicy.automaticallyAccept = true
-        // If you don't want to automatically accept,
-        // you'll have to use a code similar to the one in toggleVideo to answer a received request
-        loginLinphone()
     }
 
     private fun loadFragment(fragment: Fragment) {
@@ -119,20 +105,14 @@ class DashboardActivity : AppCompatActivity(), CallBackListener,  PermissionRequ
         transaction.commit()
     }
 
-//    private var accountCreator: AccountCreator = TODO()
-//    private val accountCreator: AccountCreator
-
-
-    private var accountToCheck: Account? = null
     val waitForServerAnswer = MutableLiveData<Boolean>()
     private fun loginLinphone() {
         var usedata = Preference.getLoginData(this@DashboardActivity)
         waitForServerAnswer.value = true
         val username = usedata?.extension?.extension
-        val password = usedata?.extension?.password
+        val password = usedata?.extension?.extensionpassword
         val domain = "dzcl.et.lk"
         val transportType = TransportType.Udp
-        val  displayName = usedata?.extension?.firstName+" "+usedata?.extension?.lastName
         val authInfo = Factory.instance()
             .createAuthInfo(username.toString(), null, password, null, null, domain, null)
         authInfo.domain
@@ -184,9 +164,12 @@ class DashboardActivity : AppCompatActivity(), CallBackListener,  PermissionRequ
 //            findViewById<TextView>(org.linphone.core.R.id.registration_status).text = message
             if (state == RegistrationState.Failed) {
 //                findViewById<Button>(org.linphone.core.R.id.connect).isEnabled = true
+                statusTV.setText("Offline")
                 Log.i("SipTest", "REG Failed")
             } else if (state == RegistrationState.Ok) {
                 Log.i("SipTest", "REG Success")
+                statusTV.setText("Online")
+                statusTV.setBackgroundColor(getColor(R.color.green_status))
                 //Start incoming call service
             }
         }

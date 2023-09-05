@@ -7,7 +7,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 
-const val BASEURL = "https://dzapi.et.lk/api/extensions/"
+const val BASEURL = "https://dzapi.et.lk/api/"
 class ApiClient {
 
 

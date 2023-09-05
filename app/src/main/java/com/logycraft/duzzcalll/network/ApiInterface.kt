@@ -2,6 +2,7 @@ package com.example.restapiidemo.network
 
 import com.example.restapiidemo.home.data.UserModel
 import com.google.gson.JsonElement
+import com.logycraft.duzzcalll.data.BusinessResponce
 import com.logycraft.duzzcalll.data.LoginData
 import com.logycraft.duzzcalll.data.SendOTP
 import okhttp3.ResponseBody
@@ -10,7 +11,7 @@ import retrofit2.http.*
 
 interface ApiInterface {
 
-    @GET("posts")
+    @GET("extensions/posts")
     fun fetchAllPosts(): Call<List<UserModel>>
 
 //    @FormUrlEncoded
@@ -22,25 +23,29 @@ interface ApiInterface {
 //        @Field("password")  password:String,
 //        @Field("email")  email:String):Call<SendOTP>
 
-    @PATCH("update")
+    @PATCH("extensions/update")
     fun createUser(
         @Body jsonElement: JsonElement?,@Header("Authorization") authHeader:String):Call<JsonElement>
 
 
     @FormUrlEncoded
-    @POST("token/sms")
+    @POST("extensions/token/sms")
     fun sendOtp(
         @Field("phone")  phone:String):Call<SendOTP>
 
-    @POST("token/verify")
-    fun verifyOtp(
-        @Body jsonElement: JsonElement?,@Header("Authorization") authHeader:String):Call<JsonElement>
+    @GET("businesses")
+    fun getBusiness(
+        @Header("Authorization") authHeader:String):Call<List<BusinessResponce>>
 
-    @DELETE("posts/{id}")
+    @POST("extensions/token/verify")
+    fun verifyOtp(
+        @Body jsonElement: JsonElement?,@Header("Authorization") authHeader:String):Call<LoginData>
+
+    @DELETE("extensions/posts/{id}")
     fun deletePost(@Path("id") id:Int):Call<String>
 
 
-    @POST("login")
+    @POST("extensions/login")
     fun loginUser(
         @Body jsonElement: JsonElement?
     ): Call<JsonElement>
