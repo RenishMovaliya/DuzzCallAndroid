@@ -3,6 +3,7 @@ package com.logycraft.duzzcalll.Util
 import android.content.Context
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
+import com.example.restapiidemo.home.data.UserModel
 import com.google.gson.Gson
 import com.logycraft.duzzcalll.data.LoginData
 
@@ -102,6 +103,23 @@ object Preference {
         return gson.fromJson(json, LoginData::class.java)
     }
 
+
+    fun setUserData(context: Context?, str: UserModel?) {
+        val gson = Gson()
+        val json = gson.toJson(str)
+        val preferences = PreferenceManager.getDefaultSharedPreferences(context)
+        edit = preferences.edit()
+
+        edit?.putString("MyUser", json)
+        edit?.apply()
+    }
+
+    fun getUserData(context: Context?): UserModel? {
+        val preferences = PreferenceManager.getDefaultSharedPreferences(context)
+        val gson = Gson()
+        val json = preferences.getString("MyUser", "")
+        return gson.fromJson(json, UserModel::class.java)
+    }
 
     fun getFirstUser(c1: Context): Boolean {
         val sharedpreferences =

@@ -12,67 +12,46 @@ import com.google.gson.annotations.SerializedName;
 public class BusinessResponce implements Serializable
 {
 
-    @SerializedName("name")
-    @Expose
-    private String name;
-    @SerializedName("logo")
-    @Expose
-    private String logo;
-    @SerializedName("lines")
-    @Expose
-    private List<Line> lines;
-    private final static long serialVersionUID = 1470759806049909854L;
+    @SerializedName("business_name")
+    String businessName;
 
-    public String getName() {
-        return name;
+    @SerializedName("business_logo")
+    String businessLogo;
+
+    @SerializedName("line_name")
+    String lineName;
+
+    @SerializedName("line_extension")
+    String lineExtension;
+
+
+    public void setBusinessName(String businessName) {
+        this.businessName = businessName;
+    }
+    public String getBusinessName() {
+        return businessName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setBusinessLogo(String businessLogo) {
+        this.businessLogo = businessLogo;
+    }
+    public String getBusinessLogo() {
+        return businessLogo;
     }
 
-    public String getLogo() {
-        return logo;
+    public void setLineName(String lineName) {
+        this.lineName = lineName;
+    }
+    public String getLineName() {
+        return lineName;
     }
 
-    public void setLogo(String logo) {
-        this.logo = logo;
+    public void setLineExtension(String lineExtension) {
+        this.lineExtension = lineExtension;
+    }
+    public String getLineExtension() {
+        return lineExtension;
     }
 
-    public List<Line> getLines() {
-        return lines;
-    }
-
-    public void setLines(List<Line> lines) {
-        this.lines = lines;
-    }
-    public class Line implements Serializable
-    {
-
-        @SerializedName("name")
-        @Expose
-        private String name;
-        @SerializedName("extension")
-        @Expose
-        private String extension;
-        private final static long serialVersionUID = -138817947905584944L;
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public String getExtension() {
-            return extension;
-        }
-
-        public void setExtension(String extension) {
-            this.extension = extension;
-        }
-
-    }
 }
 

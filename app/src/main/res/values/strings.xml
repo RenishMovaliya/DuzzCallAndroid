@@ -41,7 +41,7 @@
     <string name="nine">Nine</string>
     <string name="zero">Zero</string>
     <string name="settings">Settings</string>
-    <string name="jhon_doe">Jhon Doe</string>
+    <string name="jhon_doe">John Doe</string>
     <string name="account_settings">Account Settings</string>
     <string name="notification">Notification</string>
     <string name="security_notifications">Security notifications, change\nnumber</string>
@@ -72,7 +72,7 @@
     <string name="enter_lastname">Enter Last Name</string>
     <string name="enter_email_address">Enter email address</string>
     <string name="invalid_email_address">Invalid email address</string>
-    <string name="favourited">Favourited</string>
+    <string name="favourited">Favorites</string>
     <string name="logout">Logout</string>
     <string name="to_complete_your_phone_number_nverification_please_enter_the_4_ndigit_activation_code">To complete your phone number\nverification, please enter the 4\ndigit activation code</string>
     <string name="resend_otp">Resend OTP</string>
@@ -123,4 +123,15 @@
     <string name="add_to_contacts">Add to Contacts</string>
     <string name="duzzcall_incoming_call">Duzzcall Incoming Call</string>
     <string name="hide">Hide</string>
+    <string name="profile">Profile</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="extension_number">Extension Number</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="update_email">Update Email</string>
+    <string name="update_name">Update Name</string>
+    <string name="update">Update</string>
+    <string name="enter_your_mobile_number">Enter your mobile number</string>
+    <string name="enter_your_country_and_nphone_number">Enter your country and\nphone number</string>
+    <string name="update_portfolio">Update portfolio</string>
 </resources>

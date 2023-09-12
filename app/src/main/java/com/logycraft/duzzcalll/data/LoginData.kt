@@ -16,13 +16,13 @@ class LoginData {
     var verified: Boolean? = null
 
     class Extension {
-//        @SerializedName("first_name")
-//        @Expose
-//        var firstName: String? = null
+        @SerializedName("first_name")
+        @Expose
+        var firstName: String? = null
 
-//        @SerializedName("last_name")
-//        @Expose
-//        var lastName: String? = null
+        @SerializedName("last_name")
+        @Expose
+        var lastName: String? = null
 
         @SerializedName("extension")
         @Expose

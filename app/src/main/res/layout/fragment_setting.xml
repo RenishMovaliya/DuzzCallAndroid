@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/fragment_container"
     tools:context=".fragment.SettingFragment">
 
     <androidx.appcompat.widget.Toolbar
@@ -58,6 +59,7 @@
                     android:src="@drawable/ic_profile_image" />
 
                 <TextView
+                    android:id="@+id/tv_profile_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -110,7 +112,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins_light"
                         android:includeFontPadding="false"
-                        android:text="@string/security_notifications"
+                        android:text="@string/update_portfolio"
                         android:textColor="@color/text_color_gray"
                         android:textSize="@dimen/dt14" />
 

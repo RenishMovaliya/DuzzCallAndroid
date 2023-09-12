@@ -34,6 +34,17 @@ class Personal_Contact_Adapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if (isfavourite) {
             holder.img_star.setImageDrawable(context?.getDrawable(R.drawable.ic_star_filled))
+            var favourite = false;
+            holder.img_star.setOnClickListener {
+                if (favourite) {
+                    holder.img_star.setImageResource(R.drawable.ic_star)
+                    favourite = false
+                } else {
+                    holder.img_star.setImageResource(R.drawable.ic_star_filled)
+                    favourite = true
+                }
+            }
+//            holder.img_star.setImageDrawable(context?.getDrawable(R.drawable.ic_star_filled))
         } else {
             val currentContact = contactList[position]
             holder.txt_contact_name.setText(currentContact.name)

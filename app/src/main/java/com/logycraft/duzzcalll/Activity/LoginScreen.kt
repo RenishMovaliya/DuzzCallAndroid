@@ -133,8 +133,6 @@ class LoginScreen : BaseActivity(), ServiceWaitThreadListener {
                 e.printStackTrace()
             }
 
-
-
             itemsList!!.addAll(parseJson(jsonArray))
             country_list!!.addAll(parseJson(jsonArray))
 
@@ -148,17 +146,12 @@ class LoginScreen : BaseActivity(), ServiceWaitThreadListener {
             })
             recyclerview.setAdapter(countryListAdapter)
 
-
 //            val countryListAdapter = Country_List_Adapter(this@LoginScreen, jsonArray,Country_List_Adapter.OnItemClickListener)
             recyclerview.layoutManager = LinearLayoutManager(this@LoginScreen)
 
-
             et_search.addTextChangedListener(object : TextWatcher {
-                // from class: com.komalartinfo.screeenmirrorinngg.activity.AllRouterPassword.1
-                // android.text.TextWatcher
                 override fun afterTextChanged(editable: Editable) {}
 
-                // android.text.TextWatcher
                 override fun beforeTextChanged(
                     charSequence: CharSequence,
                     i2: Int,
@@ -229,10 +222,8 @@ class LoginScreen : BaseActivity(), ServiceWaitThreadListener {
                 intent.putExtra(FROM, FORGOT)
                 startActivity(intent)
             }
-
         })
     }
-
 
     var mobileNumber = ""
     private fun isValidate(): Boolean {

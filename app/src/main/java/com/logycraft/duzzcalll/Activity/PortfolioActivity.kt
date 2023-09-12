@@ -44,12 +44,12 @@ class PortfolioActivity : BaseActivity() {
 //        et_email.setText("shageevan@gmail.com")
 //        et_password.setText("1234567890")
 //        numbers = "+94773785342"
-        if (intent.getStringExtra("PASS").equals("NEW_PASS")) {
-            binding.linearPortfolio.visibility = View.GONE
-            binding.viewBottom.visibility = View.GONE
-        } else {
-            binding.linearPortfolio.visibility = View.VISIBLE
-        }
+//        if (intent.getStringExtra("PASS").equals("NEW_PASS")) {
+//            binding.linearPortfolio.visibility = View.GONE
+//            binding.viewBottom.visibility = View.GONE
+//        } else {
+//            binding.linearPortfolio.visibility = View.VISIBLE
+//        }
 
 
         binding.btnNext.setOnClickListener(object : View.OnClickListener {
@@ -103,8 +103,9 @@ class PortfolioActivity : BaseActivity() {
 //                Toast.makeText(this@PortfolioActivity, "" + usedata?.tfaCode, Toast.LENGTH_LONG)
 //                    .show()
                 Preference.setFirstUser(this@PortfolioActivity, true)
+                Preference.setUserData(this@PortfolioActivity,userModel)
 
-                val intent = Intent(this@PortfolioActivity, DashboardActivity::class.java)
+                val intent = Intent(this@PortfolioActivity, Terms_And_ConditionActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent)
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
@@ -173,7 +174,7 @@ class PortfolioActivity : BaseActivity() {
                 userModel.first_name = firstname
                 userModel.last_name = lastname
                 userModel.email = email
-                userModel.phone = intent.getStringExtra("MOBILE")
+                userModel.phone = Preference.getNumber(this@PortfolioActivity)
                 return true
             }
         }

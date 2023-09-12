@@ -16,15 +16,15 @@ class SplashActivity : AppCompatActivity() {
         setContentView(R.layout.activity_splash)
         LinphonePreferences.instance().setDebugEnabled(true)
         Handler(Looper.getMainLooper()).postDelayed({
-//            if (Preference.getFirstUser(this@SplashActivity)){
-//                val intent = Intent(this, DashboardActivity::class.java)
-//                startActivity(intent)
-//                finish()
-//            }else{
+            if (Preference.getFirstUser(this@SplashActivity)){
+                val intent = Intent(this, DashboardActivity::class.java)
+                startActivity(intent)
+                finish()
+            }else{
                 val intent = Intent(this, LoginScreen::class.java)
                 startActivity(intent)
                 finish()
-//            }
+            }
 
         }, 2000)
     }

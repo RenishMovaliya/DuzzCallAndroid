@@ -10,6 +10,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.adwardstark.mtextdrawable.MaterialTextDrawable
+import com.bumptech.glide.Glide
 import com.duzzcall.duzzcall.R
 import com.logycraft.duzzcalll.data.BusinessResponce
 import de.hdodenhof.circleimageview.CircleImageView
@@ -20,8 +21,9 @@ import java.util.Base64
 //import android.util.Base64
 
 
-class BusinessContact_Adapter(var activity: Activity?,var businessresponce: List<BusinessResponce>, var isfavourite: Boolean ) :
-    RecyclerView.Adapter<BusinessContact_Adapter.ViewHolder>() {
+class BusinessContact_Adapter(
+    var activity: Activity?, var businessresponce: List<BusinessResponce>, var isfavourite: Boolean
+) : RecyclerView.Adapter<BusinessContact_Adapter.ViewHolder>() {
 //    var businessresponce: List<BusinessResponce>? = null;
 //    lateinit var activity :Context ;
 //     var isfavourite  : Boolean = false;
@@ -33,7 +35,8 @@ class BusinessContact_Adapter(var activity: Activity?,var businessresponce: List
 //    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view: View = LayoutInflater.from(activity).inflate(R.layout.personal_contact_list, parent, false)
+        val view: View =
+            LayoutInflater.from(activity).inflate(R.layout.personal_contact_list, parent, false)
         return ViewHolder(view)
     }
 
@@ -49,16 +52,34 @@ class BusinessContact_Adapter(var activity: Activity?,var businessresponce: List
 //            val decodedString: String = String(Base64.getDecoder().decode(businessresponce.get(position).logo))
 //            Log.d("ImageUrl",decodedString)
 //        }
-        MaterialTextDrawable.with(activity!!)
-            .text(businessresponce.get(position).name.substring(0,2) ?: "DC")
-            .into(holder.contact_image)
-        holder.txt_contact_name.setText( businessresponce.get(position).name)
+
+            activity?.let {
+                Glide
+                    .with(it)
+                    .load(businessresponce.get(position).businessLogo)
+                    .centerCrop()
+                    .into(holder.contact_image)
+            };
+            holder.txt_contact_name.setText(businessresponce.get(position).businessName)
+        holder.txt_contact_number.setText(businessresponce.get(position).lineExtension)
+
+
+        var favourite = false;
+        holder.img_star.setOnClickListener {
+            if (favourite) {
+                holder.img_star.setImageResource(R.drawable.ic_star)
+                favourite = false
+            } else {
+                holder.img_star.setImageResource(R.drawable.ic_star_filled)
+                favourite = true
+            }
+        }
 
 
     }
 
     override fun getItemCount(): Int {
-        if (isfavourite){
+        if (isfavourite) {
             return 2
         }
         return businessresponce.size

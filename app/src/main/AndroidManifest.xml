@@ -14,10 +14,15 @@
     <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" /> <!-- To vibrate when pressing DTMF keys on numpad & incoming calls -->
     <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
 
     <application
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@drawable/app_logo"
@@ -28,75 +33,82 @@
         tools:replace="android:allowBackup,android:icon,android:label,android:roundIcon,android:theme"
         tools:targetApi="31">
         <activity
-            android:screenOrientation="portrait"
-            android:configChanges="orientation|keyboardHidden"
+            android:name="com.logycraft.duzzcalll.Activity.AccountSettingActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name="com.logycraft.duzzcalll.Activity.NewContactActivity"
-            android:exported="false" />
+            android:configChanges="orientation|keyboardHidden"
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.logycraft.duzzcalll.Activity.CallActivity"
+            android:configChanges="orientation|keyboardHidden"
             android:exported="true"
-            android:screenOrientation="portrait"
-            android:configChanges="orientation|keyboardHidden" />
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.logycraft.duzzcalll.Activity.DashboardActivity"
+            android:configChanges="orientation|keyboardHidden"
             android:exported="false"
-            android:screenOrientation="portrait"
-            android:configChanges="orientation|keyboardHidden">
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name="com.logycraft.duzzcalll.Activity.IncomingActivity"
-            android:showOnLockScreen="true"
+            android:configChanges="orientation|keyboardHidden"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:configChanges="orientation|keyboardHidden">
+            android:showOnLockScreen="true">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name="com.logycraft.duzzcalll.Activity.OutgoingActivity"
+            android:configChanges="orientation|keyboardHidden"
             android:exported="true"
-            android:screenOrientation="portrait"
-            android:configChanges="orientation|keyboardHidden">
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name="com.logycraft.duzzcalll.Activity.Verify_PhoneActivity"
+            android:configChanges="orientation|keyboardHidden"
             android:exported="false"
-            android:screenOrientation="portrait"
-            android:configChanges="orientation|keyboardHidden">
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name="com.logycraft.duzzcalll.Activity.PortfolioActivity"
+            android:configChanges="orientation|keyboardHidden"
             android:exported="false"
-            android:screenOrientation="portrait"
-            android:configChanges="orientation|keyboardHidden">
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name="com.logycraft.duzzcalll.Activity.Edit_PhoneActivity"
+            android:configChanges="orientation|keyboardHidden"
             android:exported="false"
-            android:screenOrientation="portrait"
-            android:configChanges="orientation|keyboardHidden">
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name="com.logycraft.duzzcalll.Activity.Terms_And_ConditionActivity"
+            android:configChanges="orientation|keyboardHidden"
             android:exported="false"
-            android:screenOrientation="portrait"
-            android:configChanges="orientation|keyboardHidden">
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -109,18 +121,18 @@
         <!-- </activity> -->
         <activity
             android:name="com.logycraft.duzzcalll.Activity.LoginScreen"
+            android:configChanges="orientation|keyboardHidden"
             android:exported="false"
-            android:screenOrientation="portrait"
-            android:configChanges="orientation|keyboardHidden">
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name="com.logycraft.duzzcalll.Activity.SplashActivity"
+            android:configChanges="orientation|keyboardHidden"
             android:exported="true"
-            android:screenOrientation="portrait"
-            android:configChanges="orientation|keyboardHidden">
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -133,9 +145,9 @@
         </activity>
         <activity
             android:name="com.logycraft.duzzcalll.Activity.MainActivity"
+            android:configChanges="orientation|keyboardHidden"
             android:exported="false"
-            android:screenOrientation="portrait"
-            android:configChanges="orientation|keyboardHidden">
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

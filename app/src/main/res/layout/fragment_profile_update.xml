@@ -1,0 +1,128 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context="com.logycraft.duzzcalll.fragment.ProfileUpdateFragment">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/d20">
+
+        <TextView
+            android:id="@+id/titleTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/d30"
+            android:fontFamily="@font/poppins_bold"
+            android:includeFontPadding="false"
+            android:text="Update Portfolio"
+            android:textColor="@color/appcolour"
+            android:textSize="@dimen/dt22" />
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/topBar"
+        android:layout_marginHorizontal="@dimen/d30"
+        android:alpha="0.3"
+        android:background="#BFBABA" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/view"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="@dimen/d160"
+            android:layout_height="@dimen/d160"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/d50">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/profile_image"
+                android:layout_width="@dimen/d150"
+                android:layout_height="@dimen/d150"
+                android:src="@drawable/ic_profile_image" />
+
+            <ImageView
+                android:id="@+id/img_camera"
+                android:layout_width="@dimen/d35"
+                android:layout_height="@dimen/d35"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="@dimen/d10"
+                android:layout_marginTop="@dimen/d10"
+                android:layout_marginEnd="@dimen/d10"
+                android:layout_marginBottom="@dimen/d10"
+                android:src="@drawable/ic_camera" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/d40"
+            android:layout_marginTop="@dimen/d20"
+            android:text="@string/update_name" />
+
+        <EditText
+            android:id="@+id/et_name"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/d45"
+            android:layout_marginHorizontal="@dimen/d40"
+            android:background="@drawable/rounded_corner"
+            android:fontFamily="@font/poppins_light"
+            android:inputType="text"
+            android:maxLength="18"
+            android:paddingHorizontal="@dimen/dt20"
+            android:textColor="@color/black"
+            android:textColorHint="@color/black"
+            android:textSize="@dimen/dt14" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/d40"
+            android:layout_marginTop="@dimen/d20"
+            android:text="@string/update_email" />
+
+        <EditText
+            android:id="@+id/et_email"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/d45"
+            android:layout_marginHorizontal="@dimen/d40"
+            android:background="@drawable/rounded_corner"
+            android:fontFamily="@font/poppins_light"
+            android:inputType="text"
+            android:paddingHorizontal="@dimen/dt20"
+            android:textColor="@color/black"
+            android:textColorHint="@color/black"
+            android:textSize="@dimen/dt14" />
+
+
+        <TextView
+            android:id="@+id/btn_update"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/d50"
+            android:background="@drawable/rounded_button_bg"
+            android:layout_marginHorizontal="@dimen/d40"
+            android:fontFamily="@font/poppins_bold"
+            android:gravity="center"
+            android:paddingVertical="@dimen/d7"
+            android:text="@string/update"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dt17"/>
+    </LinearLayout>
+
+
+</RelativeLayout>

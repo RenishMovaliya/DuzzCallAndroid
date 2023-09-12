@@ -50,6 +50,8 @@ class FavouriteFragment : Fragment() {
          binding.recyclerview.setAdapter(adapter)
 
         binding.titleTV.setText(getString(R.string.favourited))
+        binding.llSearch.visibility=View.GONE
+        binding.tabbar.visibility=View.GONE
 
         binding.relativePersonal.setOnClickListener(View.OnClickListener {
 
@@ -86,9 +88,7 @@ class FavouriteFragment : Fragment() {
                 binding.flagimg.setImageResource(binding.countryCPP.selectedCountryFlagResourceId)
             }
 
-
         })
-
 
     }
 

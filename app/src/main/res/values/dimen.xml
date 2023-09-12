@@ -28,6 +28,8 @@
     <dimen name="d50">50dp</dimen>
     <dimen name="d60">60dp</dimen>
     <dimen name="d120">120dp</dimen>
+    <dimen name="d150">150dp</dimen>
+    <dimen name="d160">160dp</dimen>
     <dimen name="dt13">13sp</dimen>
     <dimen name="d2">2dp</dimen>
     <dimen name="dt10">10sp</dimen>

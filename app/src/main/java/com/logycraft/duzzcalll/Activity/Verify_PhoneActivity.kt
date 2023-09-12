@@ -190,6 +190,7 @@ class Verify_PhoneActivity : BaseActivity() {
                     this@Verify_PhoneActivity, userdata?.extension?.accessToken
                 )
                 Preference.setLoginData(this@Verify_PhoneActivity,userdata)
+
                 if (intent.getStringExtra("isNew").toString().equals("false")) {
                     val intent = Intent(
                         this@Verify_PhoneActivity, DashboardActivity::class.java
@@ -198,9 +199,10 @@ class Verify_PhoneActivity : BaseActivity() {
                     finish()
                     overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
                     overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+                    Preference.setFirstUser(this@Verify_PhoneActivity, true)
                 } else {
                     val intent = Intent(
-                        this@Verify_PhoneActivity, Terms_And_ConditionActivity::class.java
+                        this@Verify_PhoneActivity, PortfolioActivity::class.java
                     )
 
                     intent.putExtra("PASS", "NEW_PASS")

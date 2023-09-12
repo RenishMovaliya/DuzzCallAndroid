@@ -29,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="@dimen/d50"
+            android:layout_marginTop="@dimen/d60"
             android:fontFamily="@font/poppins_bold"
             android:text="@string/verify_91_777_123_456"
             android:textAlignment="center"
@@ -203,14 +203,23 @@
 
 
             <View
+                android:layout_width="@dimen/d20"
+                android:layout_height="@dimen/d6"
+                android:background="@drawable/bottom_view_unselect" />
+
+
+            <View
                 android:layout_width="@dimen/d35"
                 android:layout_height="@dimen/d6"
+                android:layout_marginLeft="@dimen/d5"
                 android:background="@drawable/bottom_view_select" />
+
             <View
                 android:layout_width="@dimen/d20"
                 android:layout_height="@dimen/d6"
                 android:layout_marginLeft="@dimen/d5"
                 android:background="@drawable/bottom_view_unselect" />
+
 
             <View
                 android:layout_width="@dimen/d20"

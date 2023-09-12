@@ -56,7 +56,7 @@ class ContactFragment : Fragment() {
     private lateinit var binding: FragmentContactBinding
     private lateinit var recyclerViewContacts: RecyclerView
     private val contactList: MutableList<ContactModel> = mutableListOf()
-    lateinit var contactdapter: Personal_Contact_Adapter;
+//    lateinit var contactdapter: Personal_Contact_Adapter;
     private var listSupplier: ArrayList<ContactModel> = ArrayList()
 
     private var param1: String? = null
@@ -87,9 +87,9 @@ class ContactFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        contactdapter = Personal_Contact_Adapter(activity, false, contactList)
-        binding.recyclerview.setLayoutManager(LinearLayoutManager(activity))
-        binding.recyclerview.setAdapter(contactdapter)
+//        contactdapter = Personal_Contact_Adapter(activity, false, contactList)
+//        binding.recyclerview.setLayoutManager(LinearLayoutManager(activity))
+//        binding.recyclerview.setAdapter(contactdapter)
         binding.titleTV.setText(getString(R.string.contacts))
 
 
@@ -127,23 +127,23 @@ class ContactFragment : Fragment() {
         })
 
         binding.relativeBusiness.performClick()
-        if (activity?.let {
-                ContextCompat.checkSelfPermission(
-                    it, android.Manifest.permission.READ_CONTACTS
-                )
-            } != PackageManager.PERMISSION_GRANTED) {
-            // Permission is not granted, request it
-            activity?.let {
-                ActivityCompat.requestPermissions(
-                    it,
-                    arrayOf(android.Manifest.permission.READ_CONTACTS),
-                    READ_CONTACTS_PERMISSION_CODE
-                )
-            }
-        } else {
-            // Permission already granted, fetch the contact list
-            fetchContactList()
-        }
+//        if (activity?.let {
+//                ContextCompat.checkSelfPermission(
+//                    it, android.Manifest.permission.READ_CONTACTS
+//                )
+//            } != PackageManager.PERMISSION_GRANTED) {
+//            // Permission is not granted, request it
+//            activity?.let {
+//                ActivityCompat.requestPermissions(
+//                    it,
+//                    arrayOf(android.Manifest.permission.READ_CONTACTS),
+//                    READ_CONTACTS_PERMISSION_CODE
+//                )
+//            }
+//        } else {
+//            // Permission already granted, fetch the contact list
+////            fetchContactList()
+//        }
 
 
         binding.etSearch.addTextChangedListener(object : TextWatcher {
@@ -221,7 +221,7 @@ class ContactFragment : Fragment() {
 //        contactdapter = Personal_Contact_Adapter(activity, false, contactList)
 //        recyclerview.setAdapter(contactdapter)
         val uniqueContacts = contactList.distinctBy { it.name }
-        contactdapter.setContacts(uniqueContacts)
+//        contactdapter.setContacts(uniqueContacts)
     }
 
     private fun filterData() {
@@ -240,50 +240,50 @@ class ContactFragment : Fragment() {
                 }
             }
             val uniqueContacts = contactList.distinctBy { it.name }
-            contactdapter.setContacts(uniqueContacts)
+//            contactdapter.setContacts(uniqueContacts)
         }
 
     }
 
 
-    private fun fetchContactList() {
-        val cursor = activity?.getContentResolver()?.query(
-            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-            null,
-            null,
-            null,
-            ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC"
-        )
-        var currentGroup = ""
-        cursor?.let {
-            while (it.moveToNext()) {
-                val name =
-                    it.getString(it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME))
-                val number =
-                    it.getString(it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
-                val imageUriString: String? =
-                    cursor.getString(it.getColumnIndex(ContactsContract.Contacts.PHOTO_URI))
-                val imageUri: Uri? = imageUriString?.let { Uri.parse(it) }
-
-                if (!name.isNullOrEmpty() && !number.isNullOrEmpty()) {
-                    val contact = ContactModel(name, number, imageUri)
-                    val groupName = name[0].toString().toUpperCase()
-
-                    if (groupName != currentGroup) {
-                        currentGroup = groupName
-                        contactList.add(ContactModel(groupName, "", imageUri))
-                    }
-
-                    contactList.add(contact)
-                    listSupplier.add(contact)
-                }
-            }
-            it.close()
-            contactdapter.notifyDataSetChanged()
-        }
-        val uniqueContacts = contactList.distinctBy { it.name }
-        contactdapter.setContacts(uniqueContacts)
-    }
+//    private fun fetchContactList() {
+//        val cursor = activity?.getContentResolver()?.query(
+//            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+//            null,
+//            null,
+//            null,
+//            ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC"
+//        )
+//        var currentGroup = ""
+////        cursor?.let {
+////            while (it.moveToNext()) {
+////                val name =
+////                    it.getString(it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME))
+////                val number =
+////                    it.getString(it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
+////                val imageUriString: String? =
+////                    cursor.getString(it.getColumnIndex(ContactsContract.Contacts.PHOTO_URI))
+////                val imageUri: Uri? = imageUriString?.let { Uri.parse(it) }
+////
+////                if (!name.isNullOrEmpty() && !number.isNullOrEmpty()) {
+////                    val contact = ContactModel(name, number, imageUri)
+////                    val groupName = name[0].toString().toUpperCase()
+////
+////                    if (groupName != currentGroup) {
+////                        currentGroup = groupName
+////                        contactList.add(ContactModel(groupName, "", imageUri))
+////                    }
+////
+////                    contactList.add(contact)
+////                    listSupplier.add(contact)
+////                }
+////            }
+////            it.close()
+////            contactdapter.notifyDataSetChanged()
+//        }
+//        val uniqueContacts = contactList.distinctBy { it.name }
+//        contactdapter.setContacts(uniqueContacts)
+//    }
 
     override fun onRequestPermissionsResult(
         requestCode: Int, permissions: Array<String>, grantResults: IntArray
@@ -293,7 +293,7 @@ class ContactFragment : Fragment() {
                 // If the request is cancelled, the grantResults array is empty
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // Permission granted, fetch the contact list
-                    fetchContactList()
+//                    fetchContactList()
                 } else {
                     // Permission denied
                     println("Read contacts permission denied")

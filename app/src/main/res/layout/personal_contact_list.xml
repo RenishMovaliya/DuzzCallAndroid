@@ -48,10 +48,11 @@
 
         <ImageView
             android:id="@+id/img_star"
-            android:layout_width="@dimen/d20"
-            android:layout_height="@dimen/d20"
+            android:layout_width="@dimen/d30"
+            android:layout_height="@dimen/d30"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
+            android:padding="@dimen/d5"
             android:layout_marginRight="@dimen/d10"
             android:src="@drawable/ic_star" />
 
