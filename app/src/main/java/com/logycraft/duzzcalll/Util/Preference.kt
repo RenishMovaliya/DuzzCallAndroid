@@ -5,7 +5,11 @@ import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import com.example.restapiidemo.home.data.UserModel
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import com.logycraft.duzzcalll.Model.Favorites
 import com.logycraft.duzzcalll.data.LoginData
+import java.lang.reflect.Type
+
 
 object Preference {
 
@@ -134,5 +138,22 @@ object Preference {
         editor.apply()
     }
 
+    fun setFavoritesContact(c1: Context,str: MutableList<Favorites>?) {
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(c1)
+        val editor = sharedPreferences.edit()
+        val gson = Gson()
+        val json = gson.toJson(str)
+        editor.putString("Favorites", json)
+        editor.apply()
+    }
+
+    fun getFavoritesContact(c1: Context):MutableList<Favorites>? {
+        val sharedPreferences =
+            PreferenceManager.getDefaultSharedPreferences(c1)
+        val gson = Gson()
+        val json = sharedPreferences.getString("Favorites", null)
+        val type: Type = object : TypeToken<MutableList<Favorites>?>() {}.type
+        return gson.fromJson<MutableList<Favorites>>(json, type)
+    }
 
 }

@@ -190,22 +190,22 @@ class HomeRepository {
 
     }
 
-    fun getBusinessContact(context: Context): LiveData<GenericDataModel<List<BusinessResponce>>> {
+    fun getBusinessContact(context: Context): LiveData<GenericDataModel<MutableList<BusinessResponce>>> {
 
 
-        val data = MutableLiveData<GenericDataModel<List<BusinessResponce>>>()
+        val data = MutableLiveData<GenericDataModel<MutableList<BusinessResponce>>>()
         var usedata = Preference.getLoginData(context)
         var token ="Bearer " +usedata?.extension?.accessToken
         Log.d("Token","Business Token "+token)
 
-        apiInterface?.getBusiness(token)?.enqueue(object : Callback<List<BusinessResponce>> {
-            override fun onFailure(call: Call<List<BusinessResponce>>, t: Throwable) {
+        apiInterface?.getBusiness(token)?.enqueue(object : Callback<MutableList<BusinessResponce>> {
+            override fun onFailure(call: Call<MutableList<BusinessResponce>>, t: Throwable) {
                 data.value = null
             }
 
             override fun onResponse(
-                call: Call<List<BusinessResponce>>,
-                response: Response<List<BusinessResponce>>
+                call: Call<MutableList<BusinessResponce>>,
+                response: Response<MutableList<BusinessResponce>>
             ) {
                 //                val res = response.body()
                 //                if (response.isSuccessful){

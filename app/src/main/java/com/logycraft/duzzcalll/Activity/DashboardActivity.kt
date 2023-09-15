@@ -29,11 +29,14 @@ import com.logycraft.duzzcalll.helper.showGrantedToast
 import com.logycraft.duzzcalll.helper.showPermanentlyDeniedDialog
 import com.logycraft.duzzcalll.helper.showRationaleDialog
 import com.logycraft.duzzcalll.service.LinphoneService
+import com.logycraft.duzzcalll.service.ServiceWaitThread
+import com.logycraft.duzzcalll.service.ServiceWaitThreadListener
 import org.linphone.core.*
 
 //import com.logycraft.duzzcalll.core.*
 
-class DashboardActivity : AppCompatActivity(), CallBackListener,  PermissionRequest.Listener{
+class DashboardActivity : AppCompatActivity(), CallBackListener,  PermissionRequest.Listener,
+    ServiceWaitThreadListener {
     lateinit var bottomNav: BottomNavigationView
     lateinit var statusTV: TextView
      lateinit var core: Core
@@ -98,6 +101,7 @@ class DashboardActivity : AppCompatActivity(), CallBackListener,  PermissionRequ
 
 
     }
+
 
     private fun loadFragment(fragment: Fragment) {
         val transaction = supportFragmentManager.beginTransaction()
@@ -165,6 +169,8 @@ class DashboardActivity : AppCompatActivity(), CallBackListener,  PermissionRequ
             if (state == RegistrationState.Failed) {
 //                findViewById<Button>(org.linphone.core.R.id.connect).isEnabled = true
                 statusTV.setText("Offline")
+                statusTV.setBackgroundColor(getColor(R.color.red))
+
                 Log.i("SipTest", "REG Failed")
             } else if (state == RegistrationState.Ok) {
                 Log.i("SipTest", "REG Success")
@@ -286,11 +292,11 @@ class DashboardActivity : AppCompatActivity(), CallBackListener,  PermissionRequ
 //        }
 //    }
 
-    private fun outgoingCall(remoteid:String) {
+    private fun outgoingCall(remoteid:String,remotename:String) {
         // As for everything we need to get the SIP URI of the remote and convert it to an Address
         val remoteSipUri = "sip:"+remoteid+"@dzcl.et.lk"
         val remoteAddress = Factory.instance().createAddress(remoteSipUri)
-        remoteAddress?.displayName= "duzzcalls"
+        remoteAddress?.displayName= remotename
         remoteAddress
             ?: return // If address parsing fails, we can't continue with outgoing call process
 
@@ -314,8 +320,8 @@ class DashboardActivity : AppCompatActivity(), CallBackListener,  PermissionRequ
         // Call process can be followed in onCallStateChanged callback from core listener
     }
 
-    override fun onCallBack(remoteid:String) {
-        outgoingCall(remoteid);
+    override fun onCallBack(remoteid:String,remoteName:String) {
+        outgoingCall(remoteid,remoteName);
 
     }
 
@@ -325,6 +331,10 @@ class DashboardActivity : AppCompatActivity(), CallBackListener,  PermissionRequ
             result.anyShouldShowRationale() -> showRationaleDialog(result, request)
             result.allGranted() -> showGrantedToast(result)
         }
+    }
+
+    override fun onServiceReady() {
+        TODO("Not yet implemented")
     }
 
 

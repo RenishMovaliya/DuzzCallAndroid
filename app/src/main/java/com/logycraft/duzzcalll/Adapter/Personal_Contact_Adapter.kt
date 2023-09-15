@@ -1,6 +1,5 @@
 package com.logycraft.duzzcalll.Adapter
 
-import android.app.Activity
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -9,14 +8,17 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.logycraft.duzzcalll.Model.ContactModel
 import com.duzzcall.duzzcall.R
-import com.simplemobiletools.commons.adapters.MyRecyclerViewAdapter
-import com.simplemobiletools.commons.helpers.SimpleContactsHelper
+
+import com.logycraft.duzzcalll.Model.Favorites
+import com.logycraft.duzzcalll.Util.Preference
 import de.hdodenhof.circleimageview.CircleImageView
 
 class Personal_Contact_Adapter(
-    var context: Context?, var isfavourite: Boolean, var contactList: MutableList<ContactModel>
+    var context: Context?,
+    var isfavourite: Boolean,
+    var favoritesContactlist: MutableList<Favorites>?,
+    var listener: OnItemClickListener
 ) : RecyclerView.Adapter<Personal_Contact_Adapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -25,45 +27,74 @@ class Personal_Contact_Adapter(
         return ViewHolder(view)
     }
 
-    fun setContacts(contacts: List<ContactModel>) {
-        contactList.clear()
-        contactList.addAll(contacts)
-        notifyDataSetChanged()
+    interface OnItemClickListener {
+        fun onClick(get: Favorites)
     }
 
+//    fun setContacts(contacts: List<ContactModel>) {
+//        contactList.clear()
+//        contactList.addAll(contacts)
+//        notifyDataSetChanged()
+//    }
+
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        if (isfavourite) {
-            holder.img_star.setImageDrawable(context?.getDrawable(R.drawable.ic_star_filled))
-            var favourite = false;
-            holder.img_star.setOnClickListener {
-                if (favourite) {
-                    holder.img_star.setImageResource(R.drawable.ic_star)
-                    favourite = false
-                } else {
-                    holder.img_star.setImageResource(R.drawable.ic_star_filled)
-                    favourite = true
-                }
-            }
+//        if (isfavourite) {
 //            holder.img_star.setImageDrawable(context?.getDrawable(R.drawable.ic_star_filled))
-        } else {
-            val currentContact = contactList[position]
-            holder.txt_contact_name.setText(currentContact.name)
-            holder.txt_contact_number.setText(currentContact.number)
-//        holder.contact_image.setImageURI(currentContact.imageUri)
+//            var favourite = false;
+//            holder.img_star.setOnClickListener {
+//                if (favourite) {
+//                    holder.img_star.setImageResource(R.drawable.ic_star)
+//                    favourite = false
+//                } else {
+//                    holder.img_star.setImageResource(R.drawable.ic_star_filled)
+//                    favourite = true
+//                }
+//            }
+////            holder.img_star.setImageDrawable(context?.getDrawable(R.drawable.ic_star_filled))
+//        } else {
+////            val currentContact = contactList[position]
+//            holder.txt_contact_name.setText(contactList?.get(position)?.business_name)
+//            holder.txt_contact_number.setText(contactList?.get(position)?.business_name)
+//            context?.let {
+//                Glide.with(it).load(contactList?.get(position)?.business_name).centerCrop()
+//                    .into(holder.contact_image)
+//            };
+////        holder.contact_image.setImageURI(currentContact.imageUri)
+////            context?.let {
+////                SimpleContactsHelper(it).loadContactImage(
+////                    currentContact.imageUri.toString(), holder.contact_image, currentContact.name
+////                )
+////            }
+//        }
+
+        holder.itemView.setOnClickListener {
+            favoritesContactlist?.get(position)?.let { it1 -> listener.onClick(it1) }
+        }
+
+        holder.img_star.setOnClickListener {
+            favoritesContactlist = context?.let { it1 -> Preference.getFavoritesContact(it1) }
+            favoritesContactlist?.remove(favoritesContactlist!!.get(position))
+            context?.let { it1 -> Preference.setFavoritesContact(it1, favoritesContactlist) }
+            notifyItemRemoved(position)
+        }
+
+        if (favoritesContactlist != null) {
+
+            holder.txt_contact_name.setText(favoritesContactlist?.get(position)?.businessName)
+            holder.txt_contact_number.setText(favoritesContactlist?.get(position)?.lineExtension)
             context?.let {
-                SimpleContactsHelper(it).loadContactImage(
-                    currentContact.imageUri.toString(), holder.contact_image, currentContact.name
-                )
-            }
+                Glide.with(it).load(favoritesContactlist?.get(position)?.businessLogo).centerCrop()
+                    .into(holder.contact_image)
+            };
         }
     }
 
 
     override fun getItemCount(): Int {
-        if (isfavourite) {
-            return 4
+        if (favoritesContactlist == null) {
+            return 0
         }
-        return contactList.size
+        return favoritesContactlist?.size!!
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -76,7 +107,7 @@ class Personal_Contact_Adapter(
             txt_contact_name = itemView.findViewById(R.id.txt_contact_name)
             txt_contact_number = itemView.findViewById(R.id.txt_contact_number)
             contact_image = itemView.findViewById(R.id.contact_image)
-            img_star = itemView.findViewById(R.id.img_star)
+            img_star = itemView.findViewById(R.id.img_star_filled)
         }
     }
 }

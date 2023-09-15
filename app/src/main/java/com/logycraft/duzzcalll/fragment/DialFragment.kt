@@ -173,7 +173,7 @@ class DialFragment : Fragment() {
 //            outgoingCall();
 
             if (! binding.dialpadInput.text.toString().isEmpty()){
-                callBackListener?.onCallBack(binding.dialpadInput.text.toString());
+                callBackListener?.onCallBack(binding.dialpadInput.text.toString(),binding.dialpadInput.text.toString());
             }
 
         }

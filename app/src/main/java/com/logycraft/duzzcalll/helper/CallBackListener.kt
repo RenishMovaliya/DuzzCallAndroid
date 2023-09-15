@@ -1,5 +1,5 @@
 package com.logycraft.duzzcalll.helper
 
 interface CallBackListener {
-    fun onCallBack(remoteid:String )
+    fun onCallBack(remoteid:String,remoteName:String )
 }

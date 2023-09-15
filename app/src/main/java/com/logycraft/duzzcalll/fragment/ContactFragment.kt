@@ -1,50 +1,30 @@
 package com.logycraft.duzzcalll.fragment
 
-import android.Manifest.permission.READ_CONTACTS
-import android.content.ContentResolver
-import android.content.Intent
 import android.content.pm.PackageManager
-import android.database.Cursor
-import android.net.Uri
 import android.os.Bundle
-import android.provider.ContactsContract
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.core.database.getStringOrNull
+import androidx.annotation.Nullable
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.logycraft.duzzcalll.Adapter.Business_Contact_Adapter
 import com.logycraft.duzzcalll.Adapter.Personal_Contact_Adapter
 import com.logycraft.duzzcalll.Model.ContactModel
 import com.duzzcall.duzzcall.R
-import com.duzzcall.duzzcall.databinding.ActivityVerifyPhoneBinding
 import com.duzzcall.duzzcall.databinding.FragmentContactBinding
-import com.google.gson.Gson
-import com.google.gson.JsonElement
-import com.hbb20.CountryCodePicker
-import com.logycraft.duzzcalll.Activity.Terms_And_ConditionActivity
 import com.logycraft.duzzcalll.Adapter.BusinessContact_Adapter
-import com.logycraft.duzzcalll.Util.Preference
+import com.logycraft.duzzcalll.Adapter.Country_List_Adapter
 import com.logycraft.duzzcalll.Util.ProgressHelper
 import com.logycraft.duzzcalll.data.BusinessResponce
-import com.logycraft.duzzcalll.data.GenericDataModel
-import com.logycraft.duzzcalll.data.SendOTP
+import com.logycraft.duzzcalll.helper.CallBackListener
 import com.logycraft.duzzcalll.viewmodel.HomeViewModel
 import okhttp3.ResponseBody
 import org.json.JSONObject
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.util.*
 
 private const val ARG_PARAM1 = "param1"
@@ -62,6 +42,7 @@ class ContactFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     private lateinit var viewModel: HomeViewModel
+    private var callBackListener: CallBackListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -85,6 +66,12 @@ class ContactFragment : Fragment() {
 //        return view;
     }
 
+    override fun onActivityCreated(@Nullable savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        //getActivity() is fully created in onActivityCreated and instanceOf differentiate it between different Activities
+        if (activity is CallBackListener) callBackListener = activity as CallBackListener?
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
 //        contactdapter = Personal_Contact_Adapter(activity, false, contactList)
@@ -100,9 +87,9 @@ class ContactFragment : Fragment() {
             binding.btnAdd.visibility = View.VISIBLE
             binding.btnCountrySelect.visibility = View.GONE
 
-            val adapter = Personal_Contact_Adapter(activity, false, contactList)
-            binding.recyclerview.setLayoutManager(LinearLayoutManager(activity))
-            binding.recyclerview.setAdapter(adapter)
+//            val adapter = Personal_Contact_Adapter(activity, false, contactList)
+//            binding.recyclerview.setLayoutManager(LinearLayoutManager(activity))
+//            binding.recyclerview.setAdapter(adapter)
 
         })
         binding.relativeBusiness.setOnClickListener(View.OnClickListener {
@@ -122,7 +109,6 @@ class ContactFragment : Fragment() {
             binding.countryCPP.setOnCountryChangeListener {
                 binding.flagimg.setImageResource(binding.countryCPP.selectedCountryFlagResourceId)
             }
-
 
         })
 
@@ -176,11 +162,20 @@ class ContactFragment : Fragment() {
                 if (it.isSuccess == true && it.Responcecode == 200) {
                     ProgressHelper.dismissProgressDialog()
 
-                    var businessresponce: List<BusinessResponce>? = it.data
+                    var businessresponce: MutableList<BusinessResponce>? = it.data as MutableList<BusinessResponce>?
                     val adapter =
                         businessresponce?.let { it1 ->
                             BusinessContact_Adapter(activity,
-                                it1, false)
+                                it1, false, object :
+                                    BusinessContact_Adapter.OnItemClickListener{
+                                    override fun onClick(business: BusinessResponce) {
+                                        if (!business.lineExtension.toString().isEmpty()){
+                                            callBackListener?.onCallBack(business.lineExtension.toString(),
+                                                business.businessName.toString()
+                                            );
+                                        }
+                                    }
+                                })
                         }
                     binding.recyclerview.setLayoutManager(LinearLayoutManager(activity))
                     binding.recyclerview.setAdapter(adapter)

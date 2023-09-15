@@ -35,7 +35,7 @@ interface ApiInterface {
 
     @GET("businesses")
     fun getBusiness(
-        @Header("Authorization") authHeader:String):Call<List<BusinessResponce>>
+        @Header("Authorization") authHeader:String):Call<MutableList<BusinessResponce>>
 
     @POST("extensions/token/verify")
     fun verifyOtp(

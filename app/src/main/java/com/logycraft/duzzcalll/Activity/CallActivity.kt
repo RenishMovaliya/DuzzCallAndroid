@@ -62,6 +62,7 @@ class CallActivity : AppCompatActivity(), CallActivityInterface {
             binding.imageViewSpeakerphone.setSelected(z2)
 //            if (LinphoneManager.g.isReady()) {
             val core = LinphoneManager.getCore()
+
             val currentAudioDevice = core.currentCall?.outputAudioDevice
             val speakerEnabled = currentAudioDevice?.type == AudioDevice.Type.Speaker
             for (audioDevice in core.audioDevices) {

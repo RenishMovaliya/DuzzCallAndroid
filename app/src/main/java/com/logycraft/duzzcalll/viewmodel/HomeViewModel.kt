@@ -19,7 +19,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     var verifyOtpLiveData: LiveData<GenericDataModel<LoginData>>? = null
     var userLiveData: LiveData<GenericDataModel<JsonElement>>? = null
     var loginuserLiveData: LiveData<GenericDataModel<JsonElement>>? = null
-    var getbusinessLiveData: LiveData<GenericDataModel<List<BusinessResponce>>>? = null
+    var getbusinessLiveData: LiveData<GenericDataModel<MutableList<BusinessResponce>>>? = null
     var deletePostLiveData: LiveData<Boolean>? = null
 
     init {

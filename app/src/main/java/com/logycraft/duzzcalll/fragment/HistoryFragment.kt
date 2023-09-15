@@ -9,8 +9,10 @@ import androidx.fragment.app.Fragment
 import com.duzzcall.duzzcall.R
 import com.logycraft.duzzcalll.Adapter.All_History_Adapter
 import com.duzzcall.duzzcall.databinding.FragmentHistoryBinding
-import com.duzzcall.duzzcall.databinding.FragmentHistoryDetailsBinding
 import com.logycraft.duzzcalll.Activity.NewContactActivity
+import com.logycraft.duzzcalll.LinphoneManager
+import org.linphone.core.Call
+import org.linphone.core.CallLog
 
 
 private const val ARG_PARAM1 = "param1"
@@ -38,7 +40,19 @@ class HistoryFragment : Fragment() {
         binding = FragmentHistoryBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val core = LinphoneManager.getCore()
+
+        if (core != null) {
+            val adapter = activity?.let { All_History_Adapter(it, core.callLogs, "All") }
+            adapter?.onItemClick = { string ->
+                callDetailscreen(string)
+            }
+            binding.recyclerview.adapter = adapter
+
+        }
+
 
         binding.relativeAll.setOnClickListener(View.OnClickListener {
 
@@ -47,11 +61,13 @@ class HistoryFragment : Fragment() {
 //                        val fragmentManager: FragmentManager = getSupportFragmentManager()
 //                        val fragmentTransaction = fragmentManager.beginTransaction()
 //                        fragmentTransaction.replace(R.id.app_container, fragment).commit()
-            val adapter = activity?.let { All_History_Adapter(it,0) }
-            adapter?.onItemClick = { string ->
-                callDetailscreen(string)
+            if (core != null) {
+                val adapter = activity?.let { All_History_Adapter(it, core.callLogs, "All") }
+                adapter?.onItemClick = { string ->
+                    callDetailscreen(string)
+                }
+                binding.recyclerview.adapter = adapter
             }
-            binding.recyclerview.adapter = adapter
 
 
         })
@@ -59,24 +75,32 @@ class HistoryFragment : Fragment() {
             val intent = Intent(activity, NewContactActivity::class.java)
             startActivity(intent)
         })
-        val adapter = activity?.let { All_History_Adapter(it,0) }
-        adapter?.onItemClick = { string ->
-            callDetailscreen(string)
-        }
-        binding.recyclerview.adapter = adapter
+
         binding.relativeMissed.setOnClickListener(View.OnClickListener {
 
-            val size: Int =  binding.relativeAll.getWidth()
+            val size: Int = binding.relativeAll.getWidth()
             binding.relativeSelectedBtn.animate().x(size.toFloat()).duration = 100
 //                        val fragment = HomeFragment()
 //                        val fragmentManager: FragmentManager = getSupportFragmentManager()
 //                        val fragmentTransaction = fragmentManager.beginTransaction()
 //                        fragmentTransaction.replace(R.id.app_container, fragment).commit()
-            val adapter = activity?.let { All_History_Adapter(it,1) }
-            adapter?.onItemClick = { string ->
-                callDetailscreen(string)
+            var missedcalllog:  Array<CallLog> = emptyArray()
+            if (core != null) {
+                for (calllog in core.callLogs) {
+                    if (calllog.getDir() == Call.Dir.Incoming) {
+
+                        if (calllog.getStatus() == Call.Status.Missed) {
+                            missedcalllog += calllog;
+                        }
+                    }
+                }
+
+                val adapter = activity?.let { All_History_Adapter(it, missedcalllog, "Miss") }
+                adapter?.onItemClick = { string ->
+                    callDetailscreen(string)
+                }
+                binding.recyclerview.adapter = adapter
             }
-            binding.recyclerview.adapter = adapter
 
 
         })
@@ -85,7 +109,7 @@ class HistoryFragment : Fragment() {
     }
 
     private fun callDetailscreen(string: String) {
-        val transaction   = activity?.supportFragmentManager!!.beginTransaction()
+        val transaction = activity?.supportFragmentManager!!.beginTransaction()
         transaction.replace(R.id.container, HistoryDetailFragment())
         transaction.commit()
         transaction.addToBackStack(null)
