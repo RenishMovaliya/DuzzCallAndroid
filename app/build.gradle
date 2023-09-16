@@ -118,5 +118,6 @@ dependencies {
         implementation 'com.github.adwardstark:materialtextdrawable-for-android:1.0.0'
     implementation "com.karumi:dexter:5.0.0"
 
+    implementation 'com.mindorks.android:prdownloader:0.3.0'
 
 }

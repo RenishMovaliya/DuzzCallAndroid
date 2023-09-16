@@ -2,6 +2,7 @@ package com.logycraft.duzzcalll.Activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Environment
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
@@ -13,6 +14,8 @@ import com.logycraft.duzzcalll.Util.Preference
 import com.logycraft.duzzcalll.service.LinphoneService
 import com.logycraft.duzzcalll.service.ServiceWaitThread
 import com.logycraft.duzzcalll.service.ServiceWaitThreadListener
+import java.io.File
+import java.util.*
 
 class SplashActivity : AppCompatActivity(), ServiceWaitThreadListener {
 
@@ -33,6 +36,8 @@ class SplashActivity : AppCompatActivity(), ServiceWaitThreadListener {
             }
 
         }, 2000)
+
+
     }
 
     override fun onStart() {

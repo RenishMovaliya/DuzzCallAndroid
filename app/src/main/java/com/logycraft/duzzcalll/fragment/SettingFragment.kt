@@ -7,6 +7,7 @@ import android.content.Intent
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +18,7 @@ import com.duzzcall.duzzcall.databinding.FragmentSettingBinding
 import com.example.restapiidemo.home.data.UserModel
 import com.logycraft.duzzcalll.Activity.LoginScreen
 import com.logycraft.duzzcalll.Util.Preference
+import java.io.File
 
 
 private const val ARG_PARAM1 = "param1"
@@ -68,6 +70,16 @@ class SettingFragment : Fragment() {
             cv_cancel?.setOnClickListener { dialog.dismiss() }
             dialog?.show()
         }
+
+        val paths= File(
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+            "DuzzCall/ProfilePhoto//duzz_profile_img.jpg"
+        )
+        if (paths.exists()) {
+            val imageUri = Uri.parse("file://$paths")
+            binding.profileImage.setImageURI(imageUri)
+        }
+
         binding.linAccountsetting.setOnClickListener {
 
             val newFragment: Fragment = ProfileFragment()
