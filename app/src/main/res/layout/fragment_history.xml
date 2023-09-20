@@ -46,7 +46,7 @@
                 android:background="@drawable/search_edittext_design">
 
                 <EditText
-                    android:id="@+id/et_saerch"
+                    android:id="@+id/et_search"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_toLeftOf="@+id/img_search"
@@ -68,6 +68,7 @@
 
             <RelativeLayout
                 android:id="@+id/btnAdd"
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="42dp"
                 android:layout_weight="4.8">

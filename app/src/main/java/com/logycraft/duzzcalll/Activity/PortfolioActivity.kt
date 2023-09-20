@@ -102,6 +102,7 @@ class PortfolioActivity : BaseActivity() {
 
 //                Toast.makeText(this@PortfolioActivity, "" + usedata?.tfaCode, Toast.LENGTH_LONG)
 //                    .show()
+
                 Preference.setFirstUser(this@PortfolioActivity, true)
                 Preference.setUserData(this@PortfolioActivity,userModel)
 

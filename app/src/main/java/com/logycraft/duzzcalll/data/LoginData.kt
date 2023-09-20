@@ -32,6 +32,10 @@ class LoginData {
         @Expose
         var extensionpassword: String? = null
 
+        @SerializedName("email")
+        @Expose
+        var email: String? = null
+
         @SerializedName("phone")
         @Expose
         var phone: String? = null

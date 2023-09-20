@@ -2,6 +2,8 @@ package com.logycraft.duzzcalll.fragment
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +15,7 @@ import com.logycraft.duzzcalll.Activity.NewContactActivity
 import com.logycraft.duzzcalll.LinphoneManager
 import org.linphone.core.Call
 import org.linphone.core.CallLog
+import java.util.*
 
 
 private const val ARG_PARAM1 = "param1"
@@ -23,6 +26,9 @@ class HistoryFragment : Fragment() {
 
     private var param1: String? = null
     private var param2: String? = null
+    lateinit var calllog: Array<CallLog>
+    lateinit var core: Array<CallLog>
+
 
     private lateinit var binding: FragmentHistoryBinding
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,10 +48,11 @@ class HistoryFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val core = LinphoneManager.getCore()
+        core = LinphoneManager.getCore().callLogs
+        calllog = LinphoneManager.getCore().callLogs
 
         if (core != null) {
-            val adapter = activity?.let { All_History_Adapter(it, core.callLogs, "All") }
+            val adapter = activity?.let { All_History_Adapter(it, core, "All") }
             adapter?.onItemClick = { string ->
                 callDetailscreen(string)
             }
@@ -62,7 +69,7 @@ class HistoryFragment : Fragment() {
 //                        val fragmentTransaction = fragmentManager.beginTransaction()
 //                        fragmentTransaction.replace(R.id.app_container, fragment).commit()
             if (core != null) {
-                val adapter = activity?.let { All_History_Adapter(it, core.callLogs, "All") }
+                val adapter = activity?.let { All_History_Adapter(it, core, "All") }
                 adapter?.onItemClick = { string ->
                     callDetailscreen(string)
                 }
@@ -84,9 +91,9 @@ class HistoryFragment : Fragment() {
 //                        val fragmentManager: FragmentManager = getSupportFragmentManager()
 //                        val fragmentTransaction = fragmentManager.beginTransaction()
 //                        fragmentTransaction.replace(R.id.app_container, fragment).commit()
-            var missedcalllog:  Array<CallLog> = emptyArray()
+            var missedcalllog: Array<CallLog> = emptyArray()
             if (core != null) {
-                for (calllog in core.callLogs) {
+                for (calllog in core) {
                     if (calllog.getDir() == Call.Dir.Incoming) {
 
                         if (calllog.getStatus() == Call.Status.Missed) {
@@ -106,6 +113,60 @@ class HistoryFragment : Fragment() {
         })
 
 
+        binding.etSearch.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable) {}
+            override fun beforeTextChanged(
+                s: CharSequence, start: Int, count: Int, after: Int
+            ) {
+            }
+
+            override fun onTextChanged(
+                s: CharSequence, start: Int, before: Int, count: Int
+            ) {
+                //refreshList()
+//                if (s.isNotEmpty()) {
+//                    ivSearchClear.visibility = View.VISIBLE
+//                } else {
+//                    ivSearchClear.visibility = View.GONE
+//                }
+                filterData()
+                if (core != null) {
+                    val adapter = activity?.let { All_History_Adapter(it, core, "All") }
+                    adapter?.onItemClick = { string ->
+                        callDetailscreen(string)
+                    }
+                    binding.recyclerview.adapter = adapter
+                }
+//                recyclerview(mendates)
+            }
+        })
+
+
+    }
+
+    private fun filterData() {
+
+        core = emptyArray()
+//        if (etSearch.text.toString().isEmpty()) {
+//            mendates.addAll(mendatesAll)
+//        } else {
+        for (item in calllog) {
+            if (item.remoteAddress.displayName.toString().toLowerCase(Locale.getDefault()).contains(
+                    binding.etSearch.text.toString().toLowerCase(Locale.getDefault())
+                ) || item.fromAddress.displayName.toString().toLowerCase(Locale.getDefault())
+                    .contains(binding.etSearch.text.toString().toLowerCase(Locale.getDefault()))
+            ) {
+                core += item
+            }
+        }
+        if (core.isEmpty()) {
+            binding.recyclerview.visibility = View.GONE
+        } else {
+            binding.recyclerview.visibility = View.VISIBLE
+        }
+
+
+//        }
     }
 
     private fun callDetailscreen(string: String) {

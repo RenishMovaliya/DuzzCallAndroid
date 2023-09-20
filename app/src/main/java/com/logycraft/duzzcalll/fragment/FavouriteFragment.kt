@@ -64,14 +64,15 @@ class FavouriteFragment : Fragment() {
 
         }
 
-        val adapter = Personal_Contact_Adapter(
-            activity,
+        val adapter = Personal_Contact_Adapter(activity,
             true,
             favoritesContactlist,
             object : Personal_Contact_Adapter.OnItemClickListener {
                 override fun onClick(call: Favorites) {
                     if (!call.lineExtension.toString().isEmpty()) {
-                        callBackListener?.onCallBack(call.lineExtension.toString(),call.businessName.toString());
+                        callBackListener?.onCallBack(
+                            call.lineExtension.toString(), call.businessName.toString()
+                        );
                     }
                 }
 
@@ -81,6 +82,7 @@ class FavouriteFragment : Fragment() {
 
         binding.titleTV.setText(getString(R.string.favourited))
         binding.llSearch.visibility = View.GONE
+        binding.viewFavorite.visibility = View.VISIBLE
         binding.tabbar.visibility = View.GONE
 
         binding.relativePersonal.setOnClickListener(View.OnClickListener {

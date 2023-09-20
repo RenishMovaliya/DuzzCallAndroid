@@ -3,17 +3,16 @@ package com.logycraft.duzzcalll.fragment
 import android.Manifest
 import android.app.Activity
 import android.content.ContentValues
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
+import android.database.Cursor
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.provider.Settings
+import android.text.TextUtils
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -23,7 +22,6 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
-import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
@@ -38,6 +36,7 @@ import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import com.logycraft.duzzcalll.Util.Preference
+import com.logycraft.duzzcalll.Util.ValidationUtils
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -53,15 +52,8 @@ class ProfileFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     private val CAMERA_REQUEST_CODE = 101
-    private val PICK_FROM_GALLERY = 1
     var userModel = UserModel()
     var imguri = ""
-    private val REQUEST_IMAGE_CAPTURE = 101
-    private val REQUEST_PICK_IMAGE = 102
-    private var currentPhotoPath: String? = null
-
-    private val PICK_IMAGE_REQUEST = 102
-
 
     private val REQUEST_TAKE_PHOTO = 101
     private val REQUEST_PICK_PHOTO = 102
@@ -109,18 +101,20 @@ class ProfileFragment : Fragment() {
         }
 
 
-        val paths=File(
+        val paths = File(
             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-            "DuzzCall/ProfilePhoto//duzz_profile_img.jpg"
+            "DuzzCall/ProfilePhoto/duzz_profile_img.jpg"
         )
         if (paths.exists()) {
             val imageUri = Uri.parse("file://$paths")
             binding.profileImage.setImageURI(imageUri)
             binding.updateProfileImage.setImageURI(imageUri)
+        } else {
+            binding.profileImage.setImageResource(R.drawable.ic_profile_image)
+            binding.updateProfileImage.setImageResource(R.drawable.ic_profile_image)
         }
 
 
-//        Update Profilee======================
         binding.imgCamera.setOnClickListener {
             val dialogView: View = layoutInflater.inflate(R.layout.profile_img_dialog, null)
             val dialog = activity?.let { it1 -> BottomSheetDialog(it1) }
@@ -145,15 +139,12 @@ class ProfileFragment : Fragment() {
                             it, android.Manifest.permission.CAMERA
                         )
                     } != PackageManager.PERMISSION_GRANTED) {
-                    // Permission is not granted, request it
                     activity?.let {
                         ActivityCompat.requestPermissions(
                             it, arrayOf(android.Manifest.permission.CAMERA), CAMERA_REQUEST_CODE
                         )
                     }
                 } else {
-//                    captureImage()
-//                    openCamera()
                     openCameraAndSavePhoto()
                 }
                 dialog.dismiss()
@@ -164,17 +155,21 @@ class ProfileFragment : Fragment() {
         }
 
         binding.btnUpdate.setOnClickListener {
-            val str = binding.etName.text.toString()
-            val separated: List<String> = str.split(" ")
-            userModel.first_name = separated[0]
-            userModel.last_name = separated[1]
-            userModel.email = binding.etEmail.text.toString()
-            userModel.profileimg = imguri
-            Preference.setUserData(activity, userModel)
 
-            updatedata()
-            binding.rlMainProfile.visibility = View.VISIBLE
-            binding.rlUpdateProfile.visibility = View.GONE
+            if (isValidate() && isUsernameValid(binding.etName.text.toString())) {
+                val str = binding.etName.text.toString()
+                val separated: List<String> = str.split(" ")
+                userModel.first_name = separated[0]
+                userModel.last_name = separated[1]
+                userModel.email = binding.etEmail.text.toString()
+                userModel.profileimg = imguri
+                Preference.setUserData(activity, userModel)
+
+                updatedata()
+                binding.rlMainProfile.visibility = View.VISIBLE
+                binding.rlUpdateProfile.visibility = View.GONE
+            }
+
         }
 
 
@@ -194,17 +189,13 @@ class ProfileFragment : Fragment() {
                             it, android.Manifest.permission.CAMERA
                         )
                     } != PackageManager.PERMISSION_GRANTED) {
-                    // Permission is not granted, request it
                     activity?.let {
                         ActivityCompat.requestPermissions(
                             it, arrayOf(android.Manifest.permission.CAMERA), CAMERA_REQUEST_CODE
                         )
                     }
                 } else {
-
-//                    captureImage()
-                    openCamera()
-
+                    openCameraAndSavePhoto()
                 }
                 dialog.dismiss()
             }
@@ -233,43 +224,13 @@ class ProfileFragment : Fragment() {
                 createUriForPreQ()
             }
         } catch (e: Exception) {
-            // Error occurred while creating the File
             Log.e("sdsdsd", "Error occurred while creating the Uri: ${e.localizedMessage}")
             null
         }
     }
 
-    /**
-     * Create File Uri for Pre Q devices
-     * With using File Provider
-     */
     @Throws(IOException::class)
     private fun createUriForPreQ(): Uri? {
-        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
-        // getExternalFilesDir method makes taken images private for our app, it will not allow to display it in gallery
-        // so we will not use requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        // instead use public external storage directory for pre Q devices
-        val storageDir = File(
-            activity?.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "ProfilePhoto"
-        )
-//    val storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-        val mFile = File.createTempFile(
-            "duzz_profile_img", /* prefix */
-            ".jpg", /* suffix */
-            storageDir /* directory */
-        )
-        return FileProvider.getUriForFile(
-            requireContext(), getString(R.string.file_provider_authorities), mFile
-        )
-    }
-
-    /**
-     * Create File Uri for after Q Devices
-     * With using Media Store
-     */
-    @RequiresApi(Build.VERSION_CODES.Q)
-    private fun createUriAfterQ(): Uri? {
-
         val customDirectory = File(
             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
             "DuzzCall/ProfilePhoto"
@@ -282,12 +243,38 @@ class ProfileFragment : Fragment() {
         clearDirectory(
             customDirectory
         )
-        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
+//        val storageDir = File(
+//            "DuzzCall/ProfilePhoto/"
+//        )
+
+        val mFile = File.createTempFile(
+            "duzz_profile_img",
+            ".jpg",
+            customDirectory
+        )
+        return FileProvider.getUriForFile(
+            requireContext(), getString(R.string.file_provider_authorities), mFile
+        )
+    }
+
+    @RequiresApi(Build.VERSION_CODES.Q)
+    private fun createUriAfterQ(): Uri? {
+        val customDirectory = File(
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+            "DuzzCall/ProfilePhoto"
+        )
+
+        if (!customDirectory.exists()) {
+            customDirectory.mkdirs()
+        }
+
+        clearDirectory(
+            customDirectory
+        )
         val fileName = "duzz_profile_img.jpg"
         val storageDir = File(
             "DuzzCall/ProfilePhoto/"
         )
-
         val resolver = requireContext().contentResolver
         val contentValues = ContentValues().apply {
             put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
@@ -319,14 +306,9 @@ class ProfileFragment : Fragment() {
         directory.delete()
     }
 
-    /**
-     * Open Camera and saved taken photo to previously created Uri
-     */
     private fun openCameraAndSavePhoto() {
         Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
-            // Ensure that there's a camera activity to handle the intent
             takePictureIntent.resolveActivity(requireContext().packageManager)?.also {
-                // Create Uri where the photo should go
                 photoURI = getImageFileUri()
                 photoURI?.let {
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, it)
@@ -336,15 +318,12 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    /**
-     * Open Gallery for pick image
-     */
+
     private fun openGallery() {
         val galleryIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         startActivityForResult(galleryIntent, REQUEST_PICK_PHOTO)
     }
 
-// ------------------------------------------------------------------------------
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -358,7 +337,6 @@ class ProfileFragment : Fragment() {
                     }
                     Activity.RESULT_CANCELED -> {
                         Log.e("aaaa", "User denied taken photo")
-//                    LogUtils.d("User denied taken photo")
                     }
                 }
             }
@@ -366,19 +344,27 @@ class ProfileFragment : Fragment() {
                 when (resultCode) {
                     Activity.RESULT_OK -> {
                         Log.e("aaaa", "User confirm pick photo")
-//                    LogUtils.d("User confirm pick photo")
-                        // Get content uri and show in imageView
+
                         val contentURI = data?.data
                         contentURI?.let {
                             binding.profileImage.setImageURI(it)
 
-//                        cameraImage.load(it)
+                            val fileName = "duzz_profile_img.jpg"
+
+                            val storageDir = File(
+                                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+                                "DuzzCall/ProfilePhoto"
+                            )
+                            val selectimgpath = getRealPathFromURI(contentURI)
+
+                            val destFile = File(storageDir, fileName)
+                            selectimgpath?.let { it1 -> copyFile(it1, destFile.path) }
+
                         }
                     }
                     Activity.RESULT_CANCELED -> {
                         Log.e("aaaa", "User denied pick photo")
 
-//                    LogUtils.d("User denied pick photo")
                     }
                 }
             }
@@ -386,58 +372,42 @@ class ProfileFragment : Fragment() {
 
     }
 
+    private fun isValidate(): Boolean {
 
-//private fun openGallery() {
-//    val galleryIntent = Intent(
-//        Intent.ACTION_PICK,
-//        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-//    )
-//    startActivityForResult(galleryIntent, PICK_IMAGE_REQUEST)
-//}
+        val email = binding.etEmail.text.toString().trim()
 
-    private fun openCamera() {
-        val cameraIntent = Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE)
-        startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE)
+        when {
+            TextUtils.isEmpty(email) -> {
+                showError(getString(R.string.enter_email_address))
+                return false
+            }
+            !ValidationUtils.isValidEmail(email) -> {
+                showError(getString(R.string.invalid_email_address))
+                return false
+            }
+
+            else -> {
+                return true
+            }
+        }
     }
 
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//
-//        if (resultCode == Activity.RESULT_OK) {
-//            when (requestCode) {
-//                CAMERA_REQUEST_CODE -> {
-//                    // Handle the captured image from the camera
-//                    val photo: Bitmap = data?.getExtras()?.get("data") as Bitmap
-//
-//                    binding.updateProfileImage.setImageBitmap(photo)
-//                    val tempUri = activity?.let { getImageUri(it, photo) }
-//                    imguri = tempUri.toString()
-//                    binding.profileImage.setImageURI(tempUri)
-//                    userModel.profileimg = imguri
-//                    Preference.setUserData(activity, userModel)
-//                    // Now you can use imageUri to display or process the captured image
-//                }
-//                PICK_IMAGE_REQUEST -> {
-//                    // Handle the picked image from the gallery
-//                    val selectedImageUri: Uri? = data?.data
-//                    imguri = selectedImageUri.toString()
-//                    binding.profileImage.setImageURI(selectedImageUri)
-//                    binding.updateProfileImage.setImageURI(selectedImageUri)
-//                    userModel.profileimg = imguri
-//                    Preference.setUserData(activity, userModel)
-//
-//                }
-//            }
-//        }
-//    }
+    fun isUsernameValid(username: String): Boolean {
+        val regex = Regex("^[A-Za-z]+\\s[A-Za-z]+$")
 
-    fun getImageUri(inContext: Context, inImage: Bitmap?): Uri? {
-        val OutImage = Bitmap.createScaledBitmap(inImage!!, 1000, 1000, true)
-        val path = MediaStore.Images.Media.insertImage(
-            inContext.getContentResolver(), OutImage, "Title", null
-        )
-        return Uri.parse(path)
+        if (regex.matches(username)) {
+            return regex.matches(username)
+
+        } else {
+            Toast.makeText(activity, "Invalid Name", Toast.LENGTH_LONG).show()
+        }
+        return regex.matches(username)
     }
+
+    fun showError(message: String?) {
+        Toast.makeText(activity, "$message", Toast.LENGTH_LONG).show()
+    }
+
 
     fun updatedata() {
 
@@ -466,9 +436,7 @@ class ProfileFragment : Fragment() {
                         openGallery()
                     }
 
-                    // check for permanent denial of any permission
                     if (report.isAnyPermissionPermanentlyDenied) {
-                        // permission is denied parmenantly, navigate user to app settings
                         Toast.makeText(
                             activity,
                             "Please grant camera and external storage permission.",
@@ -499,9 +467,7 @@ class ProfileFragment : Fragment() {
                         openGallery()
                     }
 
-                    // check for permanent denial of any permission
                     if (report.isAnyPermissionPermanentlyDenied) {
-                        // permission is denied parmenantly, navigate user to app settings
                         Toast.makeText(
                             activity,
                             "Please grant camera and external storage permission.",
@@ -524,42 +490,6 @@ class ProfileFragment : Fragment() {
         }
     }
 
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//
-//        if (requestCode == REQUEST_PICK_IMAGE && resultCode == Activity.RESULT_OK && data != null) {
-//            val selectedImageUri = data.data
-//            if (selectedImageUri != null) {
-//
-//                binding.profileImage.setImageURI(selectedImageUri)
-//                val selectedImagePath = getRealPathFromURI(selectedImageUri)
-//                if (selectedImagePath != null) {
-//                    // Copy the selected image to the "ProfilePhoto" folder
-//                    val profilePhotoDir = File(
-//                        activity?.getExternalFilesDir(Environment.DIRECTORY_PICTURES),
-//                        "ProfilePhoto"
-//                    )
-//
-//                    if (!profilePhotoDir.exists()) {
-//                        profilePhotoDir.mkdirs()
-//                    }
-//
-//                    val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date())
-//                    val imageFileName = "JPEG_${timeStamp}.jpg"
-//                    val destFile = File(profilePhotoDir, imageFileName)
-//
-//                    try {
-//                        copyFile(selectedImagePath, destFile.path)
-//                    } catch (e: IOException) {
-//                        // Handle the error
-//                    }
-//
-//                    // The selected image is now saved in the "ProfilePhoto" folder
-//                    currentPhotoPath = destFile.absolutePath
-//                }
-//            }
-//        }
-//    }
 
     private fun getRealPathFromURI(uri: Uri): String? {
         val projection = arrayOf(MediaStore.Images.Media.DATA)

@@ -1,19 +1,22 @@
 package com.logycraft.duzzcalll.fragment
 
-import android.R
+import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.cardview.widget.CardView
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
 import com.duzzcall.duzzcall.databinding.FragmentSettingBinding
 import com.example.restapiidemo.home.data.UserModel
 import com.logycraft.duzzcalll.Activity.LoginScreen
@@ -28,6 +31,8 @@ class SettingFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     private lateinit var binding: FragmentSettingBinding
+    private val PERMISSION_REQUEST_READ_EXTERNAL_STORAGE = 1
+
     var userModel = UserModel()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,32 +76,61 @@ class SettingFragment : Fragment() {
             dialog?.show()
         }
 
-        val paths= File(
+        activity?.let {
+
+            ActivityCompat.requestPermissions(
+                it,
+                arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE),
+                PERMISSION_REQUEST_READ_EXTERNAL_STORAGE
+            )
+        };
+
+        val paths = File(
             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-            "DuzzCall/ProfilePhoto//duzz_profile_img.jpg"
+            "DuzzCall/ProfilePhoto/duzz_profile_img.jpg"
         )
         if (paths.exists()) {
             val imageUri = Uri.parse("file://$paths")
             binding.profileImage.setImageURI(imageUri)
+        } else {
+            binding.profileImage.setImageResource(com.duzzcall.duzzcall.R.drawable.ic_profile_image)
         }
 
+        val readImagePermission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+            android.Manifest.permission.READ_MEDIA_IMAGES
+        else
+            android.Manifest.permission.READ_EXTERNAL_STORAGE
         binding.linAccountsetting.setOnClickListener {
+            if (activity?.let { it1 ->
+                    ContextCompat.checkSelfPermission(
+                        it1,
+                        readImagePermission
+                    )
+                } == PackageManager.PERMISSION_GRANTED) {
+                val newFragment: Fragment = ProfileFragment()
+                val transaction = activity?.supportFragmentManager?.beginTransaction()
+                transaction?.add(com.duzzcall.duzzcall.R.id.fragment_container, newFragment)
+                transaction?.addToBackStack(null)
+                transaction?.commit()
 
-            val newFragment: Fragment = ProfileFragment()
-            val transaction = activity?.supportFragmentManager?.beginTransaction()
-            transaction?.add(com.duzzcall.duzzcall.R.id.fragment_container, newFragment)
-            transaction?.addToBackStack(null)
-            transaction?.commit()
+            } else {
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+                    android.Manifest.permission.READ_MEDIA_IMAGES
+                else
+                    android.Manifest.permission.READ_EXTERNAL_STORAGE
+            }
+
         }
 
-        if (Preference.getUserData(activity)!=null){
+        if (Preference.getUserData(activity) != null) {
             userModel = Preference.getUserData(activity)!!
         }
 
-        if (userModel.first_name.equals(" ")){
+        if (userModel.first_name.equals(" ")) {
             binding.tvProfileName.setText("John Doi")
-        }else{
-            binding.tvProfileName.setText(userModel.first_name+" "+userModel.last_name)
+        } else {
+            binding.tvProfileName.setText(userModel.first_name + " " + userModel.last_name)
         }
 
 //        if (userModel.profileimg==null && userModel.profileimg.equals("") && userModel.profileimg?.isEmpty()!!){

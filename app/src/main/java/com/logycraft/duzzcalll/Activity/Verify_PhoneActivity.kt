@@ -21,6 +21,7 @@ import com.logycraft.duzzcalll.Util.Utils.Companion.LOGIN
 import com.logycraft.duzzcalll.Util.Utils.Companion.REGISTER
 import com.logycraft.duzzcalll.data.SendOTP
 import com.duzzcall.duzzcall.databinding.ActivityVerifyPhoneBinding
+import com.example.restapiidemo.home.data.UserModel
 import com.google.gson.Gson
 import com.logycraft.duzzcalll.Util.Utils.Companion.COUNTRY_CODE
 import com.logycraft.duzzcalll.data.LoginData
@@ -33,12 +34,12 @@ import org.json.JSONObject
 class Verify_PhoneActivity : BaseActivity() {
     private lateinit var binding: ActivityVerifyPhoneBinding
     lateinit var btn_next: TextView
-    lateinit var view_bottom: LinearLayout
     lateinit var entered_otp: String
     lateinit var country_code: String
     lateinit var otpTextView: OtpTextView
     private lateinit var viewModel: HomeViewModel
     private lateinit var countDownTimer: CountDownTimer
+    val userModel = UserModel()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 //        setContentView(R.layout.activity_verify_phone)
@@ -46,14 +47,10 @@ class Verify_PhoneActivity : BaseActivity() {
         setContentView(binding.root)
         viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
         btn_next = findViewById(R.id.btn_next)
-        view_bottom = findViewById(R.id.view_bottom)
         btn_next?.isEnabled = false
         btn_next.alpha = 0.5f
 
-        if (!intent.getStringExtra(FROM).equals(REGISTER)) {
-            view_bottom.visibility = View.GONE
 
-        }
 
         country_code = intent.getStringExtra(COUNTRY_CODE).toString()
         otpTextView = findViewById(R.id.otp_view)
@@ -189,7 +186,14 @@ class Verify_PhoneActivity : BaseActivity() {
                 Preference.saveAccessToken(
                     this@Verify_PhoneActivity, userdata?.extension?.accessToken
                 )
-                Preference.setLoginData(this@Verify_PhoneActivity,userdata)
+                Preference.setLoginData(this@Verify_PhoneActivity, userdata)
+
+                userModel.first_name = userdata?.extension?.firstName
+                userModel.last_name = userdata?.extension?.lastName
+                userModel.email = userdata?.extension?.email
+                userModel.extension = userdata?.extension?.extension
+                userModel.phone = userdata?.extension?.phone
+                Preference.setUserData(this@Verify_PhoneActivity, userModel)
 
                 if (intent.getStringExtra("isNew").toString().equals("false")) {
                     val intent = Intent(
@@ -204,7 +208,6 @@ class Verify_PhoneActivity : BaseActivity() {
                     val intent = Intent(
                         this@Verify_PhoneActivity, PortfolioActivity::class.java
                     )
-
                     intent.putExtra("PASS", "NEW_PASS")
                     intent.putExtra("MOBILE", intent.getStringExtra("MOBILE"))
                     startActivity(intent)

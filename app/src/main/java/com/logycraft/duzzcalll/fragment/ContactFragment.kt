@@ -36,8 +36,11 @@ class ContactFragment : Fragment() {
     private lateinit var binding: FragmentContactBinding
     private lateinit var recyclerViewContacts: RecyclerView
     private val contactList: MutableList<ContactModel> = mutableListOf()
-//    lateinit var contactdapter: Personal_Contact_Adapter;
+
+    //    lateinit var contactdapter: Personal_Contact_Adapter;
     private var listSupplier: ArrayList<ContactModel> = ArrayList()
+    var businessresponce: MutableList<BusinessResponce> = mutableListOf()
+    var businesdata: MutableList<BusinessResponce> = mutableListOf()
 
     private var param1: String? = null
     private var param2: String? = null
@@ -59,7 +62,7 @@ class ContactFragment : Fragment() {
 //        binding = FragmentContactBinding.inflate(layoutInflater)
 //        val view: View = inflater.inflate(binding, container, false)
 
-        binding = FragmentContactBinding.inflate(inflater,container,false);
+        binding = FragmentContactBinding.inflate(inflater, container, false);
         viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
         return binding.getRoot();
 
@@ -144,7 +147,7 @@ class ContactFragment : Fragment() {
             ) {
 
                 filterData()
-                setDataInList()
+                recyclerview(businessresponce)
             }
         })
 
@@ -162,35 +165,23 @@ class ContactFragment : Fragment() {
                 if (it.isSuccess == true && it.Responcecode == 200) {
                     ProgressHelper.dismissProgressDialog()
 
-                    var businessresponce: MutableList<BusinessResponce>? = it.data as MutableList<BusinessResponce>?
-                    val adapter =
-                        businessresponce?.let { it1 ->
-                            BusinessContact_Adapter(activity,
-                                it1, false, object :
-                                    BusinessContact_Adapter.OnItemClickListener{
-                                    override fun onClick(business: BusinessResponce) {
-                                        if (!business.lineExtension.toString().isEmpty()){
-                                            callBackListener?.onCallBack(business.lineExtension.toString(),
-                                                business.businessName.toString()
-                                            );
-                                        }
-                                    }
-                                })
-                        }
-                    binding.recyclerview.setLayoutManager(LinearLayoutManager(activity))
-                    binding.recyclerview.setAdapter(adapter)
+                    it.data?.let { it1 -> businessresponce.addAll(it1) }
+                    it.data?.let { it1 -> businesdata.addAll(it1) }
 
-    //                val `objecsst` = JSONObject(usedata.toString())
-    ////                showError("" + sendOtp.toString())
-    //                val intent = Intent(
-    //                    this@Verify_PhoneActivity, Terms_And_ConditionActivity::class.java
-    //                )
-    //                Preference.saveAccessToken(this@Verify_PhoneActivity,objecsst.getString("access_token"))
-    //                intent.putExtra("PASS", "NEW_PASS")
-    //                intent.putExtra("MOBILE", intent.getStringExtra("MOBILE"))
-    //                startActivity(intent)
-    //                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
-    //                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+                    recyclerview(businessresponce)
+
+
+                    //                val `objecsst` = JSONObject(usedata.toString())
+                    ////                showError("" + sendOtp.toString())
+                    //                val intent = Intent(
+                    //                    this@Verify_PhoneActivity, Terms_And_ConditionActivity::class.java
+                    //                )
+                    //                Preference.saveAccessToken(this@Verify_PhoneActivity,objecsst.getString("access_token"))
+                    //                intent.putExtra("PASS", "NEW_PASS")
+                    //                intent.putExtra("MOBILE", intent.getStringExtra("MOBILE"))
+                    //                startActivity(intent)
+                    //                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+                    //                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
                 } else if (it.error != null) {
                     ProgressHelper.dismissProgressDialog()
                     var errorResponce: ResponseBody = it.error
@@ -206,6 +197,29 @@ class ContactFragment : Fragment() {
         }
 
     }
+
+    private fun recyclerview(businessresponce: MutableList<BusinessResponce>) {
+
+        val adapter = businessresponce?.let { it1 ->
+            BusinessContact_Adapter(activity,
+                it1,
+                false,
+                object : BusinessContact_Adapter.OnItemClickListener {
+                    override fun onClick(business: BusinessResponce) {
+                        if (!business.lineExtension.toString().isEmpty()) {
+                            callBackListener?.onCallBack(
+                                business.lineExtension.toString(),
+                                business.businessName.toString()
+                            );
+                        }
+                    }
+                })
+        }
+        binding.recyclerview.setLayoutManager(LinearLayoutManager(activity))
+        binding.recyclerview.setAdapter(adapter)
+
+    }
+
     fun showMessage(message: String?) {
         Toast.makeText(activity, "$message", Toast.LENGTH_LONG).show()
     }
@@ -219,25 +233,28 @@ class ContactFragment : Fragment() {
 //        contactdapter.setContacts(uniqueContacts)
     }
 
+
     private fun filterData() {
-
-        contactList.clear()
-        if (binding.etSearch.text.toString().isEmpty()) {
-            contactList.addAll(listSupplier)
-        } else {
-            for (ClientsDetail in listSupplier) {
-                if (ClientsDetail.name.toString().toLowerCase(Locale.getDefault()).contains(
-                        binding.etSearch.text.toString().toLowerCase(Locale.getDefault())
-                    ) || ClientsDetail.number.toString().toLowerCase(Locale.getDefault())
-                        .contains(binding.etSearch.text.toString().toLowerCase(Locale.getDefault()))
-                ) {
-                    contactList.add(ClientsDetail)
-                }
+        businessresponce.clear()
+//        if (etSearch.text.toString().isEmpty()) {
+//            mendates.addAll(mendatesAll)
+//        } else {
+        for (item in businesdata) {
+            if (item.businessName.toString().toLowerCase(Locale.getDefault()).contains(
+                    binding.etSearch.text.toString().toLowerCase(Locale.getDefault())
+                ) || item.lineExtension.toString().toLowerCase(Locale.getDefault()).contains(
+                    binding.etSearch.text.toString().toLowerCase(Locale.getDefault())
+                )
+            ) {
+                businessresponce.add(item)
             }
-            val uniqueContacts = contactList.distinctBy { it.name }
-//            contactdapter.setContacts(uniqueContacts)
         }
-
+        if (businessresponce.isEmpty()) {
+            binding.recyclerview.visibility = View.GONE
+        } else {
+            binding.recyclerview.visibility = View.VISIBLE
+        }
+//        }
     }
 
 
