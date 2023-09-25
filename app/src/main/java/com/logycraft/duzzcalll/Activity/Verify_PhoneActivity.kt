@@ -51,7 +51,6 @@ class Verify_PhoneActivity : BaseActivity() {
         btn_next.alpha = 0.5f
 
 
-
         country_code = intent.getStringExtra(COUNTRY_CODE).toString()
         otpTextView = findViewById(R.id.otp_view)
         otpTextView.otpListener = object : OTPListener {

@@ -26,6 +26,7 @@ import com.logycraft.duzzcalll.viewmodel.HomeViewModel
 import okhttp3.ResponseBody
 import org.json.JSONObject
 import java.util.*
+import kotlin.collections.ArrayList
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -39,7 +40,7 @@ class ContactFragment : Fragment() {
 
     //    lateinit var contactdapter: Personal_Contact_Adapter;
     private var listSupplier: ArrayList<ContactModel> = ArrayList()
-    var businessresponce: MutableList<BusinessResponce> = mutableListOf()
+    var businessresponce: ArrayList<BusinessResponce> = ArrayList()
     var businesdata: MutableList<BusinessResponce> = mutableListOf()
 
     private var param1: String? = null
@@ -198,7 +199,7 @@ class ContactFragment : Fragment() {
 
     }
 
-    private fun recyclerview(businessresponce: MutableList<BusinessResponce>) {
+    private fun recyclerview(businessresponce: ArrayList<BusinessResponce>) {
 
         val adapter = businessresponce?.let { it1 ->
             BusinessContact_Adapter(activity,

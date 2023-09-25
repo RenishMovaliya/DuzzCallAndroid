@@ -16,7 +16,6 @@ import com.duzzcall.duzzcall.databinding.FragmentContactBinding
 
 import com.logycraft.duzzcalll.Activity.NewContactActivity
 import com.logycraft.duzzcalll.Adapter.BusinessContact_Adapter
-import com.logycraft.duzzcalll.Model.Favorites
 import com.logycraft.duzzcalll.Util.Preference
 import com.logycraft.duzzcalll.data.BusinessResponce
 import com.logycraft.duzzcalll.helper.CallBackListener
@@ -29,7 +28,7 @@ class FavouriteFragment : Fragment() {
     private lateinit var binding: FragmentContactBinding
     private var param1: String? = null
     private var param2: String? = null
-    var favoritesContactlist: MutableList<Favorites>? = mutableListOf()
+    var favoritesContactlist: ArrayList<BusinessResponce>? = ArrayList()
     private var callBackListener: CallBackListener? = null
 
 
@@ -68,7 +67,7 @@ class FavouriteFragment : Fragment() {
             true,
             favoritesContactlist,
             object : Personal_Contact_Adapter.OnItemClickListener {
-                override fun onClick(call: Favorites) {
+                override fun onClick(call: BusinessResponce) {
                     if (!call.lineExtension.toString().isEmpty()) {
                         callBackListener?.onCallBack(
                             call.lineExtension.toString(), call.businessName.toString()

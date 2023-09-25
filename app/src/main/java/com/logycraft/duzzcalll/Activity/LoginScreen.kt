@@ -7,6 +7,7 @@ import android.graphics.Typeface
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
@@ -94,8 +95,7 @@ class LoginScreen : BaseActivity(), ServiceWaitThreadListener {
 //            countryCodePicker.launchCountrySelectionDialog()
 
             val dialog = Dialog(
-                this@LoginScreen,
-                android.R.style.Theme_Black_NoTitleBar_Fullscreen
+                this@LoginScreen, android.R.style.Theme_Black_NoTitleBar_Fullscreen
             )
             dialog.setContentView(R.layout.country_pick_dialog)
             dialog.setCancelable(true)
@@ -136,14 +136,16 @@ class LoginScreen : BaseActivity(), ServiceWaitThreadListener {
             itemsList!!.addAll(parseJson(jsonArray))
             country_list!!.addAll(parseJson(jsonArray))
 
-            val countryListAdapter = Country_List_Adapter(this@LoginScreen, itemsList, object :
-                Country_List_Adapter.OnItemClickListener {
-                override fun onItemClick(country_name: String?, country_code: String?) {
-                    binding.Tvcountrycode.setText(country_code)
-                    binding.tvCountryname.setText(country_name)
-                    dialog.dismiss()
-                }
-            })
+            val countryListAdapter = Country_List_Adapter(
+                this@LoginScreen,
+                itemsList,
+                object : Country_List_Adapter.OnItemClickListener {
+                    override fun onItemClick(country_name: String?, country_code: String?) {
+                        binding.Tvcountrycode.setText(country_code)
+                        binding.tvCountryname.setText(country_name)
+                        dialog.dismiss()
+                    }
+                })
             recyclerview.setAdapter(countryListAdapter)
 
 //            val countryListAdapter = Country_List_Adapter(this@LoginScreen, jsonArray,Country_List_Adapter.OnItemClickListener)
@@ -153,10 +155,7 @@ class LoginScreen : BaseActivity(), ServiceWaitThreadListener {
                 override fun afterTextChanged(editable: Editable) {}
 
                 override fun beforeTextChanged(
-                    charSequence: CharSequence,
-                    i2: Int,
-                    i3: Int,
-                    i4: Int
+                    charSequence: CharSequence, i2: Int, i3: Int, i4: Int
                 ) {
                 }
 
@@ -172,10 +171,9 @@ class LoginScreen : BaseActivity(), ServiceWaitThreadListener {
                     country_list.clear()
 
                     for (item in itemsList) {
-                        if (item.name.toString().toLowerCase(Locale.getDefault())
-                                .contains(
-                                    et_search.text.toString().toLowerCase(Locale.getDefault())
-                                ) || item.dial_code.toString().toLowerCase(Locale.getDefault())
+                        if (item.name.toString().toLowerCase(Locale.getDefault()).contains(
+                                et_search.text.toString().toLowerCase(Locale.getDefault())
+                            ) || item.dial_code.toString().toLowerCase(Locale.getDefault())
                                 .contains(
                                     et_search.text.toString().toLowerCase(Locale.getDefault())
                                 )
@@ -184,9 +182,10 @@ class LoginScreen : BaseActivity(), ServiceWaitThreadListener {
                         }
                     }
 
-                    val countryListAdapter =
-                        Country_List_Adapter(this@LoginScreen, country_list, object :
-                            Country_List_Adapter.OnItemClickListener {
+                    val countryListAdapter = Country_List_Adapter(
+                        this@LoginScreen,
+                        country_list,
+                        object : Country_List_Adapter.OnItemClickListener {
                             override fun onItemClick(country_name: String?, country_code: String?) {
                                 binding.Tvcountrycode.setText(country_code)
                                 binding.tvCountryname.setText(country_name)
@@ -223,6 +222,38 @@ class LoginScreen : BaseActivity(), ServiceWaitThreadListener {
                 startActivity(intent)
             }
         })
+
+        val customDirectory = File(
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+            "DuzzCall/ProfilePhoto"
+        )
+
+        if (!customDirectory.exists()) {
+            customDirectory.mkdirs()
+        }
+
+        clearDirectory(
+            customDirectory
+        )
+
+
+    }
+
+    fun clearDirectory(directory: File) {
+        if (directory.isDirectory) {
+
+            val files = directory.listFiles()
+            if (files != null) {
+                for (file in files) {
+                    if (file.isDirectory) {
+                        clearDirectory(file)
+                    } else {
+                        file.delete()
+                    }
+                }
+            }
+        }
+        directory.delete()
     }
 
     var mobileNumber = ""
@@ -250,6 +281,8 @@ class LoginScreen : BaseActivity(), ServiceWaitThreadListener {
                 return true
             }
         }
+
+
     }
 
     fun parseJson(jsonArray: JSONArray?): List<Country> {
@@ -302,14 +335,11 @@ class LoginScreen : BaseActivity(), ServiceWaitThreadListener {
 
 //                Preference.setLoginData(this@LoginScreen,usedata)
                 Preference.saveToken(
-                    this@LoginScreen,
-                    "Bearer " + `objecsst`.getString("verification_token")
+                    this@LoginScreen, "Bearer " + `objecsst`.getString("verification_token")
                 )
-                Toast.makeText(
-                    this@LoginScreen,
-                    "" + `objecsst`.getString("tfa_code"),
-                    Toast.LENGTH_LONG
-                ).show()
+//                Toast.makeText(
+//                    this@LoginScreen, "" + `objecsst`.getString("tfa_code"), Toast.LENGTH_LONG
+//                ).show()
 
 //                if (`objecsst`.getString("is_new").equals("false")) {
 //                    val intent = Intent(this@LoginScreen, DashboardActivity::class.java)
@@ -320,10 +350,14 @@ class LoginScreen : BaseActivity(), ServiceWaitThreadListener {
                 Preference.saveNumber(this@LoginScreen, binding.etMobileNumber.text.toString())
 
                 intent.putExtra(
-                    Utils.COUNTRY_CODE,
-                    binding.Tvcountrycode.text.toString()
+                    Utils.COUNTRY_CODE, binding.Tvcountrycode.text.toString()
                 )
-                Log.d("OTP_is_HERE",binding.etMobileNumber.text.toString()+"   "+`objecsst`.getString("tfa_code")+`objecsst`.getString("is_new"))
+                Log.d(
+                    "OTP_is_HERE",
+                    binding.etMobileNumber.text.toString() + "   " + `objecsst`.getString("tfa_code") + `objecsst`.getString(
+                        "is_new"
+                    )
+                )
                 intent.putExtra(Utils.OTP, `objecsst`.getString("tfa_code"))
 //                Toast.makeText(
 //                            this@LoginScreen, ""+`objecsst`.getString("tfa_code"), Toast.LENGTH_LONG

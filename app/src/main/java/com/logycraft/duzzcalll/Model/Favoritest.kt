@@ -2,7 +2,7 @@ package com.logycraft.duzzcalll.Model
 
 import com.google.gson.annotations.SerializedName
 
-class Favorites {
+class Favoritested {
     @SerializedName("business_name")
     var businessName: String? = null
 

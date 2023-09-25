@@ -11,7 +11,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.duzzcall.duzzcall.R
-import com.logycraft.duzzcalll.Model.Favorites
 import com.logycraft.duzzcalll.Util.Preference
 import com.logycraft.duzzcalll.data.BusinessResponce
 import de.hdodenhof.circleimageview.CircleImageView
@@ -21,12 +20,12 @@ import de.hdodenhof.circleimageview.CircleImageView
 
 class BusinessContact_Adapter(
     var activity: Activity?,
-    var businessresponce: MutableList<BusinessResponce>,
+    var businessresponce: ArrayList<BusinessResponce>,
     var isfavourite: Boolean,
     var listener: OnItemClickListener?
 ) : RecyclerView.Adapter<BusinessContact_Adapter.ViewHolder>() {
-    var favoritesContactlist: MutableList<Favorites>? = mutableListOf()
-    var favoritesContact = Favorites()
+    var favoritesContactlist: ArrayList<BusinessResponce>? = ArrayList()
+//    var favoritesContact = BusinessResponce()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view: View =
@@ -51,31 +50,48 @@ class BusinessContact_Adapter(
         holder.txt_contact_name.setText(businessresponce.get(position).businessName)
         holder.txt_contact_number.setText(businessresponce.get(position).lineExtension)
 
-        var listdata: MutableList<Favorites>? = mutableListOf()
+        var listdata: MutableList<BusinessResponce>? = mutableListOf()
         listdata = activity?.let {
             Preference.getFavoritesContact(it)
         }
 
         if (listdata != null && !listdata.isEmpty() && businessresponce != null) {
-            if (position != (listdata.size-1)) {
-                for (item1 in listdata) {
-                    for (item2 in businessresponce) {
-                        if (item1.lineExtension == item2.lineExtension) {
-                            holder.img_star_blank.visibility = View.GONE
-                            holder.img_star_filled.visibility = View.VISIBLE
-                            break
-                        } else {
-                            holder.img_star_blank.visibility = View.VISIBLE
-                            holder.img_star_filled.visibility = View.GONE
-                            break
-                        }
-                    }
-                }
 
-            } else {
-                holder.img_star_blank.visibility = View.VISIBLE
-                holder.img_star_filled.visibility = View.GONE
+//            if (listdata.contains(businessresponce.get(position)) ){
+//                Log.e("favourited",""+businessresponce.get(position).lineExtension)
+//            }
+            for (item1 in listdata) {
+                if (item1.lineExtension.equals(businessresponce.get(position).lineExtension)) {
+                    Log.e("favourited", "bbb" + businessresponce.get(position).lineExtension)
+                    holder.img_star_blank.visibility = View.GONE
+                    holder.img_star_filled.visibility = View.VISIBLE
+                }
             }
+//            if (position != (listdata.size - 1)) {
+//                for (item1 in listdata) {
+//                    if (item1.lineExtension.equals(businessresponce.get(position).lineExtension)) {
+//                        holder.img_star_blank.visibility = View.GONE
+//                        holder.img_star_filled.visibility = View.VISIBLE
+//                        break
+//                    }
+////                    for (item2 in businessresponce) {
+////                        if (item1.lineExtension == item2.lineExtension) {
+////                            holder.img_star_blank.visibility = View.GONE
+////                            holder.img_star_filled.visibility = View.VISIBLE
+////                            break
+////                        }
+//////                        else {
+//////                            holder.img_star_blank.visibility = View.VISIBLE
+//////                            holder.img_star_filled.visibility = View.GONE
+//////                            break
+//////                        }
+////                    }
+//                }
+
+//            } else {
+//                holder.img_star_blank.visibility = View.VISIBLE
+//                holder.img_star_filled.visibility = View.GONE
+//            }
 
         } else {
             holder.img_star_blank.visibility = View.VISIBLE
@@ -87,24 +103,24 @@ class BusinessContact_Adapter(
             holder.img_star_blank.visibility = View.GONE
 
             if (activity?.let { it1 -> Preference.getFavoritesContact(it1) } == null) {
-                favoritesContact.businessLogo = businessresponce.get(position).businessLogo;
-                favoritesContact.businessName = businessresponce.get(position).businessName;
-                favoritesContact.lineExtension = businessresponce.get(position).lineExtension;
-                favoritesContact.lineName = businessresponce.get(position).lineName
-                favoritesContactlist?.add(favoritesContact)
+//                favoritesContact.businessLogo = businessresponce.get(position).businessLogo;
+//                favoritesContact.businessName = businessresponce.get(position).businessName;
+//                favoritesContact.lineExtension = businessresponce.get(position).lineExtension;
+//                favoritesContact.lineName = businessresponce.get(position).lineName
+                favoritesContactlist?.add(businessresponce.get(position))
 
                 activity?.let { it1 ->
                     Preference.setFavoritesContact(it1, favoritesContactlist)
                 }
 
             } else {
-                favoritesContact.businessLogo = businessresponce.get(position).businessLogo;
-                favoritesContact.businessName = businessresponce.get(position).businessName;
-                favoritesContact.lineExtension = businessresponce.get(position).lineExtension;
-                favoritesContact.lineName = businessresponce.get(position).lineName;
+//                favoritesContact.businessLogo = businessresponce.get(position).businessLogo;
+//                favoritesContact.businessName = businessresponce.get(position).businessName;
+//                favoritesContact.lineExtension = businessresponce.get(position).lineExtension;
+//                favoritesContact.lineName = businessresponce.get(position).lineName;
                 favoritesContactlist = Preference.getFavoritesContact(activity!!)
 
-                favoritesContactlist?.add(favoritesContact)
+                favoritesContactlist?.add(businessresponce.get(position))
                 activity?.let { it1 ->
                     Preference.setFavoritesContact(it1, favoritesContactlist)
                 }
@@ -113,14 +129,36 @@ class BusinessContact_Adapter(
 
         holder.img_star_filled.setOnClickListener {
             favoritesContactlist = Preference.getFavoritesContact(activity!!)
-            if (favoritesContactlist != null) {
-                for (item1 in favoritesContactlist!!) {
-                    if (item1.lineExtension == businessresponce.get(position).lineExtension) {
-                        favoritesContactlist?.remove(item1)
-                    }
-                }
-            }
+            favoritesContactlist?.remove(businessresponce.get(position))
+
+            Log.e("Favlouritesize", "" + favoritesContactlist?.size)
+
+//            for (item1 in favoritesContactlist!!) {
+//                if (item1.lineExtension.equals(businessresponce.get(position).lineExtension)) {
+//                    favoritesContactlist?.remove(item1)
+//                    Log.e("Favlouritesize", "current")
+//
+//                }
+//            }
+
+
+
+//            var favoriteslist: List<BusinessResponce>? = favoritesContactlist
+//            Log.e("Favlouritesize", "" + favoriteslist?.size)
+//            if (favoriteslist!!.contains(businessresponce.get(position))) {
+//                Log.e("Favlouritesize", "YES " + favoriteslist?.size)
+//            }
+//            Log.e("Favlouritesize", " after removed " + favoriteslist?.size)
+//            if (favoritesContactlist != null) {
+//                for (item1 in favoritesContactlist!!) {
+//                    if (item1.lineExtension == businessresponce.get(position).lineExtension) {
+//                        favoritesContactlist?.remove(item1)
+//                    }
+//                }
+//            }
+            Log.e("Favlouritesize", " after removed " + favoritesContactlist?.size)
             activity?.let { it1 -> Preference.setFavoritesContact(it1, favoritesContactlist) }
+
             holder.img_star_filled.visibility = View.GONE
             holder.img_star_blank.visibility = View.VISIBLE
         }

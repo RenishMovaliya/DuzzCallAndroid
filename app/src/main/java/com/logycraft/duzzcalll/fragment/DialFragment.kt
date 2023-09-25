@@ -2,6 +2,7 @@ package com.logycraft.duzzcalll.fragment
 
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
+import android.content.pm.PackageManager
 import android.graphics.Rect
 import android.os.Build
 import android.os.Bundle
@@ -12,6 +13,8 @@ import android.text.TextWatcher
 import android.view.*
 import android.widget.EditText
 import androidx.annotation.Nullable
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import com.duzzcall.duzzcall.R
@@ -34,7 +37,6 @@ private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
 
-
 class DialFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
@@ -55,6 +57,7 @@ class DialFragment : Fragment() {
 
 
     }
+
     override fun onActivityCreated(@Nullable savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         //getActivity() is fully created in onActivityCreated and instanceOf differentiate it between different Activities
@@ -65,11 +68,24 @@ class DialFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentDialBinding.inflate(inflater,container,false);
+        binding = FragmentDialBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         hasRussianLocale = Locale.getDefault().language == "ru"
+
+        if (activity?.let {
+                ContextCompat.checkSelfPermission(
+                    it, android.Manifest.permission.POST_NOTIFICATIONS
+                )
+            } != PackageManager.PERMISSION_GRANTED) {
+            activity?.let {
+                ActivityCompat.requestPermissions(
+                    it, arrayOf(android.Manifest.permission.POST_NOTIFICATIONS), 1
+                )
+            }
+        }
 //        dialpad_1_holder = view.findViewById(R.id.dialpad_1_holder)
 //        dialpad_2_holder = view.findViewById(R.id.dialpad_2_holder)
 //        dialpad_3_holder = view.findViewById(R.id.dialpad_3_holder)
@@ -172,8 +188,11 @@ class DialFragment : Fragment() {
         binding.dialpadCallButton.setOnClickListener {
 //            outgoingCall();
 
-            if (! binding.dialpadInput.text.toString().isEmpty()){
-                callBackListener?.onCallBack(binding.dialpadInput.text.toString(),binding.dialpadInput.text.toString());
+            if (!binding.dialpadInput.text.toString().isEmpty()) {
+                callBackListener?.onCallBack(
+                    binding.dialpadInput.text.toString(),
+                    binding.dialpadInput.text.toString()
+                );
             }
 
         }
@@ -218,6 +237,7 @@ class DialFragment : Fragment() {
         binding.dialpadInput.dispatchKeyEvent(binding.dialpadInput.getKeyEvent(KeyEvent.KEYCODE_DEL))
         maybePerformDialpadHapticFeedback(view)
     }
+
     @SuppressLint("ClickableViewAccessibility")
     private fun setupCharClick(view: View, char: Char, longClickable: Boolean = true) {
         view.isClickable = true
@@ -258,9 +278,11 @@ class DialFragment : Fragment() {
             false
         }
     }
+
     private fun clearInput() {
         binding.dialpadInput.setText("")
     }
+
     private fun performLongClick(view: View, char: Char) {
         if (char == '0') {
             clearChar(view)
@@ -273,42 +295,46 @@ class DialFragment : Fragment() {
 //            }
         }
     }
+
     @TargetApi(Build.VERSION_CODES.O)
     private fun maybePerformDialpadHapticFeedback(view: View?) {
 
     }
-    fun EditText.onTextChangeListener(onTextChangedAction: (newText: String) -> Unit) = addTextChangedListener(object :
-        TextWatcher {
-        override fun afterTextChanged(s: Editable?) {
-            onTextChangedAction(s.toString())
-        }
 
-        override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+    fun EditText.onTextChangeListener(onTextChangedAction: (newText: String) -> Unit) =
+        addTextChangedListener(object :
+            TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                onTextChangedAction(s.toString())
+            }
 
-        override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
-    })
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
+        })
 
     private fun startDialpadTone(char: Char) {
 //        if (config.dialpadBeeps) {
-            pressedKeys.add(char)
-            toneGeneratorHelper?.startTone(char)
+        pressedKeys.add(char)
+        toneGeneratorHelper?.startTone(char)
 //        }
     }
 
     private fun stopDialpadTone(char: Char) {
 //        if (config.dialpadBeeps) {
-            if (!pressedKeys.remove(char)) return
-            if (pressedKeys.isEmpty()) {
-                toneGeneratorHelper?.stopTone()
-            } else {
-                startDialpadTone(pressedKeys.last())
-            }
+        if (!pressedKeys.remove(char)) return
+        if (pressedKeys.isEmpty()) {
+            toneGeneratorHelper?.stopTone()
+        } else {
+            startDialpadTone(pressedKeys.last())
+        }
 //        }
     }
 
     data class SpeedDial(val id: Int, var number: String, var displayName: String) {
         fun isValid() = number.trim().isNotEmpty()
     }
+
     val View.boundingBox
         get() = Rect().also { getGlobalVisibleRect(it) }
 

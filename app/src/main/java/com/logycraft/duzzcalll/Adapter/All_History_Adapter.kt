@@ -72,6 +72,7 @@ class All_History_Adapter(
             holder.txt_contact_name.text = address
             holder.txt_contact_number.text = number
 
+
             val timestamp: Long = calllog.get(position).getStartDate() * 1000
             val logTime: Calendar = Calendar.getInstance()
             logTime.setTimeInMillis(timestamp)

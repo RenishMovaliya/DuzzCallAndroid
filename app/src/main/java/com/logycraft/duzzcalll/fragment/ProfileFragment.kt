@@ -174,43 +174,7 @@ class ProfileFragment : Fragment() {
 
 
         binding.updateImgCamera.setOnClickListener {
-            val dialogView: View = layoutInflater.inflate(R.layout.profile_img_dialog, null)
-            val dialog = activity?.let { it1 -> BottomSheetDialog(it1) }
-            dialog?.setContentView(dialogView)
-
-            val img_item = dialog?.findViewById<ImageView>(R.id.img_delete)
-            val ll_camera = dialog?.findViewById<LinearLayout>(R.id.ll_camera)
-            val ll_gallery = dialog?.findViewById<LinearLayout>(R.id.ll_gallery)
-
-
-            ll_camera?.setOnClickListener {
-                if (activity?.let {
-                        ContextCompat.checkSelfPermission(
-                            it, android.Manifest.permission.CAMERA
-                        )
-                    } != PackageManager.PERMISSION_GRANTED) {
-                    activity?.let {
-                        ActivityCompat.requestPermissions(
-                            it, arrayOf(android.Manifest.permission.CAMERA), CAMERA_REQUEST_CODE
-                        )
-                    }
-                } else {
-                    openCameraAndSavePhoto()
-                }
-                dialog.dismiss()
-            }
-
-            ll_gallery?.setOnClickListener {
-                checkForPermission()
-                dialog.dismiss()
-
-            }
-
-
-            img_item?.setOnClickListener {
-                dialog.dismiss()
-            }
-            dialog?.show()
+            binding.imgCamera.performClick();
         }
 
     }
@@ -334,6 +298,7 @@ class ProfileFragment : Fragment() {
                         Log.e("aaaa", "User confirm taken photo")
                         // Show uri in image view
                         binding.profileImage.setImageURI(photoURI)
+                        binding.updateProfileImage.setImageURI(photoURI)
                     }
                     Activity.RESULT_CANCELED -> {
                         Log.e("aaaa", "User denied taken photo")
@@ -348,6 +313,7 @@ class ProfileFragment : Fragment() {
                         val contentURI = data?.data
                         contentURI?.let {
                             binding.profileImage.setImageURI(it)
+                            binding.updateProfileImage.setImageURI(it)
 
                             val fileName = "duzz_profile_img.jpg"
 

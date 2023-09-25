@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.Environment
 import android.util.Log
 import android.view.View
 import android.widget.*
@@ -32,6 +33,7 @@ import com.logycraft.duzzcalll.service.LinphoneService
 import com.logycraft.duzzcalll.service.ServiceWaitThread
 import com.logycraft.duzzcalll.service.ServiceWaitThreadListener
 import org.linphone.core.*
+import java.io.File
 
 //import com.logycraft.duzzcalll.core.*
 
@@ -88,7 +90,12 @@ class DashboardActivity : AppCompatActivity(), CallBackListener,  PermissionRequ
                     true
                 }
             }
+
+
         }
+
+
+
 //        loadFragment(DialFragment())
         bottomNav.setSelectedItemId(R.id.dialpad);
         val factory = Factory.instance()
@@ -101,6 +108,7 @@ class DashboardActivity : AppCompatActivity(), CallBackListener,  PermissionRequ
 
 
     }
+
 
 
     private fun loadFragment(fragment: Fragment) {
