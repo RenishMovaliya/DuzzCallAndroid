@@ -68,6 +68,7 @@
 
     <string name="password_validation_msg">The password must be at least 8 characters long and include a number, lowercase letter, uppercase letter and special character</string>
     <string name="enter_mobile_number">Enter mobile number</string>
+    <string name="select_country">Select Country First</string>
     <string name="enter_password">Enter password</string>
     <string name="enter_firstname">Enter First Name</string>
     <string name="enter_lastname">Enter Last Name</string>

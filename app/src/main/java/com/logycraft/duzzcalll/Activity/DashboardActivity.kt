@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import com.duzzcall.duzzcall.R
@@ -50,6 +51,14 @@ class DashboardActivity : AppCompatActivity(), CallBackListener,  PermissionRequ
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
+
+        ActivityCompat.requestPermissions(
+            this@DashboardActivity,
+            arrayOf(
+                Manifest.permission.MANAGE_EXTERNAL_STORAGE
+            ),
+            101
+        )
 //        loadFragment(HomeFragment())
         statusTV = findViewById(R.id.statusTV)
         bottomNav = findViewById(R.id.bottomNav) as BottomNavigationView
@@ -90,8 +99,6 @@ class DashboardActivity : AppCompatActivity(), CallBackListener,  PermissionRequ
                     true
                 }
             }
-
-
         }
 
 
@@ -105,10 +112,7 @@ class DashboardActivity : AppCompatActivity(), CallBackListener,  PermissionRequ
             core.videoActivationPolicy.automaticallyAccept = true
             loginLinphone()
         }
-
-
     }
-
 
 
     private fun loadFragment(fragment: Fragment) {

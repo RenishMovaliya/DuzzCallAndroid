@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.duzzcall.duzzcall.R
+import com.logycraft.duzzcalll.Model.ContactModel
 
 import com.logycraft.duzzcalll.Util.Preference
 import com.logycraft.duzzcalll.data.BusinessResponce
@@ -42,7 +43,7 @@ class Personal_Contact_Adapter(
             favoritesContactlist = context?.let { it1 -> Preference.getFavoritesContact(it1) }
             favoritesContactlist?.remove(favoritesContactlist!!.get(position))
             context?.let { it1 -> Preference.setFavoritesContact(it1, favoritesContactlist) }
-            notifyItemRemoved(position)
+            notifyDataSetChanged()
         }
 
         if (favoritesContactlist != null) {

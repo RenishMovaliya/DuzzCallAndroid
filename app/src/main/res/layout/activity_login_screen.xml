@@ -112,7 +112,7 @@
                 android:layout_marginTop="@dimen/d20"
                 android:orientation="horizontal">
 
-                <TextView
+                <EditText
                     android:id="@+id/Tvcountrycode"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/d45"
@@ -120,7 +120,8 @@
                     android:background="@drawable/rounded_corner"
                     android:fontFamily="@font/poppins_light"
                     android:gravity="center"
-                    android:text="+00"
+                    android:hint="+00"
+                    android:textColorHint="@color/black"
                     android:textColor="@color/black"
                     android:textSize="@dimen/dt14" />
 

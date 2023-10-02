@@ -1,18 +1,27 @@
 package com.logycraft.duzzcalll.fragment
 
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.database.Cursor
+import android.net.Uri
 import android.os.Bundle
+import android.provider.ContactsContract
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.duzzcall.duzzcall.R
 import com.logycraft.duzzcalll.Adapter.All_History_Adapter
 import com.duzzcall.duzzcall.databinding.FragmentHistoryBinding
 import com.logycraft.duzzcalll.Activity.NewContactActivity
 import com.logycraft.duzzcalll.LinphoneManager
+import com.logycraft.duzzcalll.Model.ContactModel
 import org.linphone.core.Call
 import org.linphone.core.CallLog
 import java.util.*
@@ -28,6 +37,9 @@ class HistoryFragment : Fragment() {
     private var param2: String? = null
     lateinit var calllog: Array<CallLog>
     lateinit var core: Array<CallLog>
+    private val READ_CONTACTS_PERMISSION_CODE = 123
+    private val contactList: MutableList<ContactModel> = mutableListOf()
+    lateinit var historyadapter: All_History_Adapter;
 
 
     private lateinit var binding: FragmentHistoryBinding
@@ -51,12 +63,13 @@ class HistoryFragment : Fragment() {
         core = LinphoneManager.getCore().callLogs
         calllog = LinphoneManager.getCore().callLogs
 
+
         if (core != null) {
-            val adapter = activity?.let { All_History_Adapter(it, core, "All") }
-            adapter?.onItemClick = { string ->
+            historyadapter= activity?.let { All_History_Adapter(it, core, "All", contactList) }!!
+            historyadapter?.onItemClick = { string ->
                 callDetailscreen(string)
             }
-            binding.recyclerview.adapter = adapter
+            binding.recyclerview.adapter = historyadapter
 
         }
 
@@ -69,7 +82,12 @@ class HistoryFragment : Fragment() {
 //                        val fragmentTransaction = fragmentManager.beginTransaction()
 //                        fragmentTransaction.replace(R.id.app_container, fragment).commit()
             if (core != null) {
-                val adapter = activity?.let { All_History_Adapter(it, core, "All") }
+                val adapter = activity?.let { All_History_Adapter(
+                    it,
+                    core,
+                    "All",
+                    contactList
+                ) }
                 adapter?.onItemClick = { string ->
                     callDetailscreen(string)
                 }
@@ -102,13 +120,16 @@ class HistoryFragment : Fragment() {
                     }
                 }
 
-                val adapter = activity?.let { All_History_Adapter(it, missedcalllog, "Miss") }
+                val adapter = activity?.let {
+                    All_History_Adapter(
+                        it, missedcalllog, "Miss", contactList
+                    )
+                }
                 adapter?.onItemClick = { string ->
                     callDetailscreen(string)
                 }
                 binding.recyclerview.adapter = adapter
             }
-
 
         })
 
@@ -131,7 +152,13 @@ class HistoryFragment : Fragment() {
 //                }
                 filterData()
                 if (core != null) {
-                    val adapter = activity?.let { All_History_Adapter(it, core, "All") }
+                    val adapter =
+                        activity?.let { All_History_Adapter(
+                            it,
+                            core,
+                            "All",
+                            contactList
+                        ) }
                     adapter?.onItemClick = { string ->
                         callDetailscreen(string)
                     }
@@ -140,9 +167,74 @@ class HistoryFragment : Fragment() {
 //                recyclerview(mendates)
             }
         })
+        activity?.let {
+            ActivityCompat.requestPermissions(
+                it,
+                arrayOf(android.Manifest.permission.READ_CONTACTS),
+                READ_CONTACTS_PERMISSION_CODE
+            )
+        }
+
+        if (activity?.let {
+                ContextCompat.checkSelfPermission(
+                    it, android.Manifest.permission.READ_CONTACTS
+                )
+            } != PackageManager.PERMISSION_GRANTED) {
+            // Permission is not granted, request it
+            activity?.let {
+                ActivityCompat.requestPermissions(
+                    it,
+                    arrayOf(android.Manifest.permission.READ_CONTACTS),
+                    READ_CONTACTS_PERMISSION_CODE
+                )
+            }
+        } else {
+            // Permission already granted, fetch the contact list
+            fetchContactList()
+        }
 
 
     }
+
+
+    private fun fetchContactList() {
+        val cursor = activity?.getContentResolver()?.query(
+            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+            null,
+            null,
+            null,
+            ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC"
+        )
+        var currentGroup = ""
+        cursor?.let {
+            while (it.moveToNext()) {
+                val name =
+                    it.getString(it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME))
+                val number =
+                    it.getString(it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
+                val imageUriString: String? =
+                    cursor.getString(it.getColumnIndex(ContactsContract.Contacts.PHOTO_URI))
+                val imageUri: Uri? = imageUriString?.let { Uri.parse(it) }
+
+                if (!name.isNullOrEmpty() && !number.isNullOrEmpty()) {
+                    val contact = ContactModel(name, number, imageUri)
+                    val groupName = name[0].toString().toUpperCase()
+
+                    if (groupName != currentGroup) {
+                        currentGroup = groupName
+                        contactList.add(ContactModel(groupName, "", imageUri))
+                    }
+
+                    contactList.add(contact)
+                }
+            }
+            it.close()
+            historyadapter.notifyDataSetChanged()
+        }
+        historyadapter.setContacts(contactList)
+    }
+
+
 
     private fun filterData() {
 
@@ -186,4 +278,5 @@ class HistoryFragment : Fragment() {
             }
         }
     }
+
 }

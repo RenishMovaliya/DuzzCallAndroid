@@ -2,9 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/fragment_container"
     tools:context=".fragment.SettingFragment">
 
     <androidx.appcompat.widget.Toolbar
@@ -17,11 +17,11 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:layout_marginLeft="@dimen/d20"
             android:fontFamily="@font/poppins_bold"
             android:includeFontPadding="false"
             android:text="@string/settings"
-            android:layout_gravity="center_horizontal"
             android:textColor="@color/appcolour"
             android:textSize="@dimen/dt22" />
 
@@ -39,6 +39,7 @@
             android:layout_height="match_parent"
             android:layout_marginHorizontal="@dimen/d20"
             android:orientation="vertical">
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_d1"
@@ -121,12 +122,12 @@
             </LinearLayout>
 
             <LinearLayout
-                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/d10"
                 android:layout_marginTop="@dimen/d15"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <ImageView
                     android:layout_width="@dimen/d20"
@@ -164,12 +165,12 @@
             </LinearLayout>
 
             <LinearLayout
-                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/d10"
                 android:layout_marginTop="@dimen/d15"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <ImageView
                     android:layout_width="@dimen/d20"
@@ -206,12 +207,12 @@
             </LinearLayout>
 
             <LinearLayout
-                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/d10"
                 android:layout_marginTop="@dimen/d15"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <ImageView
                     android:layout_width="@dimen/d20"
@@ -248,12 +249,12 @@
             </LinearLayout>
 
             <LinearLayout
-                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/d10"
                 android:layout_marginTop="@dimen/d15"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <ImageView
                     android:layout_width="@dimen/d20"
@@ -359,15 +360,28 @@
             </LinearLayout>
 
 
-
         </LinearLayout>
     </ScrollView>
+
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="@dimen/d30"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="@dimen/d30"
         android:layout_marginTop="@dimen/d40"
+        android:layout_above="@+id/tv_version"
+        android:layout_marginBottom="@dimen/d10"
         android:src="@drawable/titlename"></ImageView>
+
+    <TextView
+        android:id="@+id/tv_version"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/d40"
+        android:fontFamily="@font/poppins_light"
+        android:text="Version 1.5.0"
+        android:textSize="@dimen/dt13" />
+
+
 </RelativeLayout>

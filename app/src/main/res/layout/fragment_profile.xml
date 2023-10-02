@@ -11,6 +11,7 @@
         android:id="@+id/rl_main_profile"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/topBar"
             android:layout_width="match_parent"
@@ -264,31 +265,34 @@
 
                 </LinearLayout>
 
-                <RelativeLayout
-                    android:id="@+id/rl_profile"
-                    android:layout_width="match_parent"
-                    android:visibility="gone"
-                    android:layout_height="match_parent"
-                    android:background="@color/white">
 
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/img_profile_imgfull"
-                        android:layout_width="match_parent"
-                        android:layout_margin="@dimen/dt20"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/ic_profile_image" />
-
-                </RelativeLayout>
             </RelativeLayout>
         </ScrollView>
+
+        <RelativeLayout
+            android:id="@+id/rl_profile"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/topBar"
+            android:background="@color/white"
+            android:visibility="gone">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/img_profile_imgfull"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/dt20"
+                android:src="@drawable/ic_profile_image" />
+
+        </RelativeLayout>
 
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/rl_update_profile"
         android:layout_width="match_parent"
-        android:visibility="gone"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:visibility="gone">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/topBar2"
@@ -365,7 +369,7 @@
                 android:background="@drawable/rounded_corner"
                 android:fontFamily="@font/poppins_light"
                 android:inputType="text"
-                android:maxLength="18"
+                android:maxLength="25"
                 android:paddingHorizontal="@dimen/dt20"
                 android:textColor="@color/black"
                 android:textColorHint="@color/black"
@@ -397,17 +401,19 @@
                 android:id="@+id/btn_update"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/d40"
                 android:layout_marginTop="@dimen/d50"
                 android:background="@drawable/rounded_button_bg"
-                android:layout_marginHorizontal="@dimen/d40"
                 android:fontFamily="@font/poppins_bold"
                 android:gravity="center"
                 android:paddingVertical="@dimen/d7"
                 android:text="@string/update"
                 android:textColor="@color/white"
-                android:textSize="@dimen/dt17"/>
+                android:textSize="@dimen/dt17" />
         </LinearLayout>
 
     </RelativeLayout>
+
+
 
 </RelativeLayout>

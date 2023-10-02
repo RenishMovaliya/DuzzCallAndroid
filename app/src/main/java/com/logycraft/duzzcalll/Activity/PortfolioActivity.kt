@@ -51,7 +51,6 @@ class PortfolioActivity : BaseActivity() {
 //            binding.linearPortfolio.visibility = View.VISIBLE
 //        }
 
-
         binding.btnNext.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View?) {
                     if (isValidate()) {
@@ -77,7 +76,6 @@ class PortfolioActivity : BaseActivity() {
 //                        })
 
                     }
-
             }
         })
     }

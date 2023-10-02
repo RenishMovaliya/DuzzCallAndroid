@@ -1,5 +1,6 @@
 package com.logycraft.duzzcalll.fragment
 
+import android.Manifest
 import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.annotation.SuppressLint
 import android.app.Dialog
@@ -20,9 +21,9 @@ import androidx.fragment.app.Fragment
 import com.duzzcall.duzzcall.databinding.FragmentSettingBinding
 import com.example.restapiidemo.home.data.UserModel
 import com.logycraft.duzzcalll.Activity.LoginScreen
+import com.logycraft.duzzcalll.LinphoneManager
 import com.logycraft.duzzcalll.Util.Preference
 import java.io.File
-
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -31,7 +32,6 @@ class SettingFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     private lateinit var binding: FragmentSettingBinding
-    private val PERMISSION_REQUEST_READ_EXTERNAL_STORAGE = 1
 
     var userModel = UserModel()
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,6 +52,24 @@ class SettingFragment : Fragment() {
     @SuppressLint("ResourceAsColor")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
+        val customDirectory = File(
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+            "DuzzCall/ProfilePhoto"
+        )
+
+        if (!customDirectory.exists()) {
+            customDirectory.mkdirs()
+        }
+        ActivityCompat.requestPermissions(
+            requireActivity(),
+            arrayOf(
+                READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_MEDIA_IMAGES
+            ),
+            101
+        )
+
         binding.llLogout.setOnClickListener {
             val dialog = activity?.let { it1 ->
                 Dialog(
@@ -66,29 +84,28 @@ class SettingFragment : Fragment() {
             val cv_cancel = dialog?.findViewById<CardView>(com.duzzcall.duzzcall.R.id.cv_cancel)
             cv_logout?.setOnClickListener {
                 activity?.let { it1 -> Preference.setFirstUser(it1, false) }
+                val linphoneCore = LinphoneManager.getCore()
+
+                linphoneCore.setDefaultProxyConfig(null);
+                linphoneCore.clearAllAuthInfo();
+                linphoneCore.clearProxyConfig();
+                linphoneCore.clearCallLogs()
                 val intent = Intent(
                     activity, LoginScreen::class.java
                 )
                 startActivity(intent)
+
                 dialog?.dismiss()
             }
             cv_cancel?.setOnClickListener { dialog.dismiss() }
             dialog?.show()
         }
 
-        activity?.let {
-
-            ActivityCompat.requestPermissions(
-                it,
-                arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE),
-                PERMISSION_REQUEST_READ_EXTERNAL_STORAGE
-            )
-        };
-
         val paths = File(
             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
             "DuzzCall/ProfilePhoto/duzz_profile_img.jpg"
         )
+
         if (paths.exists()) {
             val imageUri = Uri.parse("file://$paths")
             binding.profileImage.setImageURI(imageUri)
@@ -99,8 +116,30 @@ class SettingFragment : Fragment() {
         val readImagePermission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
             android.Manifest.permission.READ_MEDIA_IMAGES
         else
-            android.Manifest.permission.READ_EXTERNAL_STORAGE
+            android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+
         binding.linAccountsetting.setOnClickListener {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                android.Manifest.permission.READ_MEDIA_IMAGES
+                activity?.let { it1 ->
+                    ActivityCompat.requestPermissions(
+                        it1,
+                        arrayOf(
+                            android.Manifest.permission.READ_MEDIA_IMAGES,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE
+                        ),
+                        1
+                    )
+                }
+            } else {
+                activity?.let { it1 ->
+                    ActivityCompat.requestPermissions(
+                        it1,
+                        arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                        101
+                    )
+                }
+            }
             if (activity?.let { it1 ->
                     ContextCompat.checkSelfPermission(
                         it1,
@@ -115,12 +154,25 @@ class SettingFragment : Fragment() {
 
             } else {
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                     android.Manifest.permission.READ_MEDIA_IMAGES
-                else
-                    android.Manifest.permission.READ_EXTERNAL_STORAGE
+                    activity?.let { it1 ->
+                        ActivityCompat.requestPermissions(
+                            it1,
+                            arrayOf(android.Manifest.permission.READ_MEDIA_IMAGES),
+                            101
+                        )
+                    }
+                } else {
+                    activity?.let { it1 ->
+                        ActivityCompat.requestPermissions(
+                            it1,
+                            arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                            101
+                        )
+                    }
+                }
             }
-
         }
 
         if (Preference.getUserData(activity) != null) {

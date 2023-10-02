@@ -16,26 +16,33 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
 
     <uses-permission
+        android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
+    <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:maxSdkVersion="28" />
+        android:maxSdkVersion="33"
+        tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.CAMERA" />
 
 
     <application
-        android:allowBackup="false"
+        android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@drawable/app_logo"
         android:label="@string/app_name"
         android:requestLegacyExternalStorage="true"
+        android:largeHeap="true"
         android:roundIcon="@drawable/app_logo"
+        android:hardwareAccelerated="true"
+        android:usesCleartextTraffic="true"
         android:supportsRtl="true"
         android:theme="@style/Theme.DuzzCalll"
         tools:replace="android:allowBackup,android:icon,android:label,android:roundIcon,android:theme"
         tools:targetApi="31">
+
         <activity
             android:name="com.logycraft.duzzcalll.Activity.AccountSettingActivity"
             android:exported="false">
@@ -158,7 +165,7 @@
         </activity>
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="@string/file_provider_authorities"
+            android:authorities="com.logycraft.duzzcalll.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

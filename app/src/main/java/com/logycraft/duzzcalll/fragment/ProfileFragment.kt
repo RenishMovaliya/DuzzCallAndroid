@@ -1,17 +1,14 @@
 package com.logycraft.duzzcalll.fragment
 
-import android.Manifest
 import android.app.Activity
 import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.database.Cursor
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
-import android.provider.Settings
 import android.text.TextUtils
 import android.util.Log
 import android.view.LayoutInflater
@@ -25,16 +22,10 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
-import com.duzzcall.duzzcall.BuildConfig
 import com.duzzcall.duzzcall.R
 import com.duzzcall.duzzcall.databinding.FragmentProfileBinding
 import com.example.restapiidemo.home.data.UserModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.karumi.dexter.Dexter
-import com.karumi.dexter.MultiplePermissionsReport
-import com.karumi.dexter.PermissionToken
-import com.karumi.dexter.listener.PermissionRequest
-import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import com.logycraft.duzzcalll.Util.Preference
 import com.logycraft.duzzcalll.Util.ValidationUtils
 import java.io.File
@@ -54,10 +45,11 @@ class ProfileFragment : Fragment() {
     private val CAMERA_REQUEST_CODE = 101
     var userModel = UserModel()
     var imguri = ""
-
+    private var currentimg = ""
     private val REQUEST_TAKE_PHOTO = 101
     private val REQUEST_PICK_PHOTO = 102
     private var photoURI: Uri? = null
+    private var isold = false;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -89,7 +81,6 @@ class ProfileFragment : Fragment() {
         binding.rlMainProfile.visibility = View.VISIBLE
 
         binding.imgEdit.setOnClickListener {
-
             binding.rlMainProfile.visibility = View.GONE
             binding.rlUpdateProfile.visibility = View.VISIBLE
 
@@ -109,9 +100,11 @@ class ProfileFragment : Fragment() {
             val imageUri = Uri.parse("file://$paths")
             binding.profileImage.setImageURI(imageUri)
             binding.updateProfileImage.setImageURI(imageUri)
+            binding.imgProfileImgfull.setImageURI(imageUri)
         } else {
             binding.profileImage.setImageResource(R.drawable.ic_profile_image)
             binding.updateProfileImage.setImageResource(R.drawable.ic_profile_image)
+            binding.imgProfileImgfull.setImageResource(R.drawable.ic_profile_image)
         }
 
 
@@ -149,9 +142,7 @@ class ProfileFragment : Fragment() {
                 }
                 dialog.dismiss()
             }
-
             dialog?.show()
-
         }
 
         binding.btnUpdate.setOnClickListener {
@@ -169,9 +160,7 @@ class ProfileFragment : Fragment() {
                 binding.rlMainProfile.visibility = View.VISIBLE
                 binding.rlUpdateProfile.visibility = View.GONE
             }
-
         }
-
 
         binding.updateImgCamera.setOnClickListener {
             binding.imgCamera.performClick();
@@ -212,9 +201,7 @@ class ProfileFragment : Fragment() {
 //        )
 
         val mFile = File.createTempFile(
-            "duzz_profile_img",
-            ".jpg",
-            customDirectory
+            "duzz_profile_img", ".jpg", customDirectory
         )
         return FileProvider.getUriForFile(
             requireContext(), getString(R.string.file_provider_authorities), mFile
@@ -239,7 +226,7 @@ class ProfileFragment : Fragment() {
         val storageDir = File(
             "DuzzCall/ProfilePhoto/"
         )
-        val resolver = requireContext().contentResolver
+        val resolver = activity?.contentResolver
         val contentValues = ContentValues().apply {
             put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
             put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
@@ -249,8 +236,33 @@ class ProfileFragment : Fragment() {
             )
         }
 
-        val uri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
+        val uri = resolver?.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
         return uri
+    }
+
+    @Throws(IOException::class)
+    private fun createImageFile(): File? {
+
+
+        val storageDir = File(
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+            "DuzzCall/ProfilePhoto"
+        )
+        val image = File.createTempFile(
+            "duzz_profile_img",  /* prefix */
+            ".jpg",  /* suffix */
+            storageDir /* directory */
+        )
+
+        // Save a file: path for use with ACTION_VIEW intents
+        val currentPhotoPath = image.absolutePath
+        val fileName =
+            currentPhotoPath.substring(currentPhotoPath.lastIndexOf("/") + 1) // Extract just the file name with extension
+        val fileNameWithoutNumber =
+            fileName.replace(Regex("[0-9]+"), "") // Remove all numeric digits from the file name
+        val newFilePath = currentPhotoPath.replace(fileName, fileNameWithoutNumber)
+        currentimg = newFilePath;
+        return File(newFilePath)
     }
 
     fun clearDirectory(directory: File) {
@@ -271,15 +283,41 @@ class ProfileFragment : Fragment() {
     }
 
     private fun openCameraAndSavePhoto() {
-        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
-            takePictureIntent.resolveActivity(requireContext().packageManager)?.also {
-                photoURI = getImageFileUri()
-                photoURI?.let {
-                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, it)
-                    startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            isold = false;
+            Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+                takePictureIntent.resolveActivity(requireContext().packageManager)?.also {
+                    photoURI = getImageFileUri()
+                    photoURI?.let {
+                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, it)
+                        startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO)
+                    }
+                }
+            }
+        } else {
+            isold = true;
+            val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            if (activity?.getPackageManager()
+                    ?.let { takePictureIntent.resolveActivity(it) } != null
+            ) {
+                // Create the File where the photo should go
+                var photoFile: File? = null
+                try {
+                    photoFile = createImageFile()
+                } catch (ex: IOException) {
+                }
+                // Continue only if the File was successfully created
+                if (photoFile != null) {
+                    val photoURI = FileProvider.getUriForFile(
+                        requireActivity(), "com.logycraft.duzzcalll.fileprovider", photoFile
+                    )
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                    startActivityForResult(takePictureIntent, CAMERA_REQUEST_CODE)
                 }
             }
         }
+
     }
 
 
@@ -297,8 +335,19 @@ class ProfileFragment : Fragment() {
                     Activity.RESULT_OK -> {
                         Log.e("aaaa", "User confirm taken photo")
                         // Show uri in image view
-                        binding.profileImage.setImageURI(photoURI)
-                        binding.updateProfileImage.setImageURI(photoURI)
+                        if (isold) {
+                            binding.profileImage.setImageURI(Uri.parse(currentimg))
+                            binding.updateProfileImage.setImageURI(Uri.parse(currentimg))
+                            binding.imgProfileImgfull.setImageURI(Uri.parse(currentimg))
+                        } else {
+                            binding.profileImage.setImageURI(photoURI)
+                            binding.updateProfileImage.setImageURI(photoURI)
+                            binding.imgProfileImgfull.setImageURI(photoURI)
+                        }
+
+                        Log.e("aaaa", "" + currentimg)
+
+
                     }
                     Activity.RESULT_CANCELED -> {
                         Log.e("aaaa", "User denied taken photo")
@@ -310,10 +359,12 @@ class ProfileFragment : Fragment() {
                     Activity.RESULT_OK -> {
                         Log.e("aaaa", "User confirm pick photo")
 
+
                         val contentURI = data?.data
                         contentURI?.let {
                             binding.profileImage.setImageURI(it)
                             binding.updateProfileImage.setImageURI(it)
+                            binding.imgProfileImgfull.setImageURI(it)
 
                             val fileName = "duzz_profile_img.jpg"
 
@@ -325,6 +376,7 @@ class ProfileFragment : Fragment() {
 
                             val destFile = File(storageDir, fileName)
                             selectimgpath?.let { it1 -> copyFile(it1, destFile.path) }
+
 
                         }
                     }
@@ -359,13 +411,13 @@ class ProfileFragment : Fragment() {
     }
 
     fun isUsernameValid(username: String): Boolean {
-        val regex = Regex("^[A-Za-z]+\\s[A-Za-z]+$")
+        val regex = Regex("^[A-Za-z0-9]+\\s[A-Za-z0-9]+\$")
 
         if (regex.matches(username)) {
             return regex.matches(username)
 
         } else {
-            Toast.makeText(activity, "Invalid Name", Toast.LENGTH_LONG).show()
+            Toast.makeText(activity, "Invalid Name (John Doe)", Toast.LENGTH_LONG).show()
         }
         return regex.matches(username)
     }
@@ -392,69 +444,69 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    private fun checkForPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            Dexter.withActivity(activity).withPermissions(
-                Manifest.permission.READ_EXTERNAL_STORAGE
-            ).withListener(object : MultiplePermissionsListener {
-                override fun onPermissionsChecked(report: MultiplePermissionsReport) {
-                    if (report.areAllPermissionsGranted()) {
-                        openGallery()
-                    }
-
-                    if (report.isAnyPermissionPermanentlyDenied) {
-                        Toast.makeText(
-                            activity,
-                            "Please grant camera and external storage permission.",
-                            Toast.LENGTH_LONG
-                        ).show()
-                        val intent = Intent()
-                        intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-                        val uri = Uri.fromParts("package", BuildConfig.APPLICATION_ID, null)
-                        intent.data = uri
-                        startActivity(intent)
-                    }
-                }
-
-                override fun onPermissionRationaleShouldBeShown(
-                    permissions: List<PermissionRequest>, token: PermissionToken
-                ) {
-                    token.continuePermissionRequest()
-                }
-            }).onSameThread().check()
-        } else {
-            Dexter.withActivity(activity).withPermissions(
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.CAMERA
-            ).withListener(object : MultiplePermissionsListener {
-                override fun onPermissionsChecked(report: MultiplePermissionsReport) {
-                    if (report.areAllPermissionsGranted()) {
-                        openGallery()
-                    }
-
-                    if (report.isAnyPermissionPermanentlyDenied) {
-                        Toast.makeText(
-                            activity,
-                            "Please grant camera and external storage permission.",
-                            Toast.LENGTH_LONG
-                        ).show()
-                        val intent = Intent()
-                        intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-                        val uri = Uri.fromParts("package", BuildConfig.APPLICATION_ID, null)
-                        intent.data = uri
-                        startActivity(intent)
-                    }
-                }
-
-                override fun onPermissionRationaleShouldBeShown(
-                    permissions: List<PermissionRequest>, token: PermissionToken
-                ) {
-                    token.continuePermissionRequest()
-                }
-            }).onSameThread().check()
-        }
-    }
+//    private fun checkForPermission() {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+//            Dexter.withActivity(activity).withPermissions(
+//                Manifest.permission.READ_EXTERNAL_STORAGE
+//            ).withListener(object : MultiplePermissionsListener {
+//                override fun onPermissionsChecked(report: MultiplePermissionsReport) {
+//                    if (report.areAllPermissionsGranted()) {
+//                        openGallery()
+//                    }
+//
+//                    if (report.isAnyPermissionPermanentlyDenied) {
+//                        Toast.makeText(
+//                            activity,
+//                            "Please grant camera and external storage permission.",
+//                            Toast.LENGTH_LONG
+//                        ).show()
+//                        val intent = Intent()
+//                        intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+//                        val uri = Uri.fromParts("package", BuildConfig.APPLICATION_ID, null)
+//                        intent.data = uri
+//                        startActivity(intent)
+//                    }
+//                }
+//
+//                override fun onPermissionRationaleShouldBeShown(
+//                    permissions: List<PermissionRequest>, token: PermissionToken
+//                ) {
+//                    token.continuePermissionRequest()
+//                }
+//            }).onSameThread().check()
+//        } else {
+//            Dexter.withActivity(activity).withPermissions(
+//                Manifest.permission.READ_EXTERNAL_STORAGE,
+//                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+//                Manifest.permission.CAMERA
+//            ).withListener(object : MultiplePermissionsListener {
+//                override fun onPermissionsChecked(report: MultiplePermissionsReport) {
+//                    if (report.areAllPermissionsGranted()) {
+//                        openGallery()
+//                    }
+//
+//                    if (report.isAnyPermissionPermanentlyDenied) {
+//                        Toast.makeText(
+//                            activity,
+//                            "Please grant camera and external storage permission.",
+//                            Toast.LENGTH_LONG
+//                        ).show()
+//                        val intent = Intent()
+//                        intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+//                        val uri = Uri.fromParts("package", BuildConfig.APPLICATION_ID, null)
+//                        intent.data = uri
+//                        startActivity(intent)
+//                    }
+//                }
+//
+//                override fun onPermissionRationaleShouldBeShown(
+//                    permissions: List<PermissionRequest>, token: PermissionToken
+//                ) {
+//                    token.continuePermissionRequest()
+//                }
+//            }).onSameThread().check()
+//        }
+//    }
 
 
     private fun getRealPathFromURI(uri: Uri): String? {

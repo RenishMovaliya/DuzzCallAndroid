@@ -236,12 +236,10 @@ class LoginScreen : BaseActivity(), ServiceWaitThreadListener {
             customDirectory
         )
 
-
     }
 
     fun clearDirectory(directory: File) {
         if (directory.isDirectory) {
-
             val files = directory.listFiles()
             if (files != null) {
                 for (file in files) {
@@ -257,23 +255,30 @@ class LoginScreen : BaseActivity(), ServiceWaitThreadListener {
     }
 
     var mobileNumber = ""
+    var countrycode = ""
     private fun isValidate(): Boolean {
         val password = binding.etPassword.text.toString()
         mobileNumber = binding.etMobileNumber.text.toString()
+        countrycode = binding.Tvcountrycode.text.toString()
 
         when {
             TextUtils.isEmpty(mobileNumber) -> {
                 showError(getString(R.string.enter_mobile_number))
                 return false
             }
-//
+
+            TextUtils.isEmpty(countrycode) -> {
+                showError(getString(R.string.select_country))
+                return false
+            }
+
 //            TextUtils.isEmpty(password) -> {
 //                showError(getString(R.string.enter_password))
 //                return false
 //            }
 //            !ValidationUtils.isValidPassword(password) -> {
 //                showDialogOk(this, "", getString(R.string.password_validation_msg), "OK")
-////                showError(getString(R.string.password_validation_msg))
+//                showError(getString(R.string.password_validation_msg))
 //                return false
 //            }
 
@@ -337,9 +342,9 @@ class LoginScreen : BaseActivity(), ServiceWaitThreadListener {
                 Preference.saveToken(
                     this@LoginScreen, "Bearer " + `objecsst`.getString("verification_token")
                 )
-//                Toast.makeText(
-//                    this@LoginScreen, "" + `objecsst`.getString("tfa_code"), Toast.LENGTH_LONG
-//                ).show()
+                Toast.makeText(
+                    this@LoginScreen, "" + `objecsst`.getString("tfa_code"), Toast.LENGTH_LONG
+                ).show()
 
 //                if (`objecsst`.getString("is_new").equals("false")) {
 //                    val intent = Intent(this@LoginScreen, DashboardActivity::class.java)

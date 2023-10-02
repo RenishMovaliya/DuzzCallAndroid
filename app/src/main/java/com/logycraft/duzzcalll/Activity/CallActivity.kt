@@ -293,6 +293,7 @@ class CallActivity : AppCompatActivity(), CallActivityInterface {
                         .text(call.remoteAddress.username?.substring(0,2) ?: "DC")
                         .into(binding.imageViewProfile)
                     binding.textViewUserSipaddress.setText("Outgoing Call")
+
                     // Starting Android 10 foreground service is a requirement to be able to vibrate if app is in background
                     if (call.dir == Call.Dir.Incoming && call.state == Call.State.IncomingReceived && core.isVibrationOnIncomingCallEnabled) {
 //                            vibrate(call.remoteAddress)
@@ -347,6 +348,7 @@ class CallActivity : AppCompatActivity(), CallActivityInterface {
                 Call.State.IncomingReceived -> {
 
                     binding.textViewUserSipaddress.setText(call.remoteAddress.asStringUriOnly())
+                    Log.e("ddd",""+call.remoteAddress.asStringUriOnly())
                 }
 
                 Call.State.Connected -> {
