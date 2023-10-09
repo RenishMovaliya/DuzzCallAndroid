@@ -21,6 +21,7 @@ import com.logycraft.duzzcalll.LinphoneManager
 import com.logycraft.duzzcalll.LinphonePreferences
 import com.logycraft.duzzcalll.Util.CallActivityInterface
 import com.logycraft.duzzcalll.Util.LinphoneUtils
+import com.logycraft.duzzcalll.Util.Preference
 import com.logycraft.duzzcalll.extention.addCharacter
 import com.logycraft.duzzcalll.extention.disableKeyboard
 import com.logycraft.duzzcalll.extention.getKeyEvent
@@ -292,7 +293,8 @@ class CallActivity : AppCompatActivity(), CallActivityInterface {
                     MaterialTextDrawable.with(this@CallActivity)
                         .text(call.remoteAddress.username?.substring(0,2) ?: "DC")
                         .into(binding.imageViewProfile)
-                    binding.textViewUserSipaddress.setText("Outgoing Call")
+//                    binding.textViewUserSipaddress.setText("Outgoing Call")
+                    binding.textViewUserSipaddress.setText(Preference.getCountry(this@CallActivity))
 
                     // Starting Android 10 foreground service is a requirement to be able to vibrate if app is in background
                     if (call.dir == Call.Dir.Incoming && call.state == Call.State.IncomingReceived && core.isVibrationOnIncomingCallEnabled) {
@@ -355,6 +357,7 @@ class CallActivity : AppCompatActivity(), CallActivityInterface {
                     android.util.Log.d("outgoingCall", "Connectedsss")
                     binding.textViewRinging.setText("Connected")
                     binding.textViewUserName.text = call.remoteAddress.username
+                    Log.e("nameeeeee")
                     MaterialTextDrawable.with(this@CallActivity)
                         .text(call.remoteAddress.username?.substring(0,2) ?: "DC")
                         .into(binding.imageViewProfile)
@@ -363,7 +366,6 @@ class CallActivity : AppCompatActivity(), CallActivityInterface {
 //                    timer.base =
 //                        SystemClock.elapsedRealtime() - (1000 * call.duration) // Linphone timestamps are in seconds
                     binding.activeCallTimer.start()
-
 
                 }
 

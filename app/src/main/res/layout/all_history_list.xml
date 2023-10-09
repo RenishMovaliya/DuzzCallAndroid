@@ -5,9 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/d40"
         android:layout_alignParentStart="true"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
@@ -20,17 +20,16 @@
             android:layout_height="@dimen/d22"
             android:layout_centerVertical="true"
             android:src="@drawable/ic_missed_call"
-
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:layout_marginLeft="@dimen/d10"
             android:id="@+id/contct_image"
             android:layout_width="@dimen/d40"
             android:layout_height="@dimen/d40"
             android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/d10"
             android:layout_toRightOf="@+id/ic_call_action"
             android:src="@drawable/ic_profile_image"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -39,19 +38,18 @@
 
         <RelativeLayout
             android:id="@+id/linearLayout2"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/d15"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/contct_image"
-            app:layout_constraintTop_toTopOf="parent">
+            android:orientation="vertical"
+            android:layout_toRightOf="@+id/contct_image">
 
             <TextView
-                android:layout_marginTop="@dimen/d5"
                 android:id="@+id/txt_contact_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/d5"
+                android:layout_toLeftOf="@+id/tv_call_duration"
                 android:fontFamily="@font/inter_bold"
                 android:includeFontPadding="false"
                 android:text="Jane Cooper"
@@ -59,16 +57,45 @@
                 android:textSize="@dimen/dt15" />
 
             <TextView
-                android:layout_alignParentBottom="true"
-                android:layout_gravity="bottom"
+                android:id="@+id/tv_call_duration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="@dimen/d5"
+                android:layout_marginRight="@dimen/d10"
+                android:fontFamily="@font/inter_regular"
+                android:includeFontPadding="false"
+                android:text="50 sec"
+                android:textColor="@color/text_color_gray"
+                android:textSize="@dimen/dt12" />
+
+            <TextView
                 android:id="@+id/txt_contact_number"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_gravity="bottom"
                 android:fontFamily="@font/inter_regular"
+                android:layout_toLeftOf="@+id/txt_call_time"
                 android:includeFontPadding="false"
                 android:text="+94 2285652"
                 android:textColor="@color/text_color_gray"
                 android:textSize="@dimen/dt12" />
+
+            <TextView
+                android:id="@+id/txt_call_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/d10"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:fontFamily="@font/inter_light"
+                android:includeFontPadding="false"
+                android:text="14:20 pm"
+                android:textColor="@color/text_color_gray"
+                android:textSize="@dimen/dt11"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
 
         </RelativeLayout>
 
@@ -77,22 +104,12 @@
             android:layout_width="@dimen/d15"
             android:layout_height="@dimen/d15"
             android:src="@drawable/ic_call_timing"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
-        <TextView
-            android:id="@+id/txt_call_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/inter_light"
-            android:includeFontPadding="false"
-            android:text="14:20 pm"
-            android:textColor="@color/text_color_gray"
-            android:textSize="@dimen/dt12"
-            android:layout_marginRight="@dimen/d10"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/img_star" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </RelativeLayout>
 
 
 </RelativeLayout>

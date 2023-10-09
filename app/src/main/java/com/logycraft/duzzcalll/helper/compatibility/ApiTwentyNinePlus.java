@@ -14,7 +14,6 @@ import com.duzzcall.duzzcall.R;
 import com.logycraft.duzzcalll.helper.notifications.Notifiable;
 import com.logycraft.duzzcalll.helper.notifications.NotificationBroadcastReceiver;
 
-
 /* loaded from: classes2.dex */
 public class ApiTwentyNinePlus {
 
@@ -45,7 +44,7 @@ public class ApiTwentyNinePlus {
         answerIntent.setAction(Compatibility.INTENT_ANSWER_CALL_NOTIF_ACTION);
         answerIntent.putExtra(Compatibility.INTENT_NOTIF_ID, callId);
         PendingIntent answerPendingIntent = PendingIntent.getBroadcast(context, callId, answerIntent, 201326592);
-        return new NotificationCompat.Action.Builder((int) R.drawable.rounded_button__accept, context.getString(R.string.notification_call_answer_label), answerPendingIntent).build();
+        return new NotificationCompat.Action.Builder(R.drawable.call_accept, context.getString(R.string.notification_call_answer_label), answerPendingIntent).build();
     }
 
     public static NotificationCompat.Action getCallDeclineAction(Context context, int callId) {
@@ -53,6 +52,7 @@ public class ApiTwentyNinePlus {
         hangupIntent.setAction(Compatibility.INTENT_HANGUP_CALL_NOTIF_ACTION);
         hangupIntent.putExtra(Compatibility.INTENT_NOTIF_ID, callId);
         PendingIntent hangupPendingIntent = PendingIntent.getBroadcast(context, callId, hangupIntent, 201326592);
-        return new NotificationCompat.Action.Builder((int)  R.drawable.rounded_button_decline, context.getString(R.string.notification_call_hangup_label), hangupPendingIntent).build();
+        return new NotificationCompat.Action.Builder(R.drawable.btn_call_end,  context.getString(R.string.notification_call_hangup_label), hangupPendingIntent).build();
     }
+
 }

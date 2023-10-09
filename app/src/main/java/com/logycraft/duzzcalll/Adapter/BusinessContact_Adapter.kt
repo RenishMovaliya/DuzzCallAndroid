@@ -80,7 +80,6 @@ class BusinessContact_Adapter(
                 activity?.let { it1 ->
                     Preference.setFavoritesContact(it1, favoritesContactlist)
                 }
-
             } else {
                 favoritesContactlist = Preference.getFavoritesContact(activity!!)
 
@@ -101,7 +100,6 @@ class BusinessContact_Adapter(
                     break
                 }
             }
-
             Log.e("Favlouritesize", "" + favoritesContactlist?.size)
 
 //            for (item1 in favoritesContactlist!!) {

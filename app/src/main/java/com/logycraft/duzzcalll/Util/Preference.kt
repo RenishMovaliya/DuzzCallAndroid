@@ -29,6 +29,19 @@ object Preference {
         return sharedpreferences.getString("Value", "")
     }
 
+
+    fun saveCountry(activity: Context, value: String?) {
+        val sharedpreferences = activity.getSharedPreferences("Country", Context.MODE_PRIVATE)
+        val editor = sharedpreferences.edit()
+        editor.putString("CountryValue", value)
+        editor.apply()
+    }
+
+    fun getCountry(activity: Context): String? {
+        val sharedpreferences = activity.getSharedPreferences("Country", Context.MODE_PRIVATE)
+        return sharedpreferences.getString("CountryValue", "")
+    }
+
     fun saveAccessToken(activity: Context, value: String?) {
         val sharedpreferences = activity.getSharedPreferences("MyPREFERENCES2", Context.MODE_PRIVATE)
         val editor = sharedpreferences.edit()

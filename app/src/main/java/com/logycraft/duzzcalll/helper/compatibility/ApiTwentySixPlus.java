@@ -104,12 +104,27 @@ public class ApiTwentySixPlus {
         if (contactIcon != null) {
             notificationLayoutHeadsUp.setImageViewBitmap(R.id.caller_picture, contactIcon);
         }
+
+
+//        Intent answerIntent = new Intent(context, CallActionService.class);
+//        answerIntent.setAction(CallActionService.ACTION_ANSWER);
+//        answerIntent.putExtra("call_id", callId);
+//        PendingIntent answerPendingIntent = PendingIntent.getService(context, 0, answerIntent, 0);
+//
+//        Intent hangupIntent = new Intent(context, CallActionService.class);
+//        hangupIntent.setAction(CallActionService.ACTION_HANGUP);
+//        hangupIntent.putExtra("call_id", callId);
+//        PendingIntent hangupPendingIntent = PendingIntent.getService(context, 0, hangupIntent, 0);
+//
+//        notificationLayoutHeadsUp.setOnClickPendingIntent(R.id.image_view_accept, answerPendingIntent);
+//        notificationLayoutHeadsUp.setOnClickPendingIntent(R.id.image_view_end, hangupPendingIntent);
         return new NotificationCompat.Builder(context, context.getString(R.string.notification_channel_id)).setStyle(new NotificationCompat.DecoratedCustomViewStyle()).setSmallIcon(R.drawable.app_logo).setContentTitle(contactName).setContentText(context.getString(R.string.incall_notif_incoming)).setContentIntent(intent).setCategory(NotificationCompat.CATEGORY_CALL).setVisibility(Notification.VISIBILITY_PUBLIC).setPriority(Notification.PRIORITY_HIGH)
                 .setWhen(System.currentTimeMillis()).setAutoCancel(false).setShowWhen(true).setOngoing(true)
                 .setColor(context.getColor(R.color.notification_led_color)).setFullScreenIntent(intent, true)
                 .addAction(Compatibility.getCallDeclineAction(context, callId)).addAction(Compatibility.getCallAnswerAction(context, callId))
-                .setCustomHeadsUpContentView(notificationLayoutHeadsUp).build();
+                .setCustomHeadsUpContentView(notificationLayoutHeadsUp) .setPriority(NotificationCompat.PRIORITY_HIGH).build();
     }
+
 
     public static Notification createNotification(Context context, String title, String message, int icon, int level, Bitmap largeIcon, PendingIntent intent, int priority, boolean ongoing) {
         if (largeIcon != null) {

@@ -13,6 +13,7 @@ import com.adwardstark.mtextdrawable.MaterialTextDrawable
 import com.duzzcall.duzzcall.R
 import com.duzzcall.duzzcall.databinding.ActivityIncomingCallBinding
 import com.logycraft.duzzcalll.LinphoneManager
+import com.logycraft.duzzcalll.Util.Preference
 import org.linphone.core.Account
 import org.linphone.core.AudioDevice
 import org.linphone.core.Call
@@ -120,7 +121,8 @@ class IncomingActivity : AppCompatActivity() {
 //                    findViewById<Button>(org.linphone.core.R.id.hang_up).isEnabled = true
 //                    findViewById<Button>(org.linphone.core.R.id.answer).isEnabled = true
                     binding.textViewUserName.setText(call.remoteAddress.asStringUriOnly())
-                    binding.textViewUserSipaddress.setText("Incoming Call")
+//                    binding.textViewUserSipaddress.setText("Incoming Call")
+                    binding.textViewUserSipaddress.setText(Preference.getCountry(this@IncomingActivity))
                     MaterialTextDrawable.with(this@IncomingActivity)
                         .text(call.remoteAddress.username?.substring(0,2) ?: "DC")
                         .into(binding.imageViewProfile)

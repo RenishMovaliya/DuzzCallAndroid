@@ -90,7 +90,6 @@ class PortfolioActivity : BaseActivity() {
         `object`.put("email", binding.etEmail.text.toString())
         element = Gson().fromJson(`object`.toString(), JsonElement::class.java)
 
-
         viewModel.createUser(element,this@PortfolioActivity)
         viewModel.userLiveData?.observe(this@PortfolioActivity, Observer {
 
@@ -112,54 +111,49 @@ class PortfolioActivity : BaseActivity() {
 
             } else if (it.error != null) {
                 ProgressHelper.dismissProgressDialog()
-//                var errorResponce: ResponseBody = it.error
-//                val jsonObj = JSONObject(errorResponce!!.charStream().readText())
-                showError("Something went Wrong!")
+                var errorResponce: ResponseBody = it.error
+                val jsonObj = JSONObject(errorResponce!!.charStream().readText())
+//                showError("Something went Wrong!")
 
-//                val keys = jsonObj.keys()
-//                while (keys.hasNext()) {
-//                    val key2 = keys.next()
-//                    val value = jsonObj.optJSONObject(key2)
-//                    val keys: Iterator<*> = value.keys()
-//
-//                    while (keys.hasNext()) {
-//                        val key2 = keys.next()
-//                        val obj = JSONObject(java.lang.String.valueOf(value))
-//                        Log.e("Erorrr", "====" + obj.getString(key2.toString()))
-//                        val responseWithoutBrackets =
-//                            obj.getString(key2.toString()).removeSurrounding("[\"", "\"]")
-//
-//                        Toast.makeText(
-//                            this@PortfolioActivity, "" + responseWithoutBrackets, Toast.LENGTH_LONG
-//                        ).show()
-//                    }
-//                }
+                val keys = jsonObj.keys()
+                while (keys.hasNext()) {
+                    val key2 = keys.next()
+                    val value = jsonObj.optJSONObject(key2)
+                    val keys: Iterator<*> = value.keys()
+
+                    while (keys.hasNext()) {
+                        val key2 = keys.next()
+                        val obj = JSONObject(java.lang.String.valueOf(value))
+                        Log.e("Erorrr", "====" + obj.getString(key2.toString()))
+                        val responseWithoutBrackets =
+                            obj.getString(key2.toString()).removeSurrounding("[\"", "\"]")
+
+                        Toast.makeText(
+                            this@PortfolioActivity, "" + responseWithoutBrackets, Toast.LENGTH_LONG
+                        ).show()
+                    }
+                }
             } else {
                 ProgressHelper.dismissProgressDialog()
                 showError("Something Went Wrong!")
             }
-
         })
     }
-
 
     private fun isValidate(): Boolean {
 
         val firstname = binding.etFirstName.text.toString()
         val lastname = binding.etLastName.text.toString()
         val email = binding.etEmail.text.toString().trim()
-
         when {
             TextUtils.isEmpty(firstname) -> {
                 showError(getString(R.string.enter_firstname))
                 return false
             }
-
             TextUtils.isEmpty(lastname) -> {
                 showError(getString(R.string.enter_lastname))
                 return false
             }
-
             TextUtils.isEmpty(email) -> {
                 showError(getString(R.string.enter_email_address))
                 return false

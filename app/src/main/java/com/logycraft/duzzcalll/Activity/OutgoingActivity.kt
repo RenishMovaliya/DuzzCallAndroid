@@ -12,6 +12,7 @@ import com.adwardstark.mtextdrawable.MaterialTextDrawable
 import com.duzzcall.duzzcall.R
 import com.duzzcall.duzzcall.databinding.ActivityOutgoingCallBinding
 import com.logycraft.duzzcalll.LinphoneManager
+import com.logycraft.duzzcalll.Util.Preference
 import org.linphone.core.Account
 import org.linphone.core.AudioDevice
 import org.linphone.core.Call
@@ -106,14 +107,16 @@ class OutgoingActivity : AppCompatActivity() {
             when (state) {
                 Call.State.IncomingReceived -> {
 
-                    binding.textViewUserSipaddress.setText(call.remoteAddress.asStringUriOnly())
+//                    binding.textViewUserSipaddress.setText(call.remoteAddress.asStringUriOnly())
+                    binding.textViewUserSipaddress.setText(Preference.getCountry(this@OutgoingActivity))
+                    Log.d("outgoingCall", "===="+call.remoteAddress.asStringUriOnly())
                 }
 
                 Call.State.Connected -> {
                     Log.d("outgoingCall", "Connectedsss")
                     binding.textViewRinging.setText("Connected")
                     binding.activeCallTimer.visibility = View.VISIBLE
-                    binding.textViewUserName.text = call.remoteAddress.username
+                    binding.textViewUserName.text = call.remoteAddress.displayName
                     val timer = binding.activeCallTimer
                     timer.base =
                         SystemClock.elapsedRealtime() - (1000 * call.duration) // Linphone timestamps are in seconds
@@ -198,8 +201,9 @@ class OutgoingActivity : AppCompatActivity() {
                 val call = core.currentCall
                 if (call != null) {
                     org.linphone.core.tools.Log.w("[outgoingCall] Call Nulled !")
-                    binding.textViewUserName.setText(call.remoteAddress.username)
-                    binding.textViewUserSipaddress.setText("Outgoing Call")
+                    binding.textViewUserName.setText(call.remoteAddress.displayName)
+//                    binding.textViewUserSipaddress.setText("Outgoing Call")
+                    binding.textViewUserSipaddress.setText(Preference.getCountry(this@OutgoingActivity))
                     MaterialTextDrawable.with(this@OutgoingActivity)
                         .text(call.remoteAddress.username?.substring(0,2) ?: "DC")
                         .into(binding.imageViewProfile)

@@ -70,12 +70,12 @@
                 android:id="@+id/text_view_user_sipaddress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/d5"
                 android:alpha="0.7"
                 android:fontFamily="@font/poppins_medium"
                 android:gravity="center_horizontal"
                 android:text="Outgoing"
                 android:textColor="#807979"
-                android:layout_marginTop="@dimen/d5"
                 android:textSize="14sp"
                 android:visibility="visible" />
 

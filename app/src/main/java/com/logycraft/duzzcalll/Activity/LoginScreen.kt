@@ -339,12 +339,13 @@ class LoginScreen : BaseActivity(), ServiceWaitThreadListener {
 
 
 //                Preference.setLoginData(this@LoginScreen,usedata)
+                Preference.saveCountry(this@LoginScreen,binding.tvCountryname.text.toString())
                 Preference.saveToken(
                     this@LoginScreen, "Bearer " + `objecsst`.getString("verification_token")
                 )
-                Toast.makeText(
-                    this@LoginScreen, "" + `objecsst`.getString("tfa_code"), Toast.LENGTH_LONG
-                ).show()
+//                Toast.makeText(
+//                    this@LoginScreen, "" + `objecsst`.getString("tfa_code"), Toast.LENGTH_LONG
+//                ).show()
 
 //                if (`objecsst`.getString("is_new").equals("false")) {
 //                    val intent = Intent(this@LoginScreen, DashboardActivity::class.java)
