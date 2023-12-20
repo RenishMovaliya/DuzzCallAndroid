@@ -22,12 +22,21 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import com.adwardstark.mtextdrawable.MaterialTextDrawable
 import com.duzzcall.duzzcall.R
 import com.duzzcall.duzzcall.databinding.FragmentProfileBinding
 import com.example.restapiidemo.home.data.UserModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.gson.Gson
+import com.google.gson.JsonElement
+import com.logycraft.duzzcalll.Activity.Terms_And_ConditionActivity
 import com.logycraft.duzzcalll.Util.Preference
+import com.logycraft.duzzcalll.Util.ProgressHelper
 import com.logycraft.duzzcalll.Util.ValidationUtils
+import com.logycraft.duzzcalll.viewmodel.HomeViewModel
+import okhttp3.ResponseBody
+import org.json.JSONObject
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -46,6 +55,7 @@ class ProfileFragment : Fragment() {
     var userModel = UserModel()
     var imguri = ""
     private var currentimg = ""
+    private lateinit var viewModel: HomeViewModel
     private val REQUEST_TAKE_PHOTO = 101
     private val REQUEST_PICK_PHOTO = 102
     private var photoURI: Uri? = null
@@ -67,6 +77,8 @@ class ProfileFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
         binding.rlProfile.visibility = View.GONE
         binding.imgBack.setOnClickListener {
             if (binding.rlProfile.visibility == View.VISIBLE) {
@@ -96,16 +108,16 @@ class ProfileFragment : Fragment() {
             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
             "DuzzCall/ProfilePhoto/duzz_profile_img.jpg"
         )
-        if (paths.exists()) {
-            val imageUri = Uri.parse("file://$paths")
-            binding.profileImage.setImageURI(imageUri)
-            binding.updateProfileImage.setImageURI(imageUri)
-            binding.imgProfileImgfull.setImageURI(imageUri)
-        } else {
-            binding.profileImage.setImageResource(R.drawable.ic_profile_image)
-            binding.updateProfileImage.setImageResource(R.drawable.ic_profile_image)
-            binding.imgProfileImgfull.setImageResource(R.drawable.ic_profile_image)
-        }
+//        if (paths.exists()) {
+//            val imageUri = Uri.parse("file://$paths")
+//            binding.profileImage.setImageURI(imageUri)
+//            binding.updateProfileImage.setImageURI(imageUri)
+//            binding.imgProfileImgfull.setImageURI(imageUri)
+//        } else {
+//            binding.profileImage.setImageResource(R.drawable.ic_profile_image)
+//            binding.updateProfileImage.setImageResource(R.drawable.ic_profile_image)
+//            binding.imgProfileImgfull.setImageResource(R.drawable.ic_profile_image)
+//        }
 
 
         binding.imgCamera.setOnClickListener {
@@ -148,17 +160,8 @@ class ProfileFragment : Fragment() {
         binding.btnUpdate.setOnClickListener {
 
             if (isValidate() && isUsernameValid(binding.etName.text.toString())) {
-                val str = binding.etName.text.toString()
-                val separated: List<String> = str.split(" ")
-                userModel.first_name = separated[0]
-                userModel.last_name = separated[1]
-                userModel.email = binding.etEmail.text.toString()
-                userModel.profileimg = imguri
-                Preference.setUserData(activity, userModel)
 
-                updatedata()
-                binding.rlMainProfile.visibility = View.VISIBLE
-                binding.rlUpdateProfile.visibility = View.GONE
+                updateProfiledata()
             }
         }
 
@@ -434,6 +437,23 @@ class ProfileFragment : Fragment() {
             binding.tvName.setText(userModel.first_name + " " + userModel.last_name)
             binding.tvPhone.setText(userModel.phone)
             binding.tvEmail.setText(userModel.email)
+            activity?.let {
+                MaterialTextDrawable.with(it)
+                    .text(userModel.first_name?.substring(0, 2) ?: "DC")
+                    .into(binding.profileImage)
+            }
+            activity?.let {
+                MaterialTextDrawable.with(it)
+                    .text(userModel.first_name?.substring(0, 2) ?: "DC")
+                    .into(binding.imgProfileImgfull)
+            }
+            activity?.let {
+                MaterialTextDrawable.with(it)
+                    .text(userModel.first_name?.substring(0, 2) ?: "DC")
+                    .into(binding.updateProfileImage)
+            }
+
+
 //            if (userModel.profileimg.equals("")){
 //                binding.profileImage.setImageResource(com.duzzcall.duzzcall.R.drawable.ic_profile_image)
 //            }else{
@@ -444,70 +464,70 @@ class ProfileFragment : Fragment() {
         }
     }
 
-//    private fun checkForPermission() {
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-//            Dexter.withActivity(activity).withPermissions(
-//                Manifest.permission.READ_EXTERNAL_STORAGE
-//            ).withListener(object : MultiplePermissionsListener {
-//                override fun onPermissionsChecked(report: MultiplePermissionsReport) {
-//                    if (report.areAllPermissionsGranted()) {
-//                        openGallery()
-//                    }
-//
-//                    if (report.isAnyPermissionPermanentlyDenied) {
-//                        Toast.makeText(
-//                            activity,
-//                            "Please grant camera and external storage permission.",
-//                            Toast.LENGTH_LONG
-//                        ).show()
-//                        val intent = Intent()
-//                        intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-//                        val uri = Uri.fromParts("package", BuildConfig.APPLICATION_ID, null)
-//                        intent.data = uri
-//                        startActivity(intent)
-//                    }
-//                }
-//
-//                override fun onPermissionRationaleShouldBeShown(
-//                    permissions: List<PermissionRequest>, token: PermissionToken
-//                ) {
-//                    token.continuePermissionRequest()
-//                }
-//            }).onSameThread().check()
-//        } else {
-//            Dexter.withActivity(activity).withPermissions(
-//                Manifest.permission.READ_EXTERNAL_STORAGE,
-//                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-//                Manifest.permission.CAMERA
-//            ).withListener(object : MultiplePermissionsListener {
-//                override fun onPermissionsChecked(report: MultiplePermissionsReport) {
-//                    if (report.areAllPermissionsGranted()) {
-//                        openGallery()
-//                    }
-//
-//                    if (report.isAnyPermissionPermanentlyDenied) {
-//                        Toast.makeText(
-//                            activity,
-//                            "Please grant camera and external storage permission.",
-//                            Toast.LENGTH_LONG
-//                        ).show()
-//                        val intent = Intent()
-//                        intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-//                        val uri = Uri.fromParts("package", BuildConfig.APPLICATION_ID, null)
-//                        intent.data = uri
-//                        startActivity(intent)
-//                    }
-//                }
-//
-//                override fun onPermissionRationaleShouldBeShown(
-//                    permissions: List<PermissionRequest>, token: PermissionToken
-//                ) {
-//                    token.continuePermissionRequest()
-//                }
-//            }).onSameThread().check()
-//        }
-//    }
 
+    private fun updateProfiledata() {
+
+        val str = binding.etName.text.toString()
+        val separated: List<String> = str.split(" ")
+
+        var element: JsonElement? = null
+        val `object` = JSONObject()
+        `object`.put("first_name", separated[0])
+        `object`.put("last_name", separated[1])
+        `object`.put("email", binding.etEmail.text.toString())
+        element = Gson().fromJson(`object`.toString(), JsonElement::class.java)
+
+        activity?.let { viewModel.updateuser(element, it) }
+        activity?.let {
+            viewModel.userupdateData?.observe(it, androidx.lifecycle.Observer {
+
+                if (it.isSuccess == true && it.Responcecode == 200) {
+                    ProgressHelper.dismissProgressDialog()
+                    var usedata: JsonElement? = it.data
+
+                    val str = binding.etName.text.toString()
+                    val separated: List<String> = str.split(" ")
+                    userModel.first_name = separated[0]
+                    userModel.last_name = separated[1]
+                    userModel.email = binding.etEmail.text.toString()
+                    userModel.profileimg = imguri
+                    Preference.setUserData(activity, userModel)
+
+                    updatedata()
+                    binding.rlMainProfile.visibility = View.VISIBLE
+                    binding.rlUpdateProfile.visibility = View.GONE
+
+                } else if (it.error != null) {
+                    ProgressHelper.dismissProgressDialog()
+                    var errorResponce: ResponseBody = it.error
+                    val jsonObj = JSONObject(errorResponce!!.charStream().readText())
+                    //                showError("Something went Wrong!")
+
+                    val keys = jsonObj.keys()
+                    while (keys.hasNext()) {
+                        val key2 = keys.next()
+                        val value = jsonObj.optJSONObject(key2)
+                        val keys: Iterator<*> = value.keys()
+
+                        while (keys.hasNext()) {
+                            val key2 = keys.next()
+                            val obj = JSONObject(java.lang.String.valueOf(value))
+                            Log.e("Erorrr", "====" + obj.getString(key2.toString()))
+                            val responseWithoutBrackets =
+                                obj.getString(key2.toString()).removeSurrounding("[\"", "\"]")
+
+                            Toast.makeText(
+                                activity, "" + responseWithoutBrackets, Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    }
+                } else {
+                    ProgressHelper.dismissProgressDialog()
+                    showError("Something Went Wrong!")
+                }
+            })
+        }
+    }
 
     private fun getRealPathFromURI(uri: Uri): String? {
         val projection = arrayOf(MediaStore.Images.Media.DATA)

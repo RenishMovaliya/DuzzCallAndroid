@@ -19,7 +19,7 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="24dp"
-            android:background="@drawable/user_icon" />
+            />
     </RelativeLayout>
 
     <RelativeLayout
@@ -73,7 +73,7 @@
                 android:text=""
                 android:textColor="@color/black"
                 android:textSize="14sp"
-                android:visibility="visible" />
+                android:visibility="gone" />
 
             <Chronometer
                 android:id="@+id/active_call_timer"

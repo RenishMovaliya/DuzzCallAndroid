@@ -2,15 +2,14 @@ package com.logycraft.duzzcalll.Activity
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.os.Environment
 import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import com.duzzcall.duzzcall.R
@@ -30,11 +29,8 @@ import com.logycraft.duzzcalll.helper.CallBackListener
 import com.logycraft.duzzcalll.helper.showGrantedToast
 import com.logycraft.duzzcalll.helper.showPermanentlyDeniedDialog
 import com.logycraft.duzzcalll.helper.showRationaleDialog
-import com.logycraft.duzzcalll.service.LinphoneService
-import com.logycraft.duzzcalll.service.ServiceWaitThread
 import com.logycraft.duzzcalll.service.ServiceWaitThreadListener
 import org.linphone.core.*
-import java.io.File
 
 //import com.logycraft.duzzcalll.core.*
 
@@ -52,13 +48,15 @@ class DashboardActivity : AppCompatActivity(), CallBackListener,  PermissionRequ
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
 
-        ActivityCompat.requestPermissions(
-            this@DashboardActivity,
-            arrayOf(
-                Manifest.permission.MANAGE_EXTERNAL_STORAGE
-            ),
-            101
-        )
+//        ActivityCompat.requestPermissions(
+//            this@DashboardActivity,
+//            arrayOf(
+//                Manifest.permission.MANAGE_EXTERNAL_STORAGE
+//            ),
+//            101
+//        )
+
+
 //        loadFragment(HomeFragment())
         statusTV = findViewById(R.id.statusTV)
         bottomNav = findViewById(R.id.bottomNav) as BottomNavigationView
@@ -107,9 +105,9 @@ class DashboardActivity : AppCompatActivity(), CallBackListener,  PermissionRequ
         bottomNav.setSelectedItemId(R.id.dialpad);
         val factory = Factory.instance()
         factory.setDebugMode(true, "Hello Linphone")
-        if( LinphoneManager.getCore()!=null){
+       if( LinphoneManager.getCore()!=null){
             core = LinphoneManager.getCore()
-            core.videoActivationPolicy.automaticallyAccept = true
+             core.videoActivationPolicy.automaticallyAccept = true
             loginLinphone()
         }
     }
@@ -153,16 +151,23 @@ class DashboardActivity : AppCompatActivity(), CallBackListener,  PermissionRequ
         core.addListener(coreListener)
         core.start()
 
-
         // We will need the RECORD_AUDIO permission for video call
-        if (packageManager.checkPermission(
-                Manifest.permission.RECORD_AUDIO,
-                packageName
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            request.send()
-//            requestPermissions(arrayOf(Manifest.permission.RECORD_AUDIO), 0)
-            return
+//        if (packageManager.checkPermission(
+//                Manifest.permission.RECORD_AUDIO,
+//                packageName
+//            ) != PackageManager.PERMISSION_GRANTED
+//        ) {
+////            request.send()
+//            ActivityCompat.requestPermissions( this@DashboardActivity,arrayOf(Manifest.permission.RECORD_AUDIO), 0)
+//            return
+//        }
+
+        if (ContextCompat.checkSelfPermission(
+                this@DashboardActivity, android.Manifest.permission.RECORD_AUDIO
+            ) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(
+                this@DashboardActivity, arrayOf(android.Manifest.permission.RECORD_AUDIO), 123
+            )
         }
         LinphonePreferences.instance().setServiceNotificationVisibility(true)
 //        LinphoneService().onCreate();
@@ -304,11 +309,12 @@ class DashboardActivity : AppCompatActivity(), CallBackListener,  PermissionRequ
 //        }
 //    }
 
-    private fun outgoingCall(remoteid:String,remotename:String) {
+    private fun outgoingCall(remoteid: String, remotename: String, logo: String) {
         // As for everything we need to get the SIP URI of the remote and convert it to an Address
         val remoteSipUri = "sip:"+remoteid+"@dzcl.et.lk"
         val remoteAddress = Factory.instance().createAddress(remoteSipUri)
         remoteAddress?.displayName= remotename
+        remoteAddress?.methodParam=logo
         remoteAddress
             ?: return // If address parsing fails, we can't continue with outgoing call process
 
@@ -332,8 +338,8 @@ class DashboardActivity : AppCompatActivity(), CallBackListener,  PermissionRequ
         // Call process can be followed in onCallStateChanged callback from core listener
     }
 
-    override fun onCallBack(remoteid:String,remoteName:String) {
-        outgoingCall(remoteid,remoteName);
+    override fun onCallBack(remoteid: String, remoteName: String, logo: String) {
+        outgoingCall(remoteid,remoteName,logo);
 
     }
 

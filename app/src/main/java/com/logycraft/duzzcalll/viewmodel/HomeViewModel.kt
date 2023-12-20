@@ -18,6 +18,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     var sentOtpLiveData: LiveData<GenericDataModel<SendOTP>>? = null
     var verifyOtpLiveData: LiveData<GenericDataModel<LoginData>>? = null
     var userLiveData: LiveData<GenericDataModel<JsonElement>>? = null
+    var userupdateData: LiveData<GenericDataModel<JsonElement>>? = null
     var loginuserLiveData: LiveData<GenericDataModel<JsonElement>>? = null
     var getbusinessLiveData: LiveData<GenericDataModel<MutableList<BusinessResponce>>>? = null
     var deletePostLiveData: LiveData<Boolean>? = null
@@ -39,6 +40,9 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
 
     fun createUser(element: JsonElement, context: Context) {
         userLiveData = homeRepository?.createUser(element, context)
+    }
+    fun updateuser(element: JsonElement, context: Context) {
+        userupdateData = homeRepository?.createUser(element, context)
     }
 
     fun loginUser(element: JsonElement) {

@@ -10,6 +10,7 @@ import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.adwardstark.mtextdrawable.MaterialTextDrawable
+import com.bumptech.glide.Glide
 import com.duzzcall.duzzcall.R
 import com.duzzcall.duzzcall.databinding.ActivityIncomingCallBinding
 import com.logycraft.duzzcalll.LinphoneManager
@@ -123,17 +124,22 @@ class IncomingActivity : AppCompatActivity() {
                     binding.textViewUserName.setText(call.remoteAddress.asStringUriOnly())
 //                    binding.textViewUserSipaddress.setText("Incoming Call")
                     binding.textViewUserSipaddress.setText(Preference.getCountry(this@IncomingActivity))
-                    MaterialTextDrawable.with(this@IncomingActivity)
-                        .text(call.remoteAddress.username?.substring(0,2) ?: "DC")
-                        .into(binding.imageViewProfile)
+                    if (call.remoteAddress.methodParam.equals(" ")){
+                        MaterialTextDrawable.with(this@IncomingActivity)
+                            .text(call.remoteAddress.username?.substring(0,2) ?: "DC")
+                            .into(binding.imageViewProfile)
+                    }else{
+                        Glide.with(this@IncomingActivity).load(call.remoteAddress.methodParam).centerCrop()
+                            .into(binding.imageViewProfile)
+                    }
                 }
                 Call.State.Connected -> {
                     Log.d("IncomingCall","Connectedsss")
-                    binding.imageViewAccept.visibility= View.GONE
-                    binding.imageViewEnd.visibility= View.GONE
-                    binding.txtAnswer.visibility= View.GONE
-                    binding.txtDecline.visibility= View.GONE
-                    binding.imageViewDecline.visibility= View.VISIBLE
+//                    binding.imageViewAccept.visibility= View.GONE
+//                    binding.imageViewEnd.visibility= View.GONE
+//                    binding.txtAnswer.visibility= View.GONE
+//                    binding.txtDecline.visibility= View.GONE
+//                    binding.imageViewDecline.visibility= View.VISIBLE
 //                    binding.optionview.visibility= View.VISIBLE
                     binding.imageViewDecline.setOnClickListener(View.OnClickListener {
                         call.terminate()
@@ -212,9 +218,14 @@ class IncomingActivity : AppCompatActivity() {
 //                        binding.textViewUserSipaddress.setText(call.remoteAddress.displayName)
                         binding.textViewUserName.setText(call.remoteAddress.displayName)
                         binding.textViewUserSipaddress.setText("Incoming Call")
-                        MaterialTextDrawable.with(this@IncomingActivity)
-                            .text(call.remoteAddress.username?.substring(0,2) ?: "DC")
-                            .into(binding.imageViewProfile)
+                        if (call.remoteAddress.methodParam.equals(" ")){
+                            MaterialTextDrawable.with(this@IncomingActivity)
+                                .text(call.remoteAddress.username?.substring(0,2) ?: "DC")
+                                .into(binding.imageViewProfile)
+                        }else{
+                            Glide.with(this@IncomingActivity).load(call.remoteAddress.methodParam).centerCrop()
+                                .into(binding.imageViewProfile)
+                        }
                         // Starting Android 10 foreground service is a requirement to be able to vibrate if app is in background
                         if (call.dir == Call.Dir.Incoming && call.state == Call.State.IncomingReceived && core.isVibrationOnIncomingCallEnabled) {
 //                            vibrate(call.remoteAddress)

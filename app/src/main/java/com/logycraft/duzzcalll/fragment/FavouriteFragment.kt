@@ -15,7 +15,6 @@ import com.duzzcall.duzzcall.R
 import com.duzzcall.duzzcall.databinding.FragmentContactBinding
 
 import com.logycraft.duzzcalll.Activity.NewContactActivity
-import com.logycraft.duzzcalll.Adapter.BusinessContact_Adapter
 import com.logycraft.duzzcalll.Util.Preference
 import com.logycraft.duzzcalll.data.BusinessResponce
 import com.logycraft.duzzcalll.helper.CallBackListener
@@ -70,7 +69,7 @@ class FavouriteFragment : Fragment() {
                 override fun onClick(call: BusinessResponce) {
                     if (!call.lineExtension.toString().isEmpty()) {
                         callBackListener?.onCallBack(
-                            call.lineExtension.toString(), call.businessName.toString()
+                            call.lineExtension.toString(), call.businessName.toString(), call.businessLogo.toString()
                         );
                     }
                 }

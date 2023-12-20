@@ -22,6 +22,8 @@ import com.duzzcall.duzzcall.databinding.FragmentHistoryBinding
 import com.logycraft.duzzcalll.Activity.NewContactActivity
 import com.logycraft.duzzcalll.LinphoneManager
 import com.logycraft.duzzcalll.Model.ContactModel
+import com.logycraft.duzzcalll.helper.CallBackListener
+import io.reactivex.annotations.Nullable
 import org.linphone.core.Call
 import org.linphone.core.CallLog
 import java.util.*
@@ -40,6 +42,7 @@ class HistoryFragment : Fragment() {
     private val READ_CONTACTS_PERMISSION_CODE = 123
     private val contactList: MutableList<ContactModel> = mutableListOf()
     lateinit var historyadapter: All_History_Adapter;
+    private var callBackListener: CallBackListener? = null
 
 
     private lateinit var binding: FragmentHistoryBinding
@@ -59,16 +62,29 @@ class HistoryFragment : Fragment() {
         return binding.getRoot();
     }
 
+    override fun onActivityCreated(@Nullable savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        //getActivity() is fully created in onActivityCreated and instanceOf differentiate it between different Activities
+        if (activity is CallBackListener) callBackListener = activity as CallBackListener?
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         core = LinphoneManager.getCore().callLogs
         calllog = LinphoneManager.getCore().callLogs
 
 
         if (core != null) {
-            historyadapter= activity?.let { All_History_Adapter(it, core, "All", contactList) }!!
-            historyadapter?.onItemClick = { string ->
-                callDetailscreen(string)
-            }
+            historyadapter= activity?.let { All_History_Adapter(it, core, contactList,object :All_History_Adapter.OnItemClickListener{
+                override fun onClick(number: String, name: String) {
+                    callBackListener?.onCallBack(
+                        number,
+                        name,
+                        " "
+                    );
+                }
+
+            }) }!!
+
             binding.recyclerview.adapter = historyadapter
 
         }
@@ -82,15 +98,16 @@ class HistoryFragment : Fragment() {
 //                        val fragmentTransaction = fragmentManager.beginTransaction()
 //                        fragmentTransaction.replace(R.id.app_container, fragment).commit()
             if (core != null) {
-                val adapter = activity?.let { All_History_Adapter(
-                    it,
-                    core,
-                    "All",
-                    contactList
-                ) }
-                adapter?.onItemClick = { string ->
-                    callDetailscreen(string)
-                }
+                val adapter = activity?.let { All_History_Adapter(it, core, contactList,object :All_History_Adapter.OnItemClickListener{
+                    override fun onClick(number: String, name: String) {
+                        callBackListener?.onCallBack(
+                            number,
+                            name,
+                            " "
+                        );
+                    }
+
+                }) }!!
                 binding.recyclerview.adapter = adapter
             }
 
@@ -120,14 +137,19 @@ class HistoryFragment : Fragment() {
                     }
                 }
 
-                val adapter = activity?.let {
-                    All_History_Adapter(
-                        it, missedcalllog, "Miss", contactList
-                    )
-                }
-                adapter?.onItemClick = { string ->
-                    callDetailscreen(string)
-                }
+                val adapter = activity?.let { All_History_Adapter(it, missedcalllog, contactList,object :All_History_Adapter.OnItemClickListener{
+                    override fun onClick(number: String, name: String) {
+                        callBackListener?.onCallBack(
+                            number,
+                            name,
+                            " "
+                        );
+                    }
+
+                }) }!!
+//                adapter?.onItemClick = { string ->
+//                    callDetailscreen(string)
+//                }
                 binding.recyclerview.adapter = adapter
             }
 
@@ -152,16 +174,19 @@ class HistoryFragment : Fragment() {
 //                }
                 filterData()
                 if (core != null) {
-                    val adapter =
-                        activity?.let { All_History_Adapter(
-                            it,
-                            core,
-                            "All",
-                            contactList
-                        ) }
-                    adapter?.onItemClick = { string ->
-                        callDetailscreen(string)
-                    }
+                    val adapter = activity?.let { All_History_Adapter(it, core, contactList,object :All_History_Adapter.OnItemClickListener{
+                        override fun onClick(number: String, name: String) {
+                            callBackListener?.onCallBack(
+                                number,
+                                name,
+                                " "
+                            );
+                        }
+
+                    }) }!!
+//                    adapter?.onItemClick = { string ->
+//                        callDetailscreen(string)
+//                    }
                     binding.recyclerview.adapter = adapter
                 }
 //                recyclerview(mendates)
@@ -262,10 +287,10 @@ class HistoryFragment : Fragment() {
     }
 
     private fun callDetailscreen(string: String) {
-        val transaction = activity?.supportFragmentManager!!.beginTransaction()
-        transaction.replace(R.id.container, HistoryDetailFragment())
-        transaction.commit()
-        transaction.addToBackStack(null)
+//        val transaction = activity?.supportFragmentManager!!.beginTransaction()
+//        transaction.replace(R.id.container, HistoryDetailFragment())
+//        transaction.commit()
+//        transaction.addToBackStack(null)
     }
 
     companion object {

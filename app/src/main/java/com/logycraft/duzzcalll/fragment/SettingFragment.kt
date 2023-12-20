@@ -11,6 +11,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,6 +19,7 @@ import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.adwardstark.mtextdrawable.MaterialTextDrawable
 import com.duzzcall.duzzcall.databinding.FragmentSettingBinding
 import com.example.restapiidemo.home.data.UserModel
 import com.logycraft.duzzcalll.Activity.LoginScreen
@@ -65,10 +67,12 @@ class SettingFragment : Fragment() {
             arrayOf(
                 READ_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.READ_MEDIA_IMAGES
+                Manifest.permission.READ_MEDIA_IMAGES,
+                Manifest.permission.MANAGE_EXTERNAL_STORAGE,
             ),
             101
         )
+
 
         binding.llLogout.setOnClickListener {
             val dialog = activity?.let { it1 ->
@@ -119,60 +123,112 @@ class SettingFragment : Fragment() {
             android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 
         binding.linAccountsetting.setOnClickListener {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                android.Manifest.permission.READ_MEDIA_IMAGES
-                activity?.let { it1 ->
-                    ActivityCompat.requestPermissions(
-                        it1,
-                        arrayOf(
-                            android.Manifest.permission.READ_MEDIA_IMAGES,
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE
-                        ),
-                        1
-                    )
-                }
-            } else {
-                activity?.let { it1 ->
-                    ActivityCompat.requestPermissions(
-                        it1,
-                        arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                        101
-                    )
-                }
-            }
-            if (activity?.let { it1 ->
-                    ContextCompat.checkSelfPermission(
-                        it1,
-                        readImagePermission
-                    )
-                } == PackageManager.PERMISSION_GRANTED) {
-                val newFragment: Fragment = ProfileFragment()
-                val transaction = activity?.supportFragmentManager?.beginTransaction()
-                transaction?.add(com.duzzcall.duzzcall.R.id.fragment_container, newFragment)
-                transaction?.addToBackStack(null)
-                transaction?.commit()
 
-            } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                // Call isExternalStorageManager() on Android 11 and higher
+                if (Environment.isExternalStorageManager()) {
+//            internal = File("/sdcard")
+//            internalContents = internal.listFiles()
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        android.Manifest.permission.READ_MEDIA_IMAGES
+                        activity?.let { it1 ->
+                            ActivityCompat.requestPermissions(
+                                it1,
+                                arrayOf(
+                                    android.Manifest.permission.READ_MEDIA_IMAGES,
+                                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                    Manifest.permission.MANAGE_EXTERNAL_STORAGE
+                                ),
+                                1
+                            )
+                        }
+                    } else {
+                        activity?.let { it1 ->
+                            ActivityCompat.requestPermissions(
+                                it1,
+                                arrayOf(
+                                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                    Manifest.permission.MANAGE_EXTERNAL_STORAGE
+                                ),
+                                101
+                            )
+                        }
+                    }
+                    if (activity?.let { it1 ->
+                            ContextCompat.checkSelfPermission(
+                                it1,
+                                readImagePermission
+                            )
+                        } == PackageManager.PERMISSION_GRANTED) {
+                        val newFragment: Fragment = ProfileFragment()
+                        val transaction = activity?.supportFragmentManager?.beginTransaction()
+                        transaction?.add(com.duzzcall.duzzcall.R.id.fragment_container, newFragment)
+                        transaction?.addToBackStack(null)
+                        transaction?.commit()
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    android.Manifest.permission.READ_MEDIA_IMAGES
-                    activity?.let { it1 ->
-                        ActivityCompat.requestPermissions(
-                            it1,
-                            arrayOf(android.Manifest.permission.READ_MEDIA_IMAGES),
-                            101
-                        )
+                    } else {
+
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                            android.Manifest.permission.READ_MEDIA_IMAGES
+                            activity?.let { it1 ->
+                                ActivityCompat.requestPermissions(
+                                    it1,
+                                    arrayOf(android.Manifest.permission.READ_MEDIA_IMAGES),
+                                    101
+                                )
+                            }
+                        } else {
+                            activity?.let { it1 ->
+                                ActivityCompat.requestPermissions(
+                                    it1,
+                                    arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                                    101
+                                )
+                            }
+                        }
                     }
                 } else {
-                    activity?.let { it1 ->
-                        ActivityCompat.requestPermissions(
+                    val permissionIntent =
+                        Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION)
+                    startActivity(permissionIntent)
+                }
+            } else {
+                if (activity?.let { it1 ->
+                        ContextCompat.checkSelfPermission(
                             it1,
-                            arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                            101
+                            readImagePermission
                         )
+                    } == PackageManager.PERMISSION_GRANTED) {
+                    val newFragment: Fragment = ProfileFragment()
+                    val transaction = activity?.supportFragmentManager?.beginTransaction()
+                    transaction?.add(com.duzzcall.duzzcall.R.id.fragment_container, newFragment)
+                    transaction?.addToBackStack(null)
+                    transaction?.commit()
+
+                } else {
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        android.Manifest.permission.READ_MEDIA_IMAGES
+                        activity?.let { it1 ->
+                            ActivityCompat.requestPermissions(
+                                it1,
+                                arrayOf(android.Manifest.permission.READ_MEDIA_IMAGES),
+                                101
+                            )
+                        }
+                    } else {
+                        activity?.let { it1 ->
+                            ActivityCompat.requestPermissions(
+                                it1,
+                                arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                                101
+                            )
+                        }
                     }
                 }
             }
+
+
         }
 
         if (Preference.getUserData(activity) != null) {
@@ -181,8 +237,20 @@ class SettingFragment : Fragment() {
 
         if (userModel.first_name.equals(" ")) {
             binding.tvProfileName.setText("John Doi")
+            activity?.let {
+                MaterialTextDrawable.with(it)
+                    .text(binding.tvProfileName.text.toString()?.substring(0, 2) ?: "DC")
+                    .into(binding.profileImage)
+            }
+
         } else {
             binding.tvProfileName.setText(userModel.first_name + " " + userModel.last_name)
+            activity?.let {
+                MaterialTextDrawable.with(it)
+                    .text(userModel.first_name?.substring(0, 2) ?: "DC")
+                    .into(binding.profileImage)
+            }
+
         }
 
 //        if (userModel.profileimg==null && userModel.profileimg.equals("") && userModel.profileimg?.isEmpty()!!){

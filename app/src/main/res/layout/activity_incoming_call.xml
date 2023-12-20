@@ -68,7 +68,7 @@
                 android:text=""
                 android:textColor="#807979"
                 android:textSize="14sp"
-                android:visibility="visible" />
+                android:visibility="gone" />
 
             <Chronometer
                 android:id="@+id/active_call_timer"

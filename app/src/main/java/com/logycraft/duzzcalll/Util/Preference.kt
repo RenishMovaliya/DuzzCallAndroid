@@ -108,7 +108,6 @@ object Preference {
         val json = gson.toJson(str)
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
         edit = preferences.edit()
-
         edit?.putString("MyObject", json)
         edit?.apply()
     }
@@ -120,13 +119,11 @@ object Preference {
         return gson.fromJson(json, LoginData::class.java)
     }
 
-
     fun setUserData(context: Context?, str: UserModel?) {
         val gson = Gson()
         val json = gson.toJson(str)
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
         edit = preferences.edit()
-
         edit?.putString("MyUser", json)
         edit?.apply()
     }

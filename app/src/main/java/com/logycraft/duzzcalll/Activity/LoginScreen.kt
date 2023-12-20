@@ -287,7 +287,6 @@ class LoginScreen : BaseActivity(), ServiceWaitThreadListener {
             }
         }
 
-
     }
 
     fun parseJson(jsonArray: JSONArray?): List<Country> {
@@ -365,21 +364,18 @@ class LoginScreen : BaseActivity(), ServiceWaitThreadListener {
                     )
                 )
                 intent.putExtra(Utils.OTP, `objecsst`.getString("tfa_code"))
-//                Toast.makeText(
-//                            this@LoginScreen, ""+`objecsst`.getString("tfa_code"), Toast.LENGTH_LONG
-//                        ).show()
-                intent.putExtra("isNew", `objecsst`.getString("is_new"))
+                Toast.makeText(
+                            this@LoginScreen, ""+`objecsst`.getString("tfa_code"), Toast.LENGTH_LONG
+                        ).show()
+                intent.putExtra("isNew", `objecsst`.getString("user_update_required"))
                 startActivity(intent)
 //                }
 //                val intent = Intent(this@LoginScreen, DashboardActivity::class.java)
-
 //                intent.putExtra(FROM, LOGIN)
 //                intent.putExtra("MOBILE", mobileNumber)
-
 //                startActivity(intent)
 
 //                showError("" + usedata?.extension?.accessToken)
-
 
             } else if (it.error != null) {
                 ProgressHelper.dismissProgressDialog()

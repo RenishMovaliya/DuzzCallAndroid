@@ -39,9 +39,10 @@
                 android:id="@+id/img_edit"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
+                android:padding="@dimen/d3"
                 android:layout_gravity="right"
                 android:layout_marginRight="@dimen/dt15"
-                android:src="@drawable/ic_edit" />
+                android:src="@drawable/img_edit" />
         </androidx.appcompat.widget.Toolbar>
 
         <ScrollView
@@ -77,11 +78,14 @@
                             android:id="@+id/img_camera"
                             android:layout_width="@dimen/d35"
                             android:layout_height="@dimen/d35"
+                            android:visibility="gone"
                             android:layout_alignParentRight="true"
                             android:layout_alignParentBottom="true"
-                            android:layout_margin="@dimen/d10"
+                            android:layout_marginStart="@dimen/d10"
+                            android:layout_marginTop="@dimen/d10"
+                            android:layout_marginEnd="@dimen/d10"
+                            android:layout_marginBottom="@dimen/d10"
                             android:src="@drawable/ic_camera" />
-
 
                     </RelativeLayout>
 
@@ -171,7 +175,6 @@
                                 android:textSize="@dimen/dt14" />
 
                         </LinearLayout>
-
                     </LinearLayout>
 
                     <LinearLayout
@@ -216,7 +219,6 @@
                                 android:textSize="@dimen/dt14" />
 
                         </LinearLayout>
-
                     </LinearLayout>
 
                     <LinearLayout
@@ -262,9 +264,7 @@
 
                     </LinearLayout>
 
-
                 </LinearLayout>
-
 
             </RelativeLayout>
         </ScrollView>

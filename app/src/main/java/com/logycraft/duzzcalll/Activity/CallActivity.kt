@@ -15,6 +15,7 @@ import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.adwardstark.mtextdrawable.MaterialTextDrawable
+import com.bumptech.glide.Glide
 import com.duzzcall.duzzcall.R
 import com.duzzcall.duzzcall.databinding.ActivityCallBinding
 import com.logycraft.duzzcalll.LinphoneManager
@@ -185,6 +186,7 @@ class CallActivity : AppCompatActivity(), CallActivityInterface {
     override fun refreshInCallActions() {
         updateButtons()
     }
+
     private fun dialpadPressed(char: Char, view: View?) {
         binding.dialpadInput.addCharacter(char)
         maybePerformDialpadHapticFeedback(view)
@@ -194,6 +196,7 @@ class CallActivity : AppCompatActivity(), CallActivityInterface {
         binding.dialpadInput.dispatchKeyEvent(binding.dialpadInput.getKeyEvent(KeyEvent.KEYCODE_DEL))
         maybePerformDialpadHapticFeedback(view)
     }
+
     @SuppressLint("ClickableViewAccessibility")
     private fun setupCharClick(view: View, char: Char, longClickable: Boolean = true) {
         view.isClickable = true
@@ -234,14 +237,17 @@ class CallActivity : AppCompatActivity(), CallActivityInterface {
             false
         }
     }
+
     private fun startDialpadTone(char: Char) {
 //        if (config.dialpadBeeps) {
         pressedKeys.add(char)
         toneGeneratorHelper?.startTone(char)
 //        }
     }
+
     val View.boundingBox
         get() = Rect().also { getGlobalVisibleRect(it) }
+
     private fun stopDialpadTone(char: Char) {
 //        if (config.dialpadBeeps) {
         if (!pressedKeys.remove(char)) return
@@ -252,12 +258,15 @@ class CallActivity : AppCompatActivity(), CallActivityInterface {
         }
 //        }
     }
+
     private fun clearInput() {
         binding.dialpadInput.setText("")
     }
+
     private fun maybePerformDialpadHapticFeedback(view: View?) {
 
     }
+
     private fun performLongClick(view: View, char: Char) {
         if (char == '0') {
             clearChar(view)
@@ -290,9 +299,17 @@ class CallActivity : AppCompatActivity(), CallActivityInterface {
                 if (call != null) {
                     org.linphone.core.tools.Log.w("[outgoingCall] Call Nulled !")
                     binding.textViewUserName.setText(call.remoteAddress.username)
-                    MaterialTextDrawable.with(this@CallActivity)
-                        .text(call.remoteAddress.username?.substring(0,2) ?: "DC")
-                        .into(binding.imageViewProfile)
+                    if (call.remoteAddress.methodParam.equals(" ")||call.remoteAddress.methodParam==null) {
+                        MaterialTextDrawable.with(this@CallActivity)
+                            .text(call.remoteAddress.username?.substring(0, 2) ?: "DC")
+                            .into(binding.imageViewProfile)
+                    } else {
+                        Glide.with(this@CallActivity).load(call.remoteAddress.methodParam)
+                            .centerCrop()
+                            .into(binding.imageViewProfile)
+                    }
+
+
 //                    binding.textViewUserSipaddress.setText("Outgoing Call")
                     binding.textViewUserSipaddress.setText(Preference.getCountry(this@CallActivity))
 
@@ -350,7 +367,7 @@ class CallActivity : AppCompatActivity(), CallActivityInterface {
                 Call.State.IncomingReceived -> {
 
                     binding.textViewUserSipaddress.setText(call.remoteAddress.asStringUriOnly())
-                    Log.e("ddd",""+call.remoteAddress.asStringUriOnly())
+                    Log.e("ddd", "" + call.remoteAddress.asStringUriOnly())
                 }
 
                 Call.State.Connected -> {
@@ -358,9 +375,15 @@ class CallActivity : AppCompatActivity(), CallActivityInterface {
                     binding.textViewRinging.setText("Connected")
                     binding.textViewUserName.text = call.remoteAddress.username
                     Log.e("nameeeeee")
-                    MaterialTextDrawable.with(this@CallActivity)
-                        .text(call.remoteAddress.username?.substring(0,2) ?: "DC")
-                        .into(binding.imageViewProfile)
+                    if (call.remoteAddress.methodParam.equals(" ") || call.remoteAddress.methodParam == null) {
+                        MaterialTextDrawable.with(this@CallActivity)
+                            .text(call.remoteAddress.username?.substring(0, 2) ?: "DC")
+                            .into(binding.imageViewProfile)
+                    } else {
+                        Glide.with(this@CallActivity).load(call.remoteAddress.methodParam)
+                            .centerCrop()
+                            .into(binding.imageViewProfile)
+                    }
                     binding.activeCallTimer.visibility = View.VISIBLE
 //                    val timer = binding.activeCallTimer
 //                    timer.base =
@@ -481,7 +504,7 @@ class CallActivity : AppCompatActivity(), CallActivityInterface {
 //        ContactAvatar.displayAvatar(displayName, mContactAvatar as View?, true)
         binding.textViewUserName.setText(displayName)
         MaterialTextDrawable.with(this@CallActivity)
-            .text(displayName.substring(0,2) ?: "DC")
+            .text(displayName.substring(0, 2) ?: "DC")
             .into(binding.imageViewProfile)
     }
 

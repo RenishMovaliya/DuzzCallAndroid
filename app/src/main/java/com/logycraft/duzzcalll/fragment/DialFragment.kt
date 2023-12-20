@@ -15,10 +15,8 @@ import android.widget.EditText
 import androidx.annotation.Nullable
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import com.duzzcall.duzzcall.R
-import com.duzzcall.duzzcall.databinding.FragmentContactBinding
 import com.duzzcall.duzzcall.databinding.FragmentDialBinding
 import com.logycraft.duzzcalll.extention.addCharacter
 import com.logycraft.duzzcalll.extention.disableKeyboard
@@ -75,6 +73,7 @@ class DialFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         hasRussianLocale = Locale.getDefault().language == "ru"
 
+
         if (activity?.let {
                 ContextCompat.checkSelfPermission(
                     it, android.Manifest.permission.POST_NOTIFICATIONS
@@ -82,7 +81,19 @@ class DialFragment : Fragment() {
             } != PackageManager.PERMISSION_GRANTED) {
             activity?.let {
                 ActivityCompat.requestPermissions(
-                    it, arrayOf(android.Manifest.permission.POST_NOTIFICATIONS), 1
+                    it, arrayOf(android.Manifest.permission.POST_NOTIFICATIONS), 101
+                )
+            }
+        }
+
+        if (activity?.let {
+                ContextCompat.checkSelfPermission(
+                    it, android.Manifest.permission.RECORD_AUDIO
+                )
+            } != PackageManager.PERMISSION_GRANTED) {
+            activity?.let {
+                ActivityCompat.requestPermissions(
+                    it, arrayOf(android.Manifest.permission.RECORD_AUDIO), 123
                 )
             }
         }
@@ -187,13 +198,26 @@ class DialFragment : Fragment() {
         binding.dialpadClearChar.setOnLongClickListener { clearInput(); true }
         binding.dialpadCallButton.setOnClickListener {
 //            outgoingCall();
-
-            if (!binding.dialpadInput.text.toString().isEmpty()) {
-                callBackListener?.onCallBack(
-                    binding.dialpadInput.text.toString(),
-                    binding.dialpadInput.text.toString()
-                );
+            if (activity?.let {
+                    ContextCompat.checkSelfPermission(
+                        it, android.Manifest.permission.RECORD_AUDIO
+                    )
+                } != PackageManager.PERMISSION_GRANTED) {
+                activity?.let {
+                    ActivityCompat.requestPermissions(
+                        it, arrayOf(android.Manifest.permission.RECORD_AUDIO), 123
+                    )
+                }
+            }else{
+                if (!binding.dialpadInput.text.toString().isEmpty()) {
+                    callBackListener?.onCallBack(
+                        binding.dialpadInput.text.toString(),
+                        binding.dialpadInput.text.toString(),
+                        " "
+                    );
+                }
             }
+
 
         }
 //        binding.dialpadInput.setText("0094773499994")

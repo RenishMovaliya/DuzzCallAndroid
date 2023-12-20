@@ -17,8 +17,8 @@ android {
         applicationId "com.duzzcall.duzzcall"
         minSdk 23
         targetSdk 33
-        versionCode 4
-        versionName "1.5"
+        versionCode 3
+        versionName "1.2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -107,6 +107,7 @@ dependencies {
 //    implementation("io.coil-kt:coil-svg:$coil_version")
 //    implementation("io.coil-kt:coil-video:$coil_version")
 //    kapt "com.android.databinding:compiler:3.1.1"
+    implementation 'com.google.android.gms:play-services-base:17.1.0'
 
     implementation 'com.github.fondesa:kpermissions:3.4.0'
     // If you want the extensions for RxJava 2.

@@ -23,8 +23,8 @@ import java.util.*
 class All_History_Adapter(
     var activity: Activity,
     var calllog: Array<CallLog>,
-    var callType: String,
-    var contactList: MutableList<ContactModel>
+    var contactList: MutableList<ContactModel>,
+    var listener: OnItemClickListener?
 ) : RecyclerView.Adapter<All_History_Adapter.ViewHolder>() {
     var onItemClick: ((String) -> Unit)? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -36,6 +36,9 @@ class All_History_Adapter(
     fun setContacts(contacts: List<ContactModel>) {
         contactList.addAll(contacts)
         notifyDataSetChanged()
+    }
+    interface OnItemClickListener {
+        fun onClick(get: String, toString: String)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -88,7 +91,7 @@ class All_History_Adapter(
         holder.tv_call_duration.setText(ConvertSecondToHHMMSSString(calllog.get(position).duration))
 
         holder.itemView.setOnClickListener {
-            onItemClick?.invoke(" ")
+            listener?.onClick(number,holder.txt_contact_name.text.toString())
         }
     }
 

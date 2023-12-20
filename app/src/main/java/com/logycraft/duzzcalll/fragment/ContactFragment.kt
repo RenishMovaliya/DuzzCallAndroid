@@ -13,12 +13,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.logycraft.duzzcalll.Adapter.Personal_Contact_Adapter
 import com.logycraft.duzzcalll.Model.ContactModel
 import com.duzzcall.duzzcall.R
 import com.duzzcall.duzzcall.databinding.FragmentContactBinding
 import com.logycraft.duzzcalll.Adapter.BusinessContact_Adapter
-import com.logycraft.duzzcalll.Adapter.Country_List_Adapter
 import com.logycraft.duzzcalll.Util.ProgressHelper
 import com.logycraft.duzzcalll.data.BusinessResponce
 import com.logycraft.duzzcalll.helper.CallBackListener
@@ -210,7 +208,8 @@ class ContactFragment : Fragment() {
                         if (!business.lineExtension.toString().isEmpty()) {
                             callBackListener?.onCallBack(
                                 business.lineExtension.toString(),
-                                business.businessName.toString()
+                                business.businessName.toString(),
+                                business.businessLogo.toString()
                             );
                         }
                     }
