@@ -69,7 +69,6 @@ class LoginScreen : BaseActivity(), ServiceWaitThreadListener {
                 val intent = Intent(this@LoginScreen, Terms_And_ConditionActivity::class.java)
 ////                val intent = Intent(this@LoginScreen, DashboardActivity::class.java)
                 startActivity(intent)
-
             }
         })
 //        Xiaomi
@@ -134,7 +133,6 @@ class LoginScreen : BaseActivity(), ServiceWaitThreadListener {
             }
 
             itemsList!!.addAll(parseJson(jsonArray))
-            country_list!!.addAll(parseJson(jsonArray))
 
             val countryListAdapter = Country_List_Adapter(
                 this@LoginScreen,
@@ -162,15 +160,16 @@ class LoginScreen : BaseActivity(), ServiceWaitThreadListener {
                 override fun onTextChanged(charSequence: CharSequence, i2: Int, i3: Int, i4: Int) {
                     this@LoginScreen.textsearch = charSequence.toString().trim { it <= ' ' }
 
-
 //                    countryListAdapter.filter(
 //                        this@LoginScreen.textsearch,
 //                    )
 //                    filterData()
+                    itemsList!!.addAll(parseJson(jsonArray))
 
                     country_list.clear()
 
                     for (item in itemsList) {
+
                         if (item.name.toString().toLowerCase(Locale.getDefault()).contains(
                                 et_search.text.toString().toLowerCase(Locale.getDefault())
                             ) || item.dial_code.toString().toLowerCase(Locale.getDefault())
@@ -193,7 +192,7 @@ class LoginScreen : BaseActivity(), ServiceWaitThreadListener {
                             }
                         })
                     recyclerview.setAdapter(countryListAdapter)
-
+                    itemsList.clear()
                 }
             })
 
@@ -364,9 +363,9 @@ class LoginScreen : BaseActivity(), ServiceWaitThreadListener {
                     )
                 )
                 intent.putExtra(Utils.OTP, `objecsst`.getString("tfa_code"))
-                Toast.makeText(
-                            this@LoginScreen, ""+`objecsst`.getString("tfa_code"), Toast.LENGTH_LONG
-                        ).show()
+//                Toast.makeText(
+//                            this@LoginScreen, ""+`objecsst`.getString("tfa_code"), Toast.LENGTH_LONG
+//                        ).show()
                 intent.putExtra("isNew", `objecsst`.getString("user_update_required"))
                 startActivity(intent)
 //                }
@@ -420,4 +419,5 @@ class LoginScreen : BaseActivity(), ServiceWaitThreadListener {
     override fun onServiceReady() {
         LinphoneManager.getInstance().changeStatusToOnline()
     }
+
 }

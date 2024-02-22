@@ -55,7 +55,6 @@ class SplashActivity : AppCompatActivity(), ServiceWaitThreadListener {
                 Log.e("Linphone", "Exception raised while starting service: $ise")
             }
         }
-
     }
 
     override fun onServiceReady() {

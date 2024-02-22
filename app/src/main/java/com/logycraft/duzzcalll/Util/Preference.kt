@@ -2,6 +2,7 @@ package com.logycraft.duzzcalll.Util
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.graphics.*
 import android.preference.PreferenceManager
 import com.example.restapiidemo.home.data.UserModel
 import com.google.gson.Gson
@@ -16,7 +17,35 @@ object Preference {
     var edit: SharedPreferences.Editor? = null
     const val MyPREFERENCES = "DuzzFirst"
     var Register = "Register"
+    fun textToBitmap(text: String, backgroundColor: Int): Bitmap {
+        val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+        paint.textSize = 600f
+        paint.color = Color.WHITE // Text color
+        paint.textAlign = Paint.Align.LEFT
 
+        val textBounds = Rect()
+        paint.getTextBounds(text, 0, text.length, textBounds)
+
+        val width = textBounds.width() + 600 // Add some padding
+        val height = textBounds.height()+600
+
+        val image = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(image)
+
+        // Draw background color
+        val backgroundPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+        backgroundPaint.color = backgroundColor
+        canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), backgroundPaint)
+
+        // Calculate the position to center the text
+        val x = (width - textBounds.width()) / 2f - textBounds.left
+        val y = (height - textBounds.height()) / 2f - textBounds.top
+
+        // Draw text on the canvas
+        canvas.drawText(text, x, y, paint)
+
+        return image
+    }
     fun saveToken(activity: Context, value: String?) {
         val sharedpreferences = activity.getSharedPreferences("MyPREFERENCES", Context.MODE_PRIVATE)
         val editor = sharedpreferences.edit()
@@ -85,7 +114,16 @@ object Preference {
         editor.putString("Phone", value)
         editor.apply()
     }
-
+    fun saveExtensionNumber(activity: Context, value: String?) {
+        val sharedpreferences = activity.getSharedPreferences("EXNumber", Context.MODE_PRIVATE)
+        val editor = sharedpreferences.edit()
+        editor.putString("EXPhone", value)
+        editor.apply()
+    }
+    fun getExtensionNumber(activity: Context): String? {
+        val sharedpreferences = activity.getSharedPreferences("EXNumber", Context.MODE_PRIVATE)
+        return sharedpreferences.getString("EXPhone", "")
+    }
     fun getOTP(activity: Context): String? {
         val sharedpreferences = activity.getSharedPreferences("OTP", Context.MODE_PRIVATE)
         return sharedpreferences.getString("V_OTP", "")
@@ -145,6 +183,19 @@ object Preference {
         val sharedpreferences = c1.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE)
         val editor = sharedpreferences.edit()
         editor.putBoolean(Register, value)
+        editor.apply()
+    }
+
+    fun getFirstHandler(c1: Context): Boolean {
+        val sharedpreferences =
+            c1.getSharedPreferences("MyPREFERENCES22", Context.MODE_PRIVATE)
+        return sharedpreferences.getBoolean("Register22", false)
+    }
+
+    fun setFirstHandler(c1: Context, value: Boolean) {
+        val sharedpreferences = c1.getSharedPreferences("MyPREFERENCES22", Context.MODE_PRIVATE)
+        val editor = sharedpreferences.edit()
+        editor.putBoolean("Register22", value)
         editor.apply()
     }
 

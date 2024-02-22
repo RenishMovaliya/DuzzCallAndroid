@@ -18,6 +18,7 @@ import com.duzzcall.duzzcall.R
 import com.duzzcall.duzzcall.databinding.FragmentContactBinding
 import com.logycraft.duzzcalll.Adapter.BusinessContact_Adapter
 import com.logycraft.duzzcalll.Util.ProgressHelper
+import com.logycraft.duzzcalll.Util.ProgressHelper.showProgrssDialogs
 import com.logycraft.duzzcalll.data.BusinessResponce
 import com.logycraft.duzzcalll.helper.CallBackListener
 import com.logycraft.duzzcalll.viewmodel.HomeViewModel
@@ -30,7 +31,7 @@ private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
 
-class ContactFragment : Fragment() {
+class ContactFragment : Fragment(){
     private val READ_CONTACTS_PERMISSION_CODE = 1
     private lateinit var binding: FragmentContactBinding
     private lateinit var recyclerViewContacts: RecyclerView
@@ -82,7 +83,6 @@ class ContactFragment : Fragment() {
         binding.titleTV.setText(getString(R.string.contacts))
 
 
-
         binding.relativePersonal.setOnClickListener(View.OnClickListener {
 
             binding.relativeSelectedBtn.animate().x(0f).duration = 100
@@ -101,6 +101,9 @@ class ContactFragment : Fragment() {
             val size: Int = binding.relativePersonal.getWidth()
 
             binding.relativeSelectedBtn.animate().x(size.toFloat()).duration = 100
+//            binding.progressbar.visibility=View.VISIBLE
+            showProgrssDialogs(activity)
+
             getbusinessList()
 
             binding.btnCountrySelect.setOnClickListener(View.OnClickListener {
@@ -155,14 +158,13 @@ class ContactFragment : Fragment() {
 
     private fun getbusinessList() {
 
-
         activity?.let { viewModel.getBusiness(it) }
 
         activity?.let {
             viewModel.getbusinessLiveData?.observe(it, androidx.lifecycle.Observer {
 
                 if (it.isSuccess == true && it.Responcecode == 200) {
-                    ProgressHelper.dismissProgressDialog()
+                        ProgressHelper.dismissProgressDialog()
 
                     it.data?.let { it1 -> businessresponce.addAll(it1) }
                     it.data?.let { it1 -> businesdata.addAll(it1) }
@@ -198,6 +200,7 @@ class ContactFragment : Fragment() {
     }
 
     private fun recyclerview(businessresponce: ArrayList<BusinessResponce>) {
+//        binding.progressbar.visibility=View.GONE
 
         val adapter = businessresponce?.let { it1 ->
             BusinessContact_Adapter(activity,
@@ -208,7 +211,7 @@ class ContactFragment : Fragment() {
                         if (!business.lineExtension.toString().isEmpty()) {
                             callBackListener?.onCallBack(
                                 business.lineExtension.toString(),
-                                business.businessName.toString(),
+                                business.businessName.toString()+" - "+business.lineName.toString(),
                                 business.businessLogo.toString()
                             );
                         }

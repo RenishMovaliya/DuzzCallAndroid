@@ -10,14 +10,30 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1">
-
-        <ImageView
-            android:id="@+id/image_view_profile"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card"
             android:layout_width="170dp"
             android:layout_height="170dp"
             android:layout_alignParentBottom="true"
             android:layout_centerInParent="true"
-            android:background="@drawable/user_icon" />
+            app:cardElevation="-10dp"
+            app:cardCornerRadius="@dimen/d50">
+            <ImageView
+                android:id="@+id/image_view_profile"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="@dimen/d5"
+                android:layout_centerVertical="true"
+                />
+        </androidx.cardview.widget.CardView>
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/image_view_profile_direct_call"
+            android:layout_width="170dp"
+            android:visibility="gone"
+            android:layout_height="170dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerInParent="true" />
+
     </RelativeLayout>
 
     <RelativeLayout
@@ -41,21 +57,33 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_bold"
                 android:gravity="center_horizontal"
+                android:visibility="visible"
                 android:lineSpacingExtra="6sp"
                 android:text="@string/duzzcall_incoming_call"
                 android:textColor="#605454"
                 android:textSize="14sp" />
 
             <TextView
+                android:id="@+id/tv_display_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Direct Call"
+                android:fontFamily="@font/poppins_bold"
+                android:layout_marginTop="@dimen/d15"
+                android:textColor="@color/black"
+                android:includeFontPadding="false"
+                android:gravity="center"
+                android:textSize="24sp"/>
+
+            <TextView
                 android:id="@+id/text_view_user_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/d10"
-                android:fontFamily="@font/poppins_medium"
+                android:fontFamily="@font/poppins_light"
                 android:gravity="center_horizontal"
-                android:text=""
+                android:text="009400855554"
                 android:textColor="@color/black"
-                android:textSize="24sp" />
+                android:textSize="@dimen/dt18" />
 
             <TextView
                 android:id="@+id/text_view_user_sipaddress"

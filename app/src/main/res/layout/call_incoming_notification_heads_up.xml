@@ -17,7 +17,8 @@
     <RelativeLayout
         android:id="@+id/top_relative"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/d50"
+        android:paddingHorizontal="@dimen/dt10"
         android:layout_below="@+id/incoming_call_info">
 
         <LinearLayout
@@ -44,39 +45,27 @@
                 android:text="kjsdhasudgsaudgusagud"
                 android:textColor="@color/appcolour"
                 android:visibility="gone" />
+
         </LinearLayout>
+
+<!--        <de.hdodenhof.circleimageview.CircleImageView-->
+<!--            android:id="@+id/caller_picture"-->
+<!--            android:layout_width="@dimen/d50"-->
+<!--            android:layout_height="@dimen/d50"-->
+<!--            android:layout_alignParentRight="true"-->
+<!--            android:src="@drawable/user_icon" />-->
 
         <ImageView
             android:id="@+id/caller_picture"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_alignParentRight="true"
+            android:layout_width="36dp"
             android:layout_centerVertical="true"
-            android:layout_marginRight="60dp"
-            android:adjustViewBounds="true"
-            android:src="@drawable/user_icon" />
+            android:layout_height="36dp"
+            android:padding="@dimen/d2"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/roundimage"
+            android:src="@drawable/user_icon"  />
+
     </RelativeLayout>
 
-    <!--    <RelativeLayout-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_marginTop="@dimen/d5"-->
-    <!--        android:layout_below="@+id/top_relative"-->
-    <!--        android:layout_marginHorizontal="60dp">-->
-
-    <!--        <ImageView-->
-    <!--            android:id="@+id/image_view_accept"-->
-    <!--            android:layout_width="@dimen/d50"-->
-    <!--            android:layout_height="@dimen/d50"-->
-    <!--            android:layout_alignParentRight="true"-->
-    <!--            android:background="@drawable/call_accept" />-->
-
-    <!--        <ImageView-->
-    <!--            android:id="@+id/image_view_end"-->
-    <!--            android:layout_width="@dimen/d50"-->
-    <!--            android:layout_height="@dimen/d50"-->
-    <!--            android:layout_alignParentLeft="true"-->
-    <!--            android:background="@drawable/btn_call_end" />-->
-    <!--    </RelativeLayout>-->
 
 </RelativeLayout>

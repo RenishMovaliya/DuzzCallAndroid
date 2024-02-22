@@ -31,7 +31,7 @@ interface ApiInterface {
     @FormUrlEncoded
     @POST("extensions/token/sms")
     fun sendOtp(
-        @Field("phone")  phone:String):Call<SendOTP>
+        @Field("country_code")  code:String, @Field("phone")  phone:String):Call<SendOTP>
 
     @GET("businesses")
     fun getBusiness(

@@ -30,8 +30,8 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 
-    fun sentOtp(postModel: String) {
-        sentOtpLiveData = homeRepository?.sentOtp(postModel)
+    fun sentOtp(postModel: String, number: String?) {
+        sentOtpLiveData = homeRepository?.sentOtp(postModel,number)
     }
 
     fun verifyOtp(element: JsonElement, context: Context) {

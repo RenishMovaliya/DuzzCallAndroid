@@ -36,6 +36,7 @@ public class Compatibility {
     public static final String INTENT_NOTIF_ID = "NOTIFICATION_ID";
     public static final String INTENT_REPLY_NOTIF_ACTION = "org.linphone.REPLY_ACTION";
     public static final String KEY_TEXT_REPLY = "key_text_reply";
+    public static final String NOTIFICATION_DISMISS = "com.duzzcall.duzzcall.NOTIFICATION_DISMISSED";
 
     public static String getDeviceName(Context context) {
         if (Version.sdkAboveOrEqual(25)) {
@@ -106,7 +107,7 @@ public class Compatibility {
         return ApiTwentySixPlus.createMissedCallNotification(context, title, text, intent, count);
     }
 
-    public static Notification createInCallNotification(Context context, int callId, String msg, int iconID, Bitmap contactIcon, String contactName, PendingIntent intent) {
+    public static Notification createInCallNotification(Context context, int callId, String msg, int iconID, String contactIcon, String contactName, PendingIntent intent) {
         if (Version.sdkAboveOrEqual(26)) {
             return ApiTwentySixPlus.createInCallNotification(context, callId, msg, iconID, contactIcon, contactName, intent);
         }
@@ -117,7 +118,7 @@ public class Compatibility {
         return ApiTwentySixPlus.createInCallNotification(context, callId, msg, iconID, contactIcon, contactName, intent);
     }
 
-    public static Notification createIncomingCallNotification(Context context, int callId, Bitmap contactIcon, String contactName, String sipUri, PendingIntent intent) {
+    public static Notification createIncomingCallNotification(Context context, int callId, String contactIcon, String contactName, String sipUri, PendingIntent intent) {
         if (Version.sdkAboveOrEqual(26)) {
             return ApiTwentySixPlus.createIncomingCallNotification(context, callId, contactIcon, contactName, sipUri, intent);
         }

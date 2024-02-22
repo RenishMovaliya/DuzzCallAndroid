@@ -2,6 +2,7 @@ package com.logycraft.duzzcalll.Activity
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
@@ -9,6 +10,7 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
@@ -26,11 +28,13 @@ import com.logycraft.duzzcalll.LinphonePreferences
 import com.logycraft.duzzcalll.Util.Preference
 import com.logycraft.duzzcalll.fragment.*
 import com.logycraft.duzzcalll.helper.CallBackListener
+import com.logycraft.duzzcalll.helper.notifications.NotificationBroadcastReceiver
 import com.logycraft.duzzcalll.helper.showGrantedToast
 import com.logycraft.duzzcalll.helper.showPermanentlyDeniedDialog
 import com.logycraft.duzzcalll.helper.showRationaleDialog
 import com.logycraft.duzzcalll.service.ServiceWaitThreadListener
 import org.linphone.core.*
+
 
 //import com.logycraft.duzzcalll.core.*
 
@@ -55,6 +59,7 @@ class DashboardActivity : AppCompatActivity(), CallBackListener,  PermissionRequ
 //            ),
 //            101
 //        )
+//        registerNotificationDismissReceiver()
 
 
 //        loadFragment(HomeFragment())
@@ -99,8 +104,6 @@ class DashboardActivity : AppCompatActivity(), CallBackListener,  PermissionRequ
             }
         }
 
-
-
 //        loadFragment(DialFragment())
         bottomNav.setSelectedItemId(R.id.dialpad);
         val factory = Factory.instance()
@@ -124,6 +127,7 @@ class DashboardActivity : AppCompatActivity(), CallBackListener,  PermissionRequ
         var usedata = Preference.getLoginData(this@DashboardActivity)
         waitForServerAnswer.value = true
         val username = usedata?.extension?.extension
+        Log.e("usernameeeeeeee",""+usedata?.extension?.extension)
         val password = usedata?.extension?.extensionpassword
         val domain = "dzcl.et.lk"
         val transportType = TransportType.Udp
@@ -149,6 +153,7 @@ class DashboardActivity : AppCompatActivity(), CallBackListener,  PermissionRequ
 
         core.defaultAccount = account
         core.addListener(coreListener)
+        core.start()
         core.start()
 
         // We will need the RECORD_AUDIO permission for video call

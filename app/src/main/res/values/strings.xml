@@ -92,7 +92,7 @@
     <string name="notification_reply_label">Reply</string>
     <string name="notification_mark_as_read_label">Mark as read</string>
     <string name="notification_replied_label">Sent reply: %s</string>
-<!--    <string name="incall_notif_incoming">Call incoming</string>-->
+    <!--    <string name="incall_notif_incoming">Call incoming</string>-->
     <string name="incall_notif_incoming">Duzzcall Incoming Call</string>
     <string name="incall_notif_outgoing">Call outgoing</string>
     <string name="notification_call_answer_label">Answer</string>
@@ -137,4 +137,9 @@
     <string name="enter_your_mobile_number">Enter your mobile number</string>
     <string name="enter_your_country_and_nphone_number">Enter your country and\nphone number</string>
     <string name="update_portfolio">Update portfolio</string>
+    <string name="contact_us">Contact Us</string>
+    <string name="contact_number">Contact Number</string>
+    <string name="name">Name</string>
+    <string name="email">Email</string>
+    <string name="privacy_policy">Privacy Policy</string>
 </resources>

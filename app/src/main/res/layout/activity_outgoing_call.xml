@@ -6,21 +6,39 @@
     android:background="@color/white"
     android:orientation="vertical">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:gravity="bottom|center_horizontal"
         android:layout_weight="1">
-
-
-        <ImageView
-            android:id="@+id/image_view_profile"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card"
             android:layout_width="170dp"
             android:layout_height="170dp"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
+            app:cardElevation="-10dp"
+            android:visibility="gone"
             android:layout_marginBottom="24dp"
-            />
-    </RelativeLayout>
+            app:cardCornerRadius="@dimen/d50">
+            <ImageView
+                android:id="@+id/image_view_profile"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="@dimen/d5"
+                android:layout_centerVertical="true" />
+        </androidx.cardview.widget.CardView>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/image_view_profile_direct_call"
+            android:layout_width="170dp"
+            android:layout_height="170dp"
+            android:layout_marginTop="@dimen/d60"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:visibility="visible" />
+
+    </LinearLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -33,7 +51,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="24dp"
-
+            android:layout_marginTop="25dp"
             android:layout_marginRight="24dp"
             android:gravity="center_horizontal"
             android:orientation="vertical">
@@ -46,7 +64,6 @@
                 android:fontFamily="@font/poppins_bold"
                 android:gravity="center_horizontal"
                 android:lineSpacingExtra="6sp"
-
                 android:text="Calling"
                 android:textColor="#605454"
                 android:textSize="14sp" />
@@ -55,10 +72,11 @@
                 android:id="@+id/text_view_user_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:fontFamily="@font/poppins_medium"
+                android:fontFamily="@font/poppins_bold"
+                android:layout_marginTop="@dimen/d15"
                 android:gravity="center_horizontal"
                 android:text=""
+                android:includeFontPadding="false"
                 android:textColor="@color/black"
                 android:textSize="24sp" />
 
@@ -69,11 +87,22 @@
                 android:alpha="0.7"
                 android:fontFamily="@font/poppins_regular"
                 android:gravity="center_horizontal"
-
                 android:text=""
                 android:textColor="@color/black"
                 android:textSize="14sp"
                 android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/text_view_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:alpha="0.7"
+                android:fontFamily="@font/poppins_light"
+                android:gravity="center_horizontal"
+                android:text="009477788999"
+                android:textColor="@color/black"
+                android:textSize="@dimen/dt18"
+                android:visibility="visible" />
 
             <Chronometer
                 android:id="@+id/active_call_timer"

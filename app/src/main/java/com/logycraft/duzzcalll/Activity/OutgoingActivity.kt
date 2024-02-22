@@ -1,19 +1,26 @@
 package com.logycraft.duzzcalll.Activity
 
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
 import android.util.Log
 import android.view.View
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.adwardstark.mtextdrawable.MaterialTextDrawable
+import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.duzzcall.duzzcall.R
 import com.duzzcall.duzzcall.databinding.ActivityOutgoingCallBinding
 import com.logycraft.duzzcalll.LinphoneManager
 import com.logycraft.duzzcalll.Util.Preference
+import com.logycraft.duzzcalll.Util.ProgressHelper
+import com.logycraft.duzzcalll.data.BusinessResponce
+import com.logycraft.duzzcalll.viewmodel.HomeViewModel
+import okhttp3.ResponseBody
+import org.json.JSONObject
 import org.linphone.core.Account
 import org.linphone.core.AudioDevice
 import org.linphone.core.Call
@@ -28,10 +35,15 @@ class OutgoingActivity : AppCompatActivity() {
     private var mIsSpeakerEnabled = false
     private var mIsMicMuted = false
     private lateinit var binding: ActivityOutgoingCallBinding
+    var businessresponce: ArrayList<BusinessResponce> = ArrayList()
+    private lateinit var viewModel: HomeViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityOutgoingCallBinding.inflate(layoutInflater)
+
+        viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
+
         if (Build.VERSION.SDK_INT >= 21) {
             val window = this.window
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
@@ -46,7 +58,7 @@ class OutgoingActivity : AppCompatActivity() {
         binding.txtAnswer.visibility = View.GONE
         binding.txtDecline.visibility = View.GONE
         binding.imageViewEnd.visibility = View.GONE
-        binding.imageViewDialpad.isEnabled=false
+        binding.imageViewDialpad.isEnabled = false
         addCoreListener();
         binding.imageViewSpeakerphone.setOnClickListener(View.OnClickListener {
             val z2: Boolean = !mIsSpeakerEnabled
@@ -110,27 +122,46 @@ class OutgoingActivity : AppCompatActivity() {
 
 //                    binding.textViewUserSipaddress.setText(call.remoteAddress.asStringUriOnly())
                     binding.textViewUserSipaddress.setText(Preference.getCountry(this@OutgoingActivity))
-                    Log.d("outgoingCall", "===="+call.remoteAddress.asStringUriOnly())
+                    Log.d("outgoingCall", "====" + call.remoteAddress.asStringUriOnly())
                 }
 
                 Call.State.Connected -> {
                     Log.d("outgoingCall", "Connectedsss")
                     binding.textViewRinging.setText("Connected")
                     binding.activeCallTimer.visibility = View.VISIBLE
-                    binding.textViewUserName.text = call.remoteAddress.displayName
-                    val timer = binding.activeCallTimer
-                    timer.base =
-                        SystemClock.elapsedRealtime() - (1000 * call.duration) // Linphone timestamps are in seconds
-                    timer.start()
-                    finish()
-                    if (call.remoteAddress.methodParam.equals(" ")){
-                        MaterialTextDrawable.with(this@OutgoingActivity)
-                            .text(call.remoteAddress.username?.substring(0,2) ?: "DC")
-                            .into(binding.imageViewProfile)
-                    }else{
-                        Glide.with(this@OutgoingActivity).load(call.remoteAddress.methodParam).centerCrop()
-                            .into(binding.imageViewProfile)
+
+                    if (!getFirstTwoCharacters(call.remoteAddress.displayName.toString()).equals("00")) {
+                        binding.textViewUserName.setText(call.remoteAddress.displayName)
+                    } else {
+                        binding.textViewUserName.setText("Direct Call")
+
                     }
+                    binding.textViewNumber.setText(call.remoteAddress.username)
+                    getbusinessList(call)
+//                    if (call.remoteAddress.methodParam.equals(" ") ||call.remoteAddress.methodParam=="null") {
+//
+//                        Log.e("nameeeeee", "out0" + binding.textViewUserName.text.toString())
+//
+//                        val split: Array<String> =
+//                            binding.textViewUserName.text.toString().split(" ").toTypedArray()
+//                        val firstword = split[0]
+//                        val secondword = split[1]
+//                        val firstLetter = firstword[0]
+//                        val second = secondword[0]
+//                        val textss = "" + firstLetter + second
+//                        val bitmap = Preference.textToBitmap(textss, Color.parseColor("#2F80ED"))
+//                        binding.imageViewProfileDirectCall.visibility = View.VISIBLE
+//                        binding.card.visibility = View.GONE
+//                        binding.imageViewProfileDirectCall.setImageBitmap(bitmap)
+////                        MaterialTextDrawable.with(this@OutgoingActivity)
+////                            .text(call.remoteAddress.username?.substring(0,2) ?: "DC")
+////                            .into(binding.imageViewProfile)
+//                    } else {
+//                        binding.imageViewProfileDirectCall.visibility = View.GONE
+//                        binding.card.visibility = View.VISIBLE
+//                        Glide.with(this@OutgoingActivity).load(call.remoteAddress.methodParam)
+//                            .into(binding.imageViewProfile)
+//                    }
                 }
 
                 Call.State.Released -> {
@@ -149,28 +180,71 @@ class OutgoingActivity : AppCompatActivity() {
                 Call.State.OutgoingRinging -> {
                     Log.d("outgoingCall", "outgoig ringing")
                     binding.textViewRinging.setText("Connecting..")
-                    if (call.remoteAddress.methodParam.equals(" ")){
-                        MaterialTextDrawable.with(this@OutgoingActivity)
-                            .text(call.remoteAddress.username?.substring(0,2) ?: "DC")
-                            .into(binding.imageViewProfile)
-                    }else{
-                        Glide.with(this@OutgoingActivity).load(call.remoteAddress.methodParam).centerCrop()
-                            .into(binding.imageViewProfile)
-                    }
+                    getbusinessList(call)
+
+//                    if (call.remoteAddress.methodParam.equals(" ") ||call.remoteAddress.methodParam=="null" ) {
+////                        val firstLetter =call.remoteAddress.username
+////                        val textss = firstLetter?.get(0).toString()
+//                        org.linphone.core.tools.Log.e(
+//                            "nameeeeee",
+//                            "out1" + binding.textViewUserName.text.toString()
+//                        )
+//
+//                        val split: Array<String> =
+//                            binding.textViewUserName.text.toString().split(" ").toTypedArray()
+//                        val firstword = split[0]
+//                        val secondword = split[1]
+//                        val firstLetter = firstword[0]
+//                        val second = secondword[0]
+//                        val textss = "" + firstLetter + second
+//                        val bitmap = Preference.textToBitmap(textss, Color.parseColor("#2F80ED"))
+//                        binding.imageViewProfileDirectCall.visibility = View.VISIBLE
+//                        binding.card.visibility = View.GONE
+//                        binding.imageViewProfileDirectCall.setImageBitmap(bitmap)
+////                        MaterialTextDrawable.with(this@OutgoingActivity)
+////                            .text(call.remoteAddress.username?.substring(0,2) ?: "DC")
+////                            .into(binding.imageViewProfile)
+//                    } else {
+//                        binding.imageViewProfileDirectCall.visibility = View.GONE
+//                        binding.card.visibility = View.VISIBLE
+//                        Glide.with(this@OutgoingActivity).load(call.remoteAddress.methodParam)
+//                            .into(binding.imageViewProfile)
+//                    }
 //                    finish();
                 }
 
                 Call.State.OutgoingEarlyMedia -> {
                     Log.d("outgoingCall", "outgoig ringing")
                     binding.textViewRinging.setText("Ringing")
-                    if (call.remoteAddress.methodParam.equals(" ")){
-                        MaterialTextDrawable.with(this@OutgoingActivity)
-                            .text(call.remoteAddress.username?.substring(0,2) ?: "DC")
-                            .into(binding.imageViewProfile)
-                    }else{
-                        Glide.with(this@OutgoingActivity).load(call.remoteAddress.methodParam).centerCrop()
-                            .into(binding.imageViewProfile)
-                    }
+                    getbusinessList(call)
+
+//                    if (call.remoteAddress.methodParam.equals(" ") ||call.remoteAddress.methodParam=="null") {
+//                        org.linphone.core.tools.Log.e(
+//                            "nameeeeee",
+//                            "out2" + binding.textViewUserName.text.toString()
+//                        )
+//
+//                        val split: Array<String> =
+//                            binding.textViewUserName.text.toString().split(" ").toTypedArray()
+//                        val firstword = split[0]
+//                        val secondword = split[1]
+//                        val firstLetter = firstword[0]
+//                        val second = secondword[0]
+//                        val textss = "" + firstLetter + second
+//                        binding.imageViewProfileDirectCall.visibility = View.VISIBLE
+//                        binding.card.visibility = View.GONE
+//                        val bitmap = Preference.textToBitmap(textss, Color.parseColor("#2F80ED"))
+//                        binding.imageViewProfileDirectCall.setImageBitmap(bitmap)
+//
+////                        MaterialTextDrawable.with(this@OutgoingActivity)
+////                            .text(call.remoteAddress.username?.substring(0,2) ?: "DC")
+////                            .into(binding.imageViewProfile)
+//                    } else {
+//                        binding.imageViewProfileDirectCall.visibility = View.GONE
+//                        binding.card.visibility = View.VISIBLE
+//                        Glide.with(this@OutgoingActivity).load(call.remoteAddress.methodParam)
+//                            .into(binding.imageViewProfile)
+//                    }
 
                 }
 
@@ -183,6 +257,78 @@ class OutgoingActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun getbusinessList(call: Call) {
+        viewModel.getBusiness(this@OutgoingActivity)
+
+        viewModel.getbusinessLiveData?.observe(this@OutgoingActivity, androidx.lifecycle.Observer {
+
+            if (it.isSuccess == true && it.Responcecode == 200) {
+                ProgressHelper.dismissProgressDialog()
+
+                it.data?.let { it1 -> businessresponce.addAll(it1) }
+                var paraam = "";
+
+                if (businessresponce != null) {
+                    for (item1 in businessresponce) {
+                        if (item1.lineExtension.equals(call.remoteAddress.username)) {
+
+                            Log.e("errorrellll",""+ item1.businessName.toString())
+                            paraam = item1.businessLogo.toString();
+                            break
+                        }
+                    }
+                    if (paraam == null || paraam.equals("")) {
+                        val split: Array<String> =
+                            binding.textViewUserName.text.toString().split(" ").toTypedArray()
+                        val firstword = split[0]
+                        val secondword = split[1]
+                        val firstLetter = firstword[0]
+                        val second = secondword[0]
+                        val textss = "" + firstLetter + second
+                        val bitmap = Preference.textToBitmap(textss, Color.parseColor("#2F80ED"))
+                        binding.imageViewProfileDirectCall.visibility = View.VISIBLE
+                        binding.card.visibility = View.GONE
+                        binding.imageViewProfileDirectCall.setImageBitmap(bitmap)
+                    } else {
+                        binding.imageViewProfileDirectCall.visibility = View.GONE
+                        binding.card.visibility = View.VISIBLE
+                        Glide.with(this@OutgoingActivity).load(paraam)
+                            .into(binding.imageViewProfile)
+                    }
+
+                } else {
+                    val split: Array<String> =
+                        binding.textViewUserName.text.toString().split(" ").toTypedArray()
+                    val firstword = split[0]
+                    val secondword = split[1]
+                    val firstLetter = firstword[0]
+                    val second = secondword[0]
+                    val textss = "" + firstLetter + second
+                    val bitmap = Preference.textToBitmap(textss, Color.parseColor("#2F80ED"))
+                    binding.imageViewProfileDirectCall.visibility = View.VISIBLE
+                    binding.card.visibility = View.GONE
+                    binding.imageViewProfileDirectCall.setImageBitmap(bitmap)
+                }
+
+
+            } else if (it.error != null) {
+                ProgressHelper.dismissProgressDialog()
+                var errorResponce: ResponseBody = it.error
+                val jsonObj = JSONObject(errorResponce!!.charStream().readText())
+                showMessage(jsonObj.getString("errors"))
+            } else {
+                ProgressHelper.dismissProgressDialog()
+                showMessage("Something Went Wrong!")
+            }
+
+        })
+
+    }
+
+    fun showMessage(message: String?) {
+        Toast.makeText(this, "$message", Toast.LENGTH_LONG).show()
     }
 
     private fun hangUp() {
@@ -217,17 +363,69 @@ class OutgoingActivity : AppCompatActivity() {
                 val call = core.currentCall
                 if (call != null) {
                     org.linphone.core.tools.Log.w("[outgoingCall] Call Nulled !")
-                    binding.textViewUserName.setText(call.remoteAddress.displayName)
-//                    binding.textViewUserSipaddress.setText("Outgoing Call")
-                    binding.textViewUserSipaddress.setText(Preference.getCountry(this@OutgoingActivity))
-                    if (call.remoteAddress.methodParam.equals(" ")){
-                        MaterialTextDrawable.with(this@OutgoingActivity)
-                            .text(call.remoteAddress.username?.substring(0,2) ?: "DC")
-                            .into(binding.imageViewProfile)
-                    }else{
-                        Glide.with(this@OutgoingActivity).load(call.remoteAddress.methodParam).centerCrop()
-                            .into(binding.imageViewProfile)
+                    if (!getFirstTwoCharacters(call.remoteAddress.displayName.toString()).equals("00")) {
+                        binding.textViewUserName.setText(call.remoteAddress.displayName)
+                    } else {
+                        binding.textViewUserName.setText("Direct Call")
+
                     }
+                    binding.textViewNumber.setText(call.remoteAddress.username)//                    binding.textViewUserSipaddress.setText("Outgoing Call")
+                    binding.textViewUserSipaddress.setText(Preference.getCountry(this@OutgoingActivity))
+
+                    getbusinessList(call)
+//                    if (call.remoteAddress.methodParam.equals(" ") ||call.remoteAddress.methodParam=="null") {
+////                        val textss = firstLetter?.get(0).toString()
+//
+//                        org.linphone.core.tools.Log.e(
+//                            "nameeeeee",
+//                            "out3" + binding.textViewUserName.text.toString()
+//                        )
+//
+//                        val split: Array<String> =
+//                            binding.textViewUserName.text.toString().split(" ").toTypedArray()
+//
+//                        var firstLetter = ""
+//                        var second = ""
+//                        var firstword = "D"
+//                        var secondword = "C"
+//
+//                        if (split != null && split.size >= 2) {
+//                            Log.e("nameeeeeeeet","namee")
+//                            if (split[0] != null && split[0].isNotEmpty()) {
+//                                firstword = split[0]
+//                                firstLetter = firstword[0].toString()
+//                            }
+//
+//                            if (split[1] != null && split[1].isNotEmpty()) {
+//                                secondword = split[1]
+//                                second = secondword[0].toString()
+//                            }
+//                        }else{
+//                            Log.e("nameeeeeeeet","errorr")
+//                            firstword = split[0]
+//                            firstLetter = firstword[0].toString()
+//                            second="C"
+//                        }
+//
+//                        val textss = "" + firstLetter + second
+//                        val bitmap = Preference.textToBitmap(textss, Color.parseColor("#2F80ED"))
+//                        binding.imageViewProfileDirectCall.visibility = View.VISIBLE
+//                        binding.card.visibility = View.GONE
+//                        binding.imageViewProfileDirectCall.setImageBitmap(bitmap)
+////                        MaterialTextDrawable.with(this@OutgoingActivity)
+////                            .text(call.remoteAddress.username?.substring(0,2) ?: "DC")
+////                            .into(binding.imageViewProfile)
+//                    } else {
+//                        org.linphone.core.tools.Log.e(
+//                            "nameeeeee",
+//                            "else_out3" + call.remoteAddress.methodParam
+//                        )
+//
+//                        binding.imageViewProfileDirectCall.visibility = View.GONE
+//                        binding.card.visibility = View.VISIBLE
+//                        Glide.with(this@OutgoingActivity).load(call.remoteAddress.methodParam)
+//                            .into(binding.imageViewProfile)
+//                    }
                     // Starting Android 10 foreground service is a requirement to be able to vibrate if app is in background
                     if (call.dir == Call.Dir.Incoming && call.state == Call.State.IncomingReceived && core.isVibrationOnIncomingCallEnabled) {
 //                            vibrate(call.remoteAddress)
@@ -237,8 +435,9 @@ class OutgoingActivity : AppCompatActivity() {
                         binding.imageViewEnd.setOnClickListener(View.OnClickListener {
                             call.terminate()
                         })
-                    } else if (call.state == Call.State.Released ||call.state == Call.State.End||call.state == Call.State.Error) {
+                    } else if (call.state == Call.State.Released || call.state == Call.State.End || call.state == Call.State.Error) {
                         finish()
+
                     }
 
                 } else {
@@ -251,5 +450,13 @@ class OutgoingActivity : AppCompatActivity() {
 //        } else {
 //            org.linphone.core.tools.Log.w("[outgoingCall] CoreManager isn't ready yet...")
 //        }
+    }
+
+    fun getFirstTwoCharacters(input: String): String {
+        if (input.length >= 2) {
+            return input.substring(0, 2)
+        } else {
+            return input
+        }
     }
 }

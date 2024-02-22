@@ -1,39 +1,26 @@
 package com.logycraft.duzzcalll.notifications;
 
+import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.logycraft.duzzcalll.Activity.DashboardActivity;
+import com.logycraft.duzzcalll.Activity.Verify_PhoneActivity;
+import com.logycraft.duzzcalll.helper.notifications.NotificationsManager;
 
 public class ActionReceiver extends BroadcastReceiver {
-
-    @Override
     public void onReceive(Context context, Intent intent) {
-
-        //Toast.makeText(context,"recieved",Toast.LENGTH_SHORT).show();
-
-        String action=intent.getStringExtra("action");
-//        if(action.equals("action1")){
-            performAction1();
-            Intent it = new Intent(context, DashboardActivity.class);
-            context.startActivity(it);
-//        }
-//        else if(action.equals("action2")){
-//            performAction2();
-//
-//        }
-        //This is used to close the notification tray
-//        Intent it = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
-//        context.sendBroadcast(it);
-    }
-
-    public void performAction1(){
-
-    }
-
-    public void performAction2(){
-
+        if (intent.getAction().equals(NotificationsManager.MISSED_CALLS_NOTIF_ID)) {
+            int notificationId = 1;
+            if (notificationId != -1) {
+                // Handle notification dismissal
+                // This could be used to update your app's state or perform some other action
+                Log.d("NotificationDismiss", "Notification dismissed with ID: " + notificationId);
+            }
+        }
     }
 
 }

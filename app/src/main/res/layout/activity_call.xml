@@ -14,12 +14,30 @@
         android:gravity="center"
         android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/image_view_profile"
-            android:layout_width="160dp"
-            android:src="@drawable/user_icon"
-            android:layout_height="160dp"
-            android:layout_centerInParent="true" />
+        <de.hdodenhof.circleimageview.CircleImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/image_view_profile_direct_call"
+            android:layout_width="@dimen/d160"
+            android:layout_centerInParent="true"
+            android:visibility="visible"
+            android:layout_height="@dimen/d160" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card"
+            android:layout_width="170dp"
+            android:layout_height="170dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerInParent="true"
+            app:cardElevation="-10dp"
+            android:visibility="gone"
+            app:cardCornerRadius="@dimen/d50">
+            <ImageView
+                android:id="@+id/image_view_profile"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="@dimen/d5"
+                android:layout_centerVertical="true" />
+        </androidx.cardview.widget.CardView>
 
         <LinearLayout
             android:id="@+id/linear_layout_info"
@@ -30,7 +48,6 @@
             android:layout_marginRight="24dp"
             android:gravity="center_horizontal"
             android:orientation="vertical">
-
 
             <TextView
                 android:id="@+id/text_view_ringing"
@@ -50,7 +67,7 @@
                 android:layout_centerVertical="true"
                 android:fontFamily="@font/poppins_bold"
                 android:paddingHorizontal="40dp"
-                android:text="00(00)"
+                android:text=""
                 android:textColor="#605454"
                 android:textSize="18dp" />
 
@@ -59,12 +76,23 @@
                 android:id="@+id/text_view_user_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/inter_semibold"
+                android:fontFamily="@font/poppins_bold"
                 android:gravity="center_horizontal"
                 android:includeFontPadding="false"
                 android:text="Harshit Khunt"
                 android:textColor="@color/black"
-                android:textSize="23sp" />
+                android:textSize="24dp" />
+
+            <TextView
+                android:id="@+id/text_view_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_light"
+                android:gravity="center_horizontal"
+                android:text="009477788999"
+                android:textColor="@color/black"
+                android:textSize="@dimen/dt18"
+                android:visibility="visible" />
 
             <TextView
                 android:id="@+id/text_view_user_sipaddress"
@@ -89,13 +117,8 @@
                 android:textSize="@dimen/dt18"
                 android:visibility="gone" />
 
-
-
         </LinearLayout>
-
-
     </LinearLayout>
-
 
     <LinearLayout
         android:id="@+id/linear_layout_remote_mute"
@@ -133,7 +156,6 @@
         android:layout_marginRight="60dp"
         android:layout_marginBottom="40dp">
 
-
         <ImageView
             android:id="@+id/image_view_decline"
             android:layout_width="@dimen/d60"
@@ -159,8 +181,6 @@
             android:paddingVertical="@dimen/d10"></TextView>
 
     </RelativeLayout>
-
-
 
     <RelativeLayout
         android:id="@+id/bottom_view"
@@ -204,7 +224,6 @@
             android:src="@drawable/ic_dialpad"
             android:visibility="visible" />
 
-
     </RelativeLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -212,13 +231,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingTop="@dimen/d20"
-
         android:layout_above="@+id/linear_layout_connecting_buttons"
         android:background="@color/white"
         android:layout_marginBottom="@dimen/d15"
         android:visibility="gone"
         android:focusableInTouchMode="true">
-
 
         <com.logycraft.duzzcalll.helper.MyEditText
             android:id="@+id/dialpad_input"
@@ -235,7 +252,6 @@
             android:textColor="@color/black"
             android:textColorHint="#66FFFFFF"
             android:textCursorDrawable="@null"
-
             android:textSize="@dimen/dt20"
             app:layout_constraintBottom_toTopOf="@+id/dialpad_wrapper"
             app:layout_constraintEnd_toStartOf="@+id/dialpad_clear_char"
@@ -307,7 +323,6 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
                     android:text="1" />
-
             </RelativeLayout>
 
             <RelativeLayout

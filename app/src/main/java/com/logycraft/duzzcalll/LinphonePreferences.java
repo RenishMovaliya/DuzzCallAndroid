@@ -276,7 +276,6 @@ public class LinphonePreferences {
         ProxyConfig prxCfg = getProxyConfig(n);
         if (prxCfg == null) {
             LinphoneUtils.displayErrorAlert("Errors", this.mContext);
-            Toast.makeText(mContext, "Error Display!", Toast.LENGTH_SHORT).show();
             return;
         }
         prxCfg.edit();

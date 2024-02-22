@@ -1,33 +1,35 @@
 package com.logycraft.duzzcalll.Activity
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.content.IntentFilter
+import android.graphics.Color
 import android.graphics.Rect
-import android.os.Build
-import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.os.SystemClock
-import android.view.KeyEvent
-import android.view.MotionEvent
-import android.view.View
-import android.view.ViewConfiguration
-import android.view.WindowManager
+import android.os.*
+import android.view.*
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.adwardstark.mtextdrawable.MaterialTextDrawable
+import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.duzzcall.duzzcall.R
 import com.duzzcall.duzzcall.databinding.ActivityCallBinding
 import com.logycraft.duzzcalll.LinphoneManager
 import com.logycraft.duzzcalll.LinphonePreferences
+import com.logycraft.duzzcalll.TimerReceiver
+import com.logycraft.duzzcalll.TimerService
 import com.logycraft.duzzcalll.Util.CallActivityInterface
-import com.logycraft.duzzcalll.Util.LinphoneUtils
 import com.logycraft.duzzcalll.Util.Preference
+import com.logycraft.duzzcalll.Util.ProgressHelper
+import com.logycraft.duzzcalll.data.BusinessResponce
 import com.logycraft.duzzcalll.extention.addCharacter
 import com.logycraft.duzzcalll.extention.disableKeyboard
 import com.logycraft.duzzcalll.extention.getKeyEvent
 import com.logycraft.duzzcalll.helper.ToneGeneratorHelper
 import com.logycraft.duzzcalll.service.LinphoneService
+import com.logycraft.duzzcalll.viewmodel.HomeViewModel
+import okhttp3.ResponseBody
+import org.json.JSONObject
 import org.linphone.core.*
 import org.linphone.core.tools.Log
 import java.util.*
@@ -42,10 +44,15 @@ class CallActivity : AppCompatActivity(), CallActivityInterface {
     private var running = false
     private var wasRunning = false
     private var mIsMicMuted = false
+    private var icCallrunning = true
     private val longPressTimeout = ViewConfiguration.getLongPressTimeout().toLong()
+    var businessresponce: ArrayList<BusinessResponce> = ArrayList()
+    private lateinit var viewModel: HomeViewModel
     private val longPressHandler = Handler(Looper.getMainLooper())
     private val pressedKeys = mutableSetOf<Char>()
     private var toneGeneratorHelper: ToneGeneratorHelper? = null
+    private var timerReceiver: TimerReceiver? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCallBinding.inflate(layoutInflater)
@@ -54,7 +61,8 @@ class CallActivity : AppCompatActivity(), CallActivityInterface {
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
             window.statusBarColor = ContextCompat.getColor(this, R.color.white)
         }
-
+        viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
+        timerReceiver = TimerReceiver(binding.txtTime)
         setContentView(binding.root)
 
         addCoreListener();
@@ -120,27 +128,34 @@ class CallActivity : AppCompatActivity(), CallActivityInterface {
             wasRunning = savedInstanceState.getBoolean("wasRunning")
         }
 
-        running = true
-        val handler = Handler()
-        handler.post(object : Runnable {
-            override fun run() {
-//                val hours = seconds / 3600
-                val minutes = seconds % 3600 / 60
-                val secs = seconds % 60
-                val time = String.format(
-                    Locale.getDefault(),
-                    "%02d:%02d",
+        if (!Preference.getFirstHandler(this@CallActivity)) {
+            Preference.setFirstHandler(this@CallActivity, true)
+            Log.e("rrrrrrrrrrr","hhhhh")
+//            running = true
+//            val handler = Handler()
+//            handler.post(object : Runnable {
+//                override fun run() {
+////                val hours = seconds / 3600
+//                    val minutes = seconds % 3600 / 60
+//                    val secs = seconds % 60
+//                    val time = String.format(
+//                        Locale.getDefault(),
+//                        "%02d:%02d",
+//
+//                        minutes,
+//                        secs
+//                    )
+//                    binding.txtTime.setText(time)
+//                    if (running) {
+//                        seconds++
+//                    }
+//                    handler.postDelayed(this, 1000)
+//                }
+//            })
+            val serviceIntent = Intent(this, TimerService::class.java)
+            startService(serviceIntent)
+        }
 
-                    minutes,
-                    secs
-                )
-                binding.txtTime.setText(time)
-                if (running) {
-                    seconds++
-                }
-                handler.postDelayed(this, 1000)
-            }
-        })
         setupCharClick(binding.dialpad1Holder, '1')
         setupCharClick(binding.dialpad2Holder, '2')
         setupCharClick(binding.dialpad3Holder, '3')
@@ -294,23 +309,18 @@ class CallActivity : AppCompatActivity(), CallActivityInterface {
             org.linphone.core.tools.Log.i("[outgoingCall] CoreListener succesfully added to the Core")
             if (core.callsNb > 0) {
                 org.linphone.core.tools.Log.w("[outgoingCall] Core listener added while at least one call active !")
-//                    startForeground()
                 val call = core.currentCall
                 if (call != null) {
                     org.linphone.core.tools.Log.w("[outgoingCall] Call Nulled !")
-                    binding.textViewUserName.setText(call.remoteAddress.username)
-                    if (call.remoteAddress.methodParam.equals(" ")||call.remoteAddress.methodParam==null) {
-                        MaterialTextDrawable.with(this@CallActivity)
-                            .text(call.remoteAddress.username?.substring(0, 2) ?: "DC")
-                            .into(binding.imageViewProfile)
+                    icCallrunning=true
+                    getbusinessList(call)
+                    if (!getFirstTwoCharacters(call.remoteAddress.displayName.toString()).equals("00")) {
+                        binding.textViewUserName.setText(call.remoteAddress.displayName)
                     } else {
-                        Glide.with(this@CallActivity).load(call.remoteAddress.methodParam)
-                            .centerCrop()
-                            .into(binding.imageViewProfile)
+                        binding.textViewUserName.setText("Direct Call")
+
                     }
-
-
-//                    binding.textViewUserSipaddress.setText("Outgoing Call")
+                    binding.textViewNumber.setText(call.remoteAddress.username)
                     binding.textViewUserSipaddress.setText(Preference.getCountry(this@CallActivity))
 
                     // Starting Android 10 foreground service is a requirement to be able to vibrate if app is in background
@@ -335,6 +345,14 @@ class CallActivity : AppCompatActivity(), CallActivityInterface {
 //        } else {
 //            org.linphone.core.tools.Log.w("[outgoingCall] CoreManager isn't ready yet...")
 //        }
+    }
+
+    fun getFirstTwoCharacters(input: String): String {
+        if (input.length >= 2) {
+            return input.substring(0, 2)
+        } else {
+            return input
+        }
     }
 
     private val coreListener = object : CoreListenerStub() {
@@ -367,24 +385,67 @@ class CallActivity : AppCompatActivity(), CallActivityInterface {
                 Call.State.IncomingReceived -> {
 
                     binding.textViewUserSipaddress.setText(call.remoteAddress.asStringUriOnly())
-                    Log.e("ddd", "" + call.remoteAddress.asStringUriOnly())
+                    Log.e("nameeeeee", "" + call.remoteAddress.asStringUriOnly())
                 }
 
                 Call.State.Connected -> {
                     android.util.Log.d("outgoingCall", "Connectedsss")
                     binding.textViewRinging.setText("Connected")
-                    binding.textViewUserName.text = call.remoteAddress.username
-                    Log.e("nameeeeee")
-                    if (call.remoteAddress.methodParam.equals(" ") || call.remoteAddress.methodParam == null) {
-                        MaterialTextDrawable.with(this@CallActivity)
-                            .text(call.remoteAddress.username?.substring(0, 2) ?: "DC")
-                            .into(binding.imageViewProfile)
+//                    binding.textViewUserName.text = call.remoteAddress.username
+                    icCallrunning=true
+                    getbusinessList(call)
+
+                    if (!getFirstTwoCharacters(call.remoteAddress.displayName.toString()).equals("00")) {
+                        binding.textViewUserName.setText(call.remoteAddress.displayName)
                     } else {
-                        Glide.with(this@CallActivity).load(call.remoteAddress.methodParam)
-                            .centerCrop()
-                            .into(binding.imageViewProfile)
+                        binding.textViewUserName.setText("Direct Call")
+
                     }
-                    binding.activeCallTimer.visibility = View.VISIBLE
+                    binding.textViewNumber.setText(call.remoteAddress.username)
+//                    if (call.remoteAddress.methodParam.equals(" ") || call.remoteAddress.methodParam == null) {
+////                        MaterialTextDrawable.with(this@CallActivity)
+////                            .text(call.remoteAddress.username?.substring(0, 2) ?: "DC")
+////                            .into(binding.imageViewProfile)
+//
+////                        val firstLetter =call.remoteAddress.username
+////                        val textss = firstLetter?.get(0).toString()
+//                        Log.e("nameeeeee","oooooo"+binding.textViewUserName.text.toString())
+//
+//                        val split: Array<String> = binding.textViewUserName.text.toString().split(" ").toTypedArray()
+//                        var firstLetter = ""
+//                        var second = ""
+//                        var firstword = "D"
+//                        var secondword = "C"
+//
+//                        if (split != null && split.size >= 2) {
+//                            android.util.Log.e("nameeeeeeeet","namee")
+//                            if (split[0] != null && split[0].isNotEmpty()) {
+//                                firstword = split[0]
+//                                firstLetter = firstword[0].toString()
+//                            }
+//
+//                            if (split[1] != null && split[1].isNotEmpty()) {
+//                                secondword = split[1]
+//                                second = secondword[0].toString()
+//                            }
+//                        }else{
+//                            android.util.Log.e("nameeeeeeeet","errorr")
+//                            firstword = split[0]
+//                            firstLetter = firstword[0].toString()
+//                            second="C"
+//                        }
+//                        val textss = ""+firstLetter+second
+//                        val bitmap = Preference.textToBitmap(textss, Color.parseColor("#2F80ED"))
+//                        binding.imageViewProfileDirectCall.visibility=View.VISIBLE
+//                        binding.card.visibility=View.GONE
+//                        binding.imageViewProfileDirectCall.setImageBitmap(bitmap)
+//                    } else {
+//                        binding.imageViewProfileDirectCall.visibility=View.GONE
+//                        binding.card.visibility=View.VISIBLE
+//                        Glide.with(this@CallActivity).load(call.remoteAddress.methodParam)
+//                            .into(binding.imageViewProfile)
+//                    }
+
 //                    val timer = binding.activeCallTimer
 //                    timer.base =
 //                        SystemClock.elapsedRealtime() - (1000 * call.duration) // Linphone timestamps are in seconds
@@ -394,6 +455,11 @@ class CallActivity : AppCompatActivity(), CallActivityInterface {
 
                 Call.State.Released -> {
                     android.util.Log.d("outgoingCall", "Released")
+                    Log.e("errrrrrrrr", "destoryy relese")
+                    icCallrunning=false
+                    Preference.setFirstHandler(this@CallActivity, false)
+
+
                     finish();
                 }
 
@@ -414,6 +480,80 @@ class CallActivity : AppCompatActivity(), CallActivityInterface {
                 }
             }
         }
+    }
+
+    private fun getbusinessList(call: Call) {
+        viewModel.getBusiness(this@CallActivity)
+
+        viewModel.getbusinessLiveData?.observe(this@CallActivity, androidx.lifecycle.Observer {
+
+            if (it.isSuccess == true && it.Responcecode == 200) {
+                ProgressHelper.dismissProgressDialog()
+
+                it.data?.let { it1 -> businessresponce.addAll(it1) }
+                var paraam = "";
+
+                if (businessresponce != null) {
+                    for (item1 in businessresponce) {
+                        if (item1.lineExtension.equals(call.remoteAddress.username)) {
+
+                            android.util.Log.e("errorrellll", "" + item1.businessName.toString())
+                            paraam = item1.businessLogo.toString();
+                            break
+                        }
+                    }
+                    if (paraam == null || paraam.equals("")) {
+                        val split: Array<String> =
+                            binding.textViewUserName.text.toString().split(" ").toTypedArray()
+                        val firstword = split[0]
+                        val secondword = split[1]
+                        val firstLetter = firstword[0]
+                        val second = secondword[0]
+                        val textss = "" + firstLetter + second
+                        val bitmap = Preference.textToBitmap(textss, Color.parseColor("#2F80ED"))
+                        binding.imageViewProfileDirectCall.visibility = View.VISIBLE
+                        binding.card.visibility = View.GONE
+                        binding.imageViewProfileDirectCall.setImageBitmap(bitmap)
+                    } else {
+                        binding.imageViewProfileDirectCall.visibility = View.GONE
+                        binding.card.visibility = View.VISIBLE
+                        Glide.with(this@CallActivity).load(paraam)
+                            .into(binding.imageViewProfile)
+                    }
+
+                } else {
+                    val split: Array<String> =
+                        binding.textViewUserName.text.toString().split(" ").toTypedArray()
+                    val firstword = split[0]
+                    val secondword = split[1]
+                    val firstLetter = firstword[0]
+                    val second = secondword[0]
+                    val textss = "" + firstLetter + second
+                    val bitmap = Preference.textToBitmap(textss, Color.parseColor("#2F80ED"))
+                    binding.imageViewProfileDirectCall.visibility = View.VISIBLE
+                    binding.card.visibility = View.GONE
+                    binding.imageViewProfileDirectCall.setImageBitmap(bitmap)
+                }
+
+
+            } else if (it.error != null) {
+                ProgressHelper.dismissProgressDialog()
+                var errorResponce: ResponseBody = it.error
+                val jsonObj = JSONObject(errorResponce!!.charStream().readText())
+                showMessage(jsonObj.getString("errors"))
+            } else {
+                ProgressHelper.dismissProgressDialog()
+                showMessage("Something Went Wrong!")
+            }
+
+
+        })
+
+
+    }
+
+    fun showMessage(message: String?) {
+        Toast.makeText(this, "$message", Toast.LENGTH_LONG).show()
     }
 
     private fun updateButtons() {
@@ -456,6 +596,8 @@ class CallActivity : AppCompatActivity(), CallActivityInterface {
     override fun onResume() {
         super.onResume()
 //        mAudioManager = LinphoneManager.getAudioManager()
+        val filter = IntentFilter("TIMER_UPDATE")
+        registerReceiver(timerReceiver, filter)
         updateButtons()
 
 //        ContactsManager.getInstance().addContactsListener(this)
@@ -472,6 +614,8 @@ class CallActivity : AppCompatActivity(), CallActivityInterface {
     override fun onPause() {
 //        ContactsManager.getInstance().removeContactsListener(this)
         LinphoneManager.getCallManager().setCallInterface(null)
+        unregisterReceiver(timerReceiver)
+
         val core = LinphoneManager.getCore()
         if (LinphonePreferences.instance()
                 .isOverlayEnabled() && core != null && core.currentCall != null
@@ -485,27 +629,15 @@ class CallActivity : AppCompatActivity(), CallActivityInterface {
     }
 
     override fun onDestroy() {
-
-
         super.onDestroy()
-    }
+        if (!icCallrunning){
+            val serviceIntent = Intent(this, TimerService::class.java)
+            stopService(serviceIntent)
+            Preference.setFirstHandler(this@CallActivity, false)
 
-    fun setCurrentCallContactInformation() {
-        updateCurrentCallTimer()
-        val call: Call = mCore.getCurrentCall() ?: return
-//        val contact: LinphoneContact =
-//            ContactsManager.getInstance().findContactFromAddress(call.getRemoteAddress())
-//        if (contact != null) {
-//            ContactAvatar.displayAvatar(contact, this.mContactAvatar as View?, true)
-//            mContactName.setText(contact.getFullName())
-//            return
-//        }
-        val displayName: String = LinphoneUtils.getAddressDisplayName(call.getRemoteAddress())
-//        ContactAvatar.displayAvatar(displayName, mContactAvatar as View?, true)
-        binding.textViewUserName.setText(displayName)
-        MaterialTextDrawable.with(this@CallActivity)
-            .text(displayName.substring(0, 2) ?: "DC")
-            .into(binding.imageViewProfile)
+        }
+
+
     }
 
     private fun updateCurrentCallTimer() {

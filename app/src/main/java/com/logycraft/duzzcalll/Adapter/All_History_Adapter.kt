@@ -10,35 +10,33 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.duzzcall.duzzcall.R
-import com.google.android.libraries.places.api.model.LocalTime
+import com.logycraft.duzzcalll.LinphoneManager
 import com.logycraft.duzzcalll.Model.ContactModel
+import com.logycraft.duzzcalll.Util.ProgressHelper
 import de.hdodenhof.circleimageview.CircleImageView
 import org.linphone.core.Call
 import org.linphone.core.CallLog
 import java.text.SimpleDateFormat
-import java.time.LocalTime.MIN
-import java.time.ZoneOffset.MIN
 import java.util.*
 
 class All_History_Adapter(
     var activity: Activity,
     var calllog: Array<CallLog>,
-    var contactList: MutableList<ContactModel>,
+    var type: String,
     var listener: OnItemClickListener?
 ) : RecyclerView.Adapter<All_History_Adapter.ViewHolder>() {
     var onItemClick: ((String) -> Unit)? = null
+    var missedcalllog: Array<CallLog> = emptyArray()
+    lateinit var calltype: String
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view: View =
             LayoutInflater.from(activity).inflate(R.layout.all_history_list, parent, false)
         return ViewHolder(view)
     }
 
-    fun setContacts(contacts: List<ContactModel>) {
-        contactList.addAll(contacts)
-        notifyDataSetChanged()
-    }
     interface OnItemClickListener {
-        fun onClick(get: String, toString: String)
+        fun onClick(get: String, toString: String, remoteAddress: String?)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -46,7 +44,8 @@ class All_History_Adapter(
 
         var address = ""
         var number = ""
-
+        calltype = type
+        Log.e("callogssssss", "" + calltype)
 
         if (calllog.get(position).getDir() == Call.Dir.Incoming) {
             address = calllog.get(position).getFromAddress().displayName.toString();
@@ -56,29 +55,34 @@ class All_History_Adapter(
                 holder.txt_contact_name.setTextColor(activity.getColor(com.duzzcall.duzzcall.R.color.missedcall_color))
             } else {
                 holder.ic_call_action.setImageResource(R.drawable.ic_incoming_call);
+                holder.txt_contact_name.setTextColor(activity.getColor(com.duzzcall.duzzcall.R.color.text_color_gray))
+
             }
         } else {
             address = calllog.get(position).remoteAddress.displayName.toString();
             number = calllog.get(position).remoteAddress.username.toString();
             holder.ic_call_action.setImageResource(R.drawable.ic_outgoing_call);
+            holder.txt_contact_name.setTextColor(activity.getColor(com.duzzcall.duzzcall.R.color.text_color_gray))
+
         }
 
-        for (item1 in contactList) {
-            Log.e("favourited", "aaaaaaz" + item1.name)
 
-//            val numb = number.toString().replace("00", "")
-            val historycontact: String = number.substring(Math.max(number.length - 9, 0))
-            val phonecontact: String = item1.number.substring(Math.max(item1.number.length - 9, 0))
+        if (!getFirstTwoCharacters(address).equals("00")) {
+            Log.e("favourited", "business--" + address)
+            holder.txt_contact_name.text = address
 
-            if (phonecontact.contains(historycontact)) {
-                Log.e("favourited", "aaaaaaz" + item1.name)
-                holder.txt_contact_name.text = item1.name
-                break
+        } else if (getFirstTwoCharacters(address).equals("00")) {
+            Log.e("favourited", "oo  --" + address)
+            holder.txt_contact_name.text = "Direct Call"
 
-            } else {
-                holder.txt_contact_name.text = address
+        }
+        else if (!getFirstTwoCharacters(address).equals("00")) {
+            Log.e(
+                "favourited",
+                "business--" + address + calllog.get(position).remoteAddress.displayName
+            )
+            holder.txt_contact_name.text = address
 
-            }
         }
         holder.txt_contact_number.text = number
 
@@ -86,15 +90,68 @@ class All_History_Adapter(
         val timestamp: Long = calllog.get(position).getStartDate() * 1000
         val logTime: Calendar = Calendar.getInstance()
         logTime.setTimeInMillis(timestamp)
+        Log.e("dateeeeee", "" + logTime)
         holder.txt_call_time.setText(timestampToHumanDate(logTime))
 
+        if (type.equals("miss")) {
+            holder.tv_call_duration.visibility = View.GONE
+        } else {
+            holder.tv_call_duration.visibility = View.VISIBLE
+        }
         holder.tv_call_duration.setText(ConvertSecondToHHMMSSString(calllog.get(position).duration))
 
         holder.itemView.setOnClickListener {
-            listener?.onClick(number,holder.txt_contact_name.text.toString())
+
+            Log.e("ggggggggggg", "" + calllog.get(position).remoteAddress)
+            var methodparam = " ";
+            if (calllog.get(position).remoteAddress.methodParam == null) {
+                methodparam = " "
+            } else {
+                methodparam = calllog.get(position).remoteAddress.methodParam!!
+            }
+
+            listener?.onClick(number, holder.txt_contact_name.text.toString(), methodparam)
         }
     }
 
+    fun getFirstTwoCharacters(input: String): String {
+        if (input.length >= 2) {
+            return input.substring(0, 2)
+        } else {
+            return input
+        }
+    }
+
+    fun filter(query: String, type: String?) {
+
+        calllog = if (type.equals("All")) {
+            if (query.isEmpty()) {
+                LinphoneManager.getCore().callLogs
+            } else {
+                LinphoneManager.getCore().callLogs.filter {
+                    it.remoteAddress.displayName?.contains(query, true) == true ||
+                            it.remoteAddress.username?.contains(
+                                query,
+                                true
+                            ) == true || it.remoteAddress.displayName == null
+                }.toTypedArray()
+            }
+        } else {
+            if (query.isEmpty()) {
+                LinphoneManager.getCore().callLogs.filter {
+                    it.getDir() == Call.Dir.Incoming && it.getStatus() == Call.Status.Missed
+                }.toTypedArray()
+            } else {
+                LinphoneManager.getCore().callLogs.filter {
+                    it.getDir() == Call.Dir.Incoming && it.getStatus() == Call.Status.Missed &&
+                            (it.fromAddress.displayName?.contains(query, true) == true ||
+                                    it.fromAddress.username?.contains(query, true) == true)
+                }.toTypedArray()
+            }
+        }
+
+        notifyDataSetChanged()
+    }
 
     private fun ConvertSecondToHHMMSSString(nSecondTime: Int): String? {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -124,12 +181,12 @@ class All_History_Adapter(
 
     private fun timestampToHumanDate(cal: Calendar): String? {
         if (isToday(cal)) {
-            return "Today"
+            val dateFormat = SimpleDateFormat("HH:mm")
+            return dateFormat.format(cal.time)
+//            return "Today"
         }
-        if (isYesterday(cal)) {
-            return "Yesterday"
-        }
-        val dateFormat = SimpleDateFormat("EEE d MMM")
+
+        val dateFormat = SimpleDateFormat("EEE")
         return dateFormat.format(cal.time)
     }
 

@@ -7,7 +7,6 @@ import android.text.TextUtils
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.hbb20.CountryCodePicker
@@ -19,7 +18,6 @@ import com.logycraft.duzzcalll.Util.Utils.Companion.FORGOT
 import com.logycraft.duzzcalll.Util.Utils.Companion.FROM
 import com.logycraft.duzzcalll.Util.Utils.Companion.MOBILE
 import com.logycraft.duzzcalll.Util.Utils.Companion.OTP
-import com.logycraft.duzzcalll.Util.Utils.Companion.VERIFY_TOKEN
 import com.logycraft.duzzcalll.data.SendOTP
 import com.duzzcall.duzzcall.databinding.ActivityEditPhoneBinding
 import com.logycraft.duzzcalll.viewmodel.HomeViewModel
@@ -89,44 +87,6 @@ class Edit_PhoneActivity : BaseActivity() {
                 }
 
 
-            }
-
-        })
-    }
-
-    private fun SendOTP(phone: String) {
-
-
-        viewModel.sentOtp(binding.Tvcountrycode.text.toString() + mobileNumber)
-        viewModel.sentOtpLiveData?.observe(this@Edit_PhoneActivity, Observer {
-
-            if (it.isSuccess == true && it.Responcecode == 200) {
-                dismissProgressDialog()
-                var sendOtp: SendOTP? = it.data
-                Preference.saveToken(
-                    this@Edit_PhoneActivity, "Bearer " + sendOtp?.verificationToken.toString()
-                )
-                Preference.saveNumber(
-                    this@Edit_PhoneActivity, binding.Tvcountrycode.text.toString() + mobileNumber
-                )
-                val intent = Intent(this@Edit_PhoneActivity, Verify_PhoneActivity::class.java)
-                intent.putExtra(MOBILE, binding.Tvcountrycode.text.toString() + mobileNumber)
-                intent.putExtra(FROM, intent.getStringExtra(FROM))
-                intent.putExtra(OTP, sendOtp?.tfaCode.toString())
-//                VERIFY_TOKEN = Preference.getToken(this@Edit_PhoneActivity).toString()
-//                Toast.makeText(
-//                    this@Edit_PhoneActivity, sendOtp?.tfaCode.toString(), Toast.LENGTH_LONG
-//                ).show()
-                startActivity(intent)
-                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
-            } else if (it.error != null) {
-                dismissProgressDialog()
-                var errorResponce: ResponseBody = it.error
-                val jsonObj = JSONObject(errorResponce!!.charStream().readText())
-                showError(jsonObj.getString("errors"))
-            } else {
-                dismissProgressDialog()
-                showError("Something Went Wrong!")
             }
 
         })

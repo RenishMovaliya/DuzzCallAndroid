@@ -4,6 +4,7 @@ import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.widget.Toast;
 
 public class CallActionService extends IntentService {
 
@@ -24,6 +25,8 @@ public class CallActionService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         if (intent != null) {
             String action = intent.getAction();
+            Log.e("hrlllllllllllll",""+intent.getAction());
+//            Toast.makeText(this, ""+intent.getAction(), Toast.LENGTH_SHORT).show();
             int callId = intent.getIntExtra("call_id", -1);
             if (ACTION_ANSWER.equals(action)) {
                 Compatibility.getCallAnswerAction(getApplicationContext(), callId);

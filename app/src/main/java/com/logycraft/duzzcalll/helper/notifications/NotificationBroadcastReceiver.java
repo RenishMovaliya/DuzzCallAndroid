@@ -1,14 +1,19 @@
 package com.logycraft.duzzcalll.helper.notifications;
 
+import android.app.Activity;
 import android.app.Notification;
 import android.app.RemoteInput;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Toast;
+
+import androidx.fragment.app.FragmentManager;
 
 import com.logycraft.duzzcalll.LinphoneManager;
 import com.logycraft.duzzcalll.LinphoneContext;
+import com.logycraft.duzzcalll.fragment.HistoryFragment;
 import com.logycraft.duzzcalll.helper.compatibility.Compatibility;
 
 import org.linphone.core.Address;
@@ -31,10 +36,26 @@ import org.linphone.core.tools.Log;
 
 /* loaded from: classes2.dex */
 public class NotificationBroadcastReceiver extends BroadcastReceiver {
+    public static final String NOTIFICATION_DISMISSED_ACTION = "com.duzzcall.duzzcall.NOTIFICATION_DISMISSED";
+
     @Override // android.content.BroadcastReceiver
     public void onReceive(Context context, Intent intent) {
+
         int notifId = intent.getIntExtra(Compatibility.INTENT_NOTIF_ID, 0);
         String localyIdentity = intent.getStringExtra(Compatibility.INTENT_LOCAL_IDENTITY);
+
+        if (intent != null && intent.getAction() != null &&
+                intent.getAction().equals(NOTIFICATION_DISMISSED_ACTION)) {
+            // Notify the fragment about notification dismissal
+//            Intent dismissIntent = new Intent(NOTIFICATION_DISMISSED_ACTION);
+//            context.sendBroadcast(dismissIntent);
+//            Toast.makeText(context, "lllllllllll", Toast.LENGTH_SHORT).show();
+
+        }
+
+
+
+
         if (!LinphoneContext.isReady()) {
             Log.e("[Notification Broadcast Receiver] Context not ready, aborting...");
         } else if (intent.getAction().equals(Compatibility.INTENT_REPLY_NOTIF_ACTION) || intent.getAction().equals(Compatibility.INTENT_MARK_AS_READ_ACTION)) {
@@ -96,6 +117,7 @@ public class NotificationBroadcastReceiver extends BroadcastReceiver {
             }
         }
     }
+
 
     private void onError(Context context, int notifId) {
         Notification replyError = Compatibility.createRepliedNotification(context, "error");

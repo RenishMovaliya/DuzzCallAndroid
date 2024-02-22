@@ -7,6 +7,8 @@ import android.os.Build;
 import android.provider.ContactsContract;
 
 
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
 import com.duzzcall.duzzcall.R;
 import com.logycraft.duzzcalll.Activity.CallActivity;
 import com.logycraft.duzzcalll.Activity.IncomingActivity;
@@ -92,6 +94,7 @@ public class LinphoneContext extends Application {
                 if (Version.sdkStrictlyBelow(24) && !LinphoneContext.this.mLinphoneManager.getCallGsmON()) {
                     LinphoneContext.this.onIncomingReceived();
                 }
+
                 if (!LinphoneService.isReady()) {
                     Log.i("[Context] Service not running, starting it");
                     Intent intent = new Intent("android.intent.action.MAIN");
@@ -106,6 +109,8 @@ public class LinphoneContext extends Application {
                 if (LinphoneService.isReady()) {
                     LinphoneService.instance().destroyOverlay();
                 }
+                Intent markAsReadIntent = new Intent("com.duzzcall.duzzcall.NOTIFICATION_ACTION");
+                LocalBroadcastManager.getInstance( LinphoneContext.this).sendBroadcast(markAsReadIntent);
                 if (state == Call.State.Released && call.getCallLog().getStatus() == Call.Status.Missed) {
                     LinphoneContext.this.mNotificationManager.displayMissedCallNotification(call);
                 }

@@ -13,7 +13,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/d20">
 
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -24,7 +23,6 @@
             android:text="@string/settings"
             android:textColor="@color/appcolour"
             android:textSize="@dimen/dt22" />
-
 
     </androidx.appcompat.widget.Toolbar>
 
@@ -57,7 +55,7 @@
                     android:id="@+id/profile_image"
                     android:layout_width="@dimen/d50"
                     android:layout_height="@dimen/d50"
-                    android:src="@drawable/ic_profile_image" />
+                    android:src="@color/appcolour" />
 
                 <TextView
                     android:id="@+id/tv_profile_name"
@@ -291,6 +289,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/linear_help"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/d10"
@@ -328,12 +327,11 @@
                         android:textSize="@dimen/dt14" />
 
                 </LinearLayout>
-
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/ll_logout"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/d10"
                 android:layout_marginTop="@dimen/d15"
@@ -353,6 +351,7 @@
                     android:fontFamily="@font/poppins_medium"
                     android:includeFontPadding="false"
                     android:padding="@dimen/d5"
+                    android:layout_marginRight="@dimen/d20"
                     android:text="@string/logout"
                     android:textColor="@color/red"
                     android:textSize="@dimen/dt17" />

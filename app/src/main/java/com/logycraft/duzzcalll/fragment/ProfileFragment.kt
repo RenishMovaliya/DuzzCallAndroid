@@ -1,46 +1,29 @@
 package com.logycraft.duzzcalll.fragment
 
-import android.app.Activity
-import android.content.ContentValues
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.net.Uri
-import android.os.Build
+import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
-import android.os.Environment
-import android.provider.MediaStore
 import android.text.TextUtils
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.LinearLayout
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
-import androidx.annotation.RequiresApi
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.adwardstark.mtextdrawable.MaterialTextDrawable
 import com.duzzcall.duzzcall.R
 import com.duzzcall.duzzcall.databinding.FragmentProfileBinding
 import com.example.restapiidemo.home.data.UserModel
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.gson.Gson
 import com.google.gson.JsonElement
-import com.logycraft.duzzcalll.Activity.Terms_And_ConditionActivity
 import com.logycraft.duzzcalll.Util.Preference
 import com.logycraft.duzzcalll.Util.ProgressHelper
 import com.logycraft.duzzcalll.Util.ValidationUtils
 import com.logycraft.duzzcalll.viewmodel.HomeViewModel
 import okhttp3.ResponseBody
 import org.json.JSONObject
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
-import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -51,15 +34,9 @@ class ProfileFragment : Fragment() {
     private lateinit var binding: FragmentProfileBinding
     private var param1: String? = null
     private var param2: String? = null
-    private val CAMERA_REQUEST_CODE = 101
     var userModel = UserModel()
     var imguri = ""
-    private var currentimg = ""
     private lateinit var viewModel: HomeViewModel
-    private val REQUEST_TAKE_PHOTO = 101
-    private val REQUEST_PICK_PHOTO = 102
-    private var photoURI: Uri? = null
-    private var isold = false;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -89,12 +66,11 @@ class ProfileFragment : Fragment() {
             }
         }
         updatedata()
-        binding.rlUpdateProfile.visibility = View.GONE
+        binding.svUpdateProfile.visibility = View.GONE
         binding.rlMainProfile.visibility = View.VISIBLE
 
         binding.imgEdit.setOnClickListener {
-            binding.rlMainProfile.visibility = View.GONE
-            binding.rlUpdateProfile.visibility = View.VISIBLE
+            binding.svUpdateProfile.visibility = View.VISIBLE
 
         }
 
@@ -104,294 +80,29 @@ class ProfileFragment : Fragment() {
         }
 
 
-        val paths = File(
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-            "DuzzCall/ProfilePhoto/duzz_profile_img.jpg"
-        )
-//        if (paths.exists()) {
-//            val imageUri = Uri.parse("file://$paths")
-//            binding.profileImage.setImageURI(imageUri)
-//            binding.updateProfileImage.setImageURI(imageUri)
-//            binding.imgProfileImgfull.setImageURI(imageUri)
-//        } else {
-//            binding.profileImage.setImageResource(R.drawable.ic_profile_image)
-//            binding.updateProfileImage.setImageResource(R.drawable.ic_profile_image)
-//            binding.imgProfileImgfull.setImageResource(R.drawable.ic_profile_image)
-//        }
-
-
-        binding.imgCamera.setOnClickListener {
-            val dialogView: View = layoutInflater.inflate(R.layout.profile_img_dialog, null)
-            val dialog = activity?.let { it1 -> BottomSheetDialog(it1) }
-            dialog?.setContentView(dialogView)
-
-            val img_item = dialog?.findViewById<ImageView>(R.id.img_delete)
-            val ll_camera = dialog?.findViewById<LinearLayout>(R.id.ll_camera)
-            val ll_gallery = dialog?.findViewById<LinearLayout>(R.id.ll_gallery)
-            img_item?.setOnClickListener {
-                dialog.dismiss()
-            }
-            ll_gallery?.setOnClickListener {
-//                checkForPermission()
-                openGallery()
-                dialog.dismiss()
-            }
-
-            ll_camera?.setOnClickListener {
-
-                if (activity?.let {
-                        ContextCompat.checkSelfPermission(
-                            it, android.Manifest.permission.CAMERA
-                        )
-                    } != PackageManager.PERMISSION_GRANTED) {
-                    activity?.let {
-                        ActivityCompat.requestPermissions(
-                            it, arrayOf(android.Manifest.permission.CAMERA), CAMERA_REQUEST_CODE
-                        )
-                    }
-                } else {
-                    openCameraAndSavePhoto()
-                }
-                dialog.dismiss()
-            }
-            dialog?.show()
-        }
-
         binding.btnUpdate.setOnClickListener {
 
             if (isValidate() && isUsernameValid(binding.etName.text.toString())) {
 
+                val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(binding.appcontainer.getWindowToken(), 0)
                 updateProfiledata()
             }
         }
-
-        binding.updateImgCamera.setOnClickListener {
-            binding.imgCamera.performClick();
-        }
-
-    }
-
-
-    private fun getImageFileUri(): Uri? {
-        return try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                createUriAfterQ()
-            } else {
-                createUriForPreQ()
-            }
-        } catch (e: Exception) {
-            Log.e("sdsdsd", "Error occurred while creating the Uri: ${e.localizedMessage}")
-            null
-        }
-    }
-
-    @Throws(IOException::class)
-    private fun createUriForPreQ(): Uri? {
-        val customDirectory = File(
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-            "DuzzCall/ProfilePhoto"
-        )
-
-        if (!customDirectory.exists()) {
-            customDirectory.mkdirs()
-        }
-
-        clearDirectory(
-            customDirectory
-        )
-//        val storageDir = File(
-//            "DuzzCall/ProfilePhoto/"
-//        )
-
-        val mFile = File.createTempFile(
-            "duzz_profile_img", ".jpg", customDirectory
-        )
-        return FileProvider.getUriForFile(
-            requireContext(), getString(R.string.file_provider_authorities), mFile
-        )
-    }
-
-    @RequiresApi(Build.VERSION_CODES.Q)
-    private fun createUriAfterQ(): Uri? {
-        val customDirectory = File(
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-            "DuzzCall/ProfilePhoto"
-        )
-
-        if (!customDirectory.exists()) {
-            customDirectory.mkdirs()
-        }
-
-        clearDirectory(
-            customDirectory
-        )
-        val fileName = "duzz_profile_img.jpg"
-        val storageDir = File(
-            "DuzzCall/ProfilePhoto/"
-        )
-        val resolver = activity?.contentResolver
-        val contentValues = ContentValues().apply {
-            put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
-            put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
-            put(
-                MediaStore.MediaColumns.RELATIVE_PATH,
-                Environment.DIRECTORY_PICTURES + File.separator + storageDir
-            )
-        }
-
-        val uri = resolver?.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
-        return uri
-    }
-
-    @Throws(IOException::class)
-    private fun createImageFile(): File? {
-
-
-        val storageDir = File(
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-            "DuzzCall/ProfilePhoto"
-        )
-        val image = File.createTempFile(
-            "duzz_profile_img",  /* prefix */
-            ".jpg",  /* suffix */
-            storageDir /* directory */
-        )
-
-        // Save a file: path for use with ACTION_VIEW intents
-        val currentPhotoPath = image.absolutePath
-        val fileName =
-            currentPhotoPath.substring(currentPhotoPath.lastIndexOf("/") + 1) // Extract just the file name with extension
-        val fileNameWithoutNumber =
-            fileName.replace(Regex("[0-9]+"), "") // Remove all numeric digits from the file name
-        val newFilePath = currentPhotoPath.replace(fileName, fileNameWithoutNumber)
-        currentimg = newFilePath;
-        return File(newFilePath)
-    }
-
-    fun clearDirectory(directory: File) {
-        if (directory.isDirectory) {
-
-            val files = directory.listFiles()
-            if (files != null) {
-                for (file in files) {
-                    if (file.isDirectory) {
-                        clearDirectory(file)
-                    } else {
-                        file.delete()
-                    }
-                }
-            }
-        }
-        directory.delete()
-    }
-
-    private fun openCameraAndSavePhoto() {
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            isold = false;
-            Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
-                takePictureIntent.resolveActivity(requireContext().packageManager)?.also {
-                    photoURI = getImageFileUri()
-                    photoURI?.let {
-                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, it)
-                        startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO)
-                    }
-                }
-            }
-        } else {
-            isold = true;
-            val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            if (activity?.getPackageManager()
-                    ?.let { takePictureIntent.resolveActivity(it) } != null
-            ) {
-                // Create the File where the photo should go
-                var photoFile: File? = null
-                try {
-                    photoFile = createImageFile()
-                } catch (ex: IOException) {
-                }
-                // Continue only if the File was successfully created
-                if (photoFile != null) {
-                    val photoURI = FileProvider.getUriForFile(
-                        requireActivity(), "com.logycraft.duzzcalll.fileprovider", photoFile
-                    )
-                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
-                    startActivityForResult(takePictureIntent, CAMERA_REQUEST_CODE)
-                }
-            }
-        }
+//        val filter = InputFilter { source, _, _, _, _, _ ->
+//            val pattern = "[a-zA-Z]*".toRegex()
+//            if (source != null && !pattern.matches(source)) {
+//                // If the entered text contains non-alphabetic characters, reject it
+//                ""
+//            } else {
+//                null // Accept the input
+//            }
+//        }
+//
+//        binding.etName.filters = arrayOf(filter)
 
     }
 
-
-    private fun openGallery() {
-        val galleryIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-        startActivityForResult(galleryIntent, REQUEST_PICK_PHOTO)
-    }
-
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        when (requestCode) {
-            REQUEST_TAKE_PHOTO -> {
-                when (resultCode) {
-                    Activity.RESULT_OK -> {
-                        Log.e("aaaa", "User confirm taken photo")
-                        // Show uri in image view
-                        if (isold) {
-                            binding.profileImage.setImageURI(Uri.parse(currentimg))
-                            binding.updateProfileImage.setImageURI(Uri.parse(currentimg))
-                            binding.imgProfileImgfull.setImageURI(Uri.parse(currentimg))
-                        } else {
-                            binding.profileImage.setImageURI(photoURI)
-                            binding.updateProfileImage.setImageURI(photoURI)
-                            binding.imgProfileImgfull.setImageURI(photoURI)
-                        }
-
-                        Log.e("aaaa", "" + currentimg)
-
-
-                    }
-                    Activity.RESULT_CANCELED -> {
-                        Log.e("aaaa", "User denied taken photo")
-                    }
-                }
-            }
-            REQUEST_PICK_PHOTO -> {
-                when (resultCode) {
-                    Activity.RESULT_OK -> {
-                        Log.e("aaaa", "User confirm pick photo")
-
-
-                        val contentURI = data?.data
-                        contentURI?.let {
-                            binding.profileImage.setImageURI(it)
-                            binding.updateProfileImage.setImageURI(it)
-                            binding.imgProfileImgfull.setImageURI(it)
-
-                            val fileName = "duzz_profile_img.jpg"
-
-                            val storageDir = File(
-                                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-                                "DuzzCall/ProfilePhoto"
-                            )
-                            val selectimgpath = getRealPathFromURI(contentURI)
-
-                            val destFile = File(storageDir, fileName)
-                            selectimgpath?.let { it1 -> copyFile(it1, destFile.path) }
-
-
-                        }
-                    }
-                    Activity.RESULT_CANCELED -> {
-                        Log.e("aaaa", "User denied pick photo")
-
-                    }
-                }
-            }
-        }
-
-    }
 
     private fun isValidate(): Boolean {
 
@@ -420,7 +131,7 @@ class ProfileFragment : Fragment() {
             return regex.matches(username)
 
         } else {
-            Toast.makeText(activity, "Invalid Name (John Doe)", Toast.LENGTH_LONG).show()
+            Toast.makeText(activity, "Invalid Name (Firstname Lastname)", Toast.LENGTH_LONG).show()
         }
         return regex.matches(username)
     }
@@ -437,30 +148,38 @@ class ProfileFragment : Fragment() {
             binding.tvName.setText(userModel.first_name + " " + userModel.last_name)
             binding.tvPhone.setText(userModel.phone)
             binding.tvEmail.setText(userModel.email)
-            activity?.let {
-                MaterialTextDrawable.with(it)
-                    .text(userModel.first_name?.substring(0, 2) ?: "DC")
-                    .into(binding.profileImage)
-            }
-            activity?.let {
-                MaterialTextDrawable.with(it)
-                    .text(userModel.first_name?.substring(0, 2) ?: "DC")
-                    .into(binding.imgProfileImgfull)
-            }
-            activity?.let {
-                MaterialTextDrawable.with(it)
-                    .text(userModel.first_name?.substring(0, 2) ?: "DC")
-                    .into(binding.updateProfileImage)
-            }
+
+            val first = userModel.first_name.toString()
+            val last = userModel.last_name.toString()
+            val firstLetter = first[0]
+            val second = last[0]
+            val textss = firstLetter + "" + second
+            val bitmap = Preference.textToBitmap(textss, Color.parseColor("#2F80ED"))
+            binding.profileImage.setImageBitmap(bitmap)
+            binding.imgProfileImgfull.setImageBitmap(bitmap)
+            binding.updateProfileImage.setImageBitmap(bitmap)
 
 
-//            if (userModel.profileimg.equals("")){
-//                binding.profileImage.setImageResource(com.duzzcall.duzzcall.R.drawable.ic_profile_image)
-//            }else{
-//                binding.profileImage.setImageURI(Uri.parse(userModel.profileimg))
+//            activity?.let {
+//                MaterialTextDrawable.with(it)
+//                    .text(userModel.first_name?.substring(0, 2) ?: "DC")
+//                    .into(binding.profileImage)
 //            }
+//            activity?.let {
+//                MaterialTextDrawable.with(it)
+//                    .text(userModel.first_name?.substring(0, 2) ?: "DC")
+//                    .into(binding.imgProfileImgfull)
+//            }
+//            activity?.let {
+//                MaterialTextDrawable.with(it)
+//                    .text(userModel.first_name?.substring(0, 2) ?: "DC")
+//                    .into(binding.updateProfileImage)
+//            }
+
+
             binding.etName.setText(userModel.first_name + " " + userModel.last_name)
             binding.etEmail.setText(userModel.email)
+            binding.tvExtention.setText(userModel.extension)
         }
     }
 
@@ -485,6 +204,7 @@ class ProfileFragment : Fragment() {
                     ProgressHelper.dismissProgressDialog()
                     var usedata: JsonElement? = it.data
 
+
                     val str = binding.etName.text.toString()
                     val separated: List<String> = str.split(" ")
                     userModel.first_name = separated[0]
@@ -495,7 +215,7 @@ class ProfileFragment : Fragment() {
 
                     updatedata()
                     binding.rlMainProfile.visibility = View.VISIBLE
-                    binding.rlUpdateProfile.visibility = View.GONE
+                    binding.svUpdateProfile.visibility = View.GONE
 
                 } else if (it.error != null) {
                     ProgressHelper.dismissProgressDialog()
@@ -527,32 +247,6 @@ class ProfileFragment : Fragment() {
                 }
             })
         }
-    }
-
-    private fun getRealPathFromURI(uri: Uri): String? {
-        val projection = arrayOf(MediaStore.Images.Media.DATA)
-        val cursor = activity?.contentResolver?.query(uri, projection, null, null, null)
-        cursor?.use {
-            val columnIndex = it.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
-            it.moveToFirst()
-            return it.getString(columnIndex)
-        }
-        return null
-    }
-
-    @Throws(IOException::class)
-    private fun copyFile(sourcePath: String, destPath: String) {
-        val sourceFile = File(sourcePath)
-        val destFile = File(destPath)
-        val sourceStream = sourceFile.inputStream()
-        val destStream = FileOutputStream(destFile)
-        val buffer = ByteArray(1024)
-        var length: Int
-        while (sourceStream.read(buffer).also { length = it } > 0) {
-            destStream.write(buffer, 0, length)
-        }
-        sourceStream.close()
-        destStream.close()
     }
 
 }

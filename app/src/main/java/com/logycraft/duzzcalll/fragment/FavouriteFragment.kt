@@ -69,7 +69,7 @@ class FavouriteFragment : Fragment() {
                 override fun onClick(call: BusinessResponce) {
                     if (!call.lineExtension.toString().isEmpty()) {
                         callBackListener?.onCallBack(
-                            call.lineExtension.toString(), call.businessName.toString(), call.businessLogo.toString()
+                            call.lineExtension.toString(), call.businessName.toString()+"-"+call.lineName.toString(), call.businessLogo.toString()
                         );
                     }
                 }
@@ -99,26 +99,7 @@ class FavouriteFragment : Fragment() {
             val intent = Intent(activity, NewContactActivity::class.java)
             startActivity(intent)
         })
-        binding.relativeBusiness.setOnClickListener(View.OnClickListener {
 
-            binding.btnAdd.visibility = View.GONE
-            binding.btnCountrySelect.visibility = View.VISIBLE
-            val size: Int = binding.relativePersonal.getWidth()
-
-            binding.relativeSelectedBtn.animate().x(size.toFloat()).duration = 100
-            val adapter = Business_Contact_Adapter(activity, false)
-            binding.recyclerview.setLayoutManager(LinearLayoutManager(activity))
-            binding.recyclerview.setAdapter(adapter)
-            binding.btnCountrySelect.setOnClickListener(View.OnClickListener {
-                binding.countryCPP.launchCountrySelectionDialog()
-
-            })
-            binding.flagimg.setImageResource(binding.countryCPP.selectedCountryFlagResourceId)
-            binding.countryCPP.setOnCountryChangeListener {
-                binding.flagimg.setImageResource(binding.countryCPP.selectedCountryFlagResourceId)
-            }
-
-        })
 
 
     }

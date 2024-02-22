@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/appcontainer"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white"
     tools:context=".fragment.DialFragment">
@@ -450,7 +451,6 @@ z
             android:elevation="@dimen/medium_margin"
             android:padding="@dimen/normal_margin"
             android:src="@drawable/ic_phone_vector"
-
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

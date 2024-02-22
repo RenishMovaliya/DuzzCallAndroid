@@ -6,6 +6,7 @@ import android.app.RemoteInput;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
@@ -27,6 +28,7 @@ public class ApiTwentyNinePlus {
         replyIntent.putExtra(Compatibility.INTENT_LOCAL_IDENTITY, notif.getLocalIdentity());
         PendingIntent replyPendingIntent = PendingIntent.getBroadcast(context, notif.getNotificationId(), replyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         return new Notification.Action.Builder((int) R.drawable.chat_send_over, context.getString(R.string.notification_reply_label), replyPendingIntent).addRemoteInput(remoteInput).setAllowGeneratedReplies(true).setSemanticAction(Notification.Action.SEMANTIC_ACTION_REPLY).build();
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.P)
@@ -44,6 +46,7 @@ public class ApiTwentyNinePlus {
         answerIntent.setAction(Compatibility.INTENT_ANSWER_CALL_NOTIF_ACTION);
         answerIntent.putExtra(Compatibility.INTENT_NOTIF_ID, callId);
         PendingIntent answerPendingIntent = PendingIntent.getBroadcast(context, callId, answerIntent, 201326592);
+
         return new NotificationCompat.Action.Builder(R.drawable.call_accept, context.getString(R.string.notification_call_answer_label), answerPendingIntent).build();
     }
 
@@ -52,6 +55,7 @@ public class ApiTwentyNinePlus {
         hangupIntent.setAction(Compatibility.INTENT_HANGUP_CALL_NOTIF_ACTION);
         hangupIntent.putExtra(Compatibility.INTENT_NOTIF_ID, callId);
         PendingIntent hangupPendingIntent = PendingIntent.getBroadcast(context, callId, hangupIntent, 201326592);
+
         return new NotificationCompat.Action.Builder(R.drawable.btn_call_end,  context.getString(R.string.notification_call_hangup_label), hangupPendingIntent).build();
     }
 

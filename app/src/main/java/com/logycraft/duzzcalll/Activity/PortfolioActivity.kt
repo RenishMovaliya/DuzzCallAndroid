@@ -168,6 +168,7 @@ class PortfolioActivity : BaseActivity() {
                 userModel.last_name = lastname
                 userModel.email = email
                 userModel.phone = Preference.getNumber(this@PortfolioActivity)
+                userModel.extension = Preference.getExtensionNumber(this@PortfolioActivity)
                 return true
             }
         }

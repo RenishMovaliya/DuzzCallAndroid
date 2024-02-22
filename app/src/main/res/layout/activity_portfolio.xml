@@ -66,7 +66,9 @@
                     android:fontFamily="@font/poppins_light"
                     android:paddingHorizontal="@dimen/dt20"
                     android:singleLine="true"
+                    android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
                     android:textColor="@color/black"
+                    android:inputType="text"
                     android:textColorHint="@color/black"
                     android:textSize="@dimen/dt14" />
 
@@ -90,6 +92,8 @@
                     android:fontFamily="@font/poppins_light"
                     android:paddingHorizontal="@dimen/dt20"
                     android:singleLine="true"
+                    android:inputType="text"
+                    android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
                     android:textColor="@color/black"
                     android:textColorHint="@color/black"
                     android:textSize="@dimen/dt14" />

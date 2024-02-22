@@ -13,16 +13,25 @@ import android.os.Build;
 import android.service.notification.StatusBarNotification;
 
 
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
 import com.duzzcall.duzzcall.R;
+import com.duzzcall.duzzcall.databinding.FragmentHistoryBinding;
+import com.google.gson.Gson;
 import com.logycraft.duzzcalll.Activity.CallActivity;
 import com.logycraft.duzzcalll.Activity.DashboardActivity;
 import com.logycraft.duzzcalll.Activity.IncomingActivity;
 import com.logycraft.duzzcalll.Activity.OutgoingActivity;
+import com.logycraft.duzzcalll.Activity.SplashActivity;
 import com.logycraft.duzzcalll.LinphoneManager;
 import com.logycraft.duzzcalll.Util.LinphoneUtils;
+import com.logycraft.duzzcalll.fragment.HistoryFragment;
+import com.logycraft.duzzcalll.helper.CallBackListener;
 import com.logycraft.duzzcalll.helper.compatibility.Compatibility;
 import com.logycraft.duzzcalll.service.LinphoneService;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.linphone.core.Address;
 import org.linphone.core.Call;
 import org.linphone.core.ChatMessage;
@@ -31,17 +40,15 @@ import org.linphone.core.ChatRoom;
 import org.linphone.core.ChatRoomCapabilities;
 import org.linphone.core.Core;
 import org.linphone.core.CoreListenerStub;
-import org.linphone.core.Reason;
 import org.linphone.core.tools.Log;
 import org.linphone.core.tools.compatibility.DeviceUtils;
 
-import java.io.File;
 import java.util.HashMap;
 
 /* loaded from: classes2.dex */
 public class NotificationsManager {
-    private static final int MISSED_CALLS_NOTIF_ID = 2;
-    private static final int SERVICE_NOTIF_ID = 1;
+    public static final int MISSED_CALLS_NOTIF_ID = 2;
+    public static final int EXTRA_NOTIFICATION_ID = 1;
     private final Context mContext;
     private int mLastNotificationId;
     private CoreListenerStub mListener;
@@ -55,6 +62,7 @@ public class NotificationsManager {
 
     public NotificationsManager(Context context) {
         PendingIntent pendingIntent;
+        Intent notifIntent1;
         this.mContext = context;
         @SuppressLint("WrongConstant") NotificationManager notificationManager = (NotificationManager) context.getSystemService("notification");
         this.mNM = notificationManager;
@@ -78,13 +86,20 @@ public class NotificationsManager {
         } catch (Exception e) {
             Log.e(e);
         }
-        Intent notifIntent = new Intent(this.mContext, DashboardActivity.class);
-        notifIntent.putExtra("Notification", true);
-        addFlagsToIntent(notifIntent);
+
+//        if (Preference.INSTANCE.getFirstUser(mContext)){
+//             notifIntent1 = new Intent(this.mContext, DashboardActivity.class);
+//        }else {
+//             notifIntent1 = new Intent(this.mContext, LoginScreen.class);
+//        }
+        notifIntent1 = new Intent(this.mContext, SplashActivity.class);
+
+        notifIntent1.putExtra("Notification", true);
+        addFlagsToIntent(notifIntent1);
         if (Build.VERSION.SDK_INT >= 23) {
-            pendingIntent = PendingIntent.getActivity(this.mContext, 0, notifIntent, 201326592);
+            pendingIntent = PendingIntent.getActivity(this.mContext, 0, notifIntent1, 201326592);
         } else {
-            pendingIntent = PendingIntent.getActivity(this.mContext, 0, notifIntent, 134217728);
+            pendingIntent = PendingIntent.getActivity(this.mContext, 0, notifIntent1, 134217728);
         }
         Context context2 = this.mContext;
         this.mServiceNotification = Compatibility.createNotification(context2, context2.getString(R.string.service_name), "", R.drawable.app_logo_notification, R.drawable.app_logo_notification, bm, pendingIntent, -2, true);
@@ -256,6 +271,8 @@ public class NotificationsManager {
 
     public void dismissNotification(int notifId) {
         Log.i("[Notifications Manager] Dismissing " + notifId);
+        Log.e("notifyyyyyyy", "dismiisss");
+
         this.mNM.cancel(notifId);
     }
 
@@ -369,11 +386,17 @@ public class NotificationsManager {
 //        displayMessageNotificationFromNotifiable(notif, fromSipUri, localIdentity.asStringUriOnly());
     }
 
+
     public void displayMissedCallNotification(Call call) {
         String body = "missed";
-        String body2="Call";
+        String body2 = "Call";
         Intent missedCallNotifIntent = new Intent(this.mContext, DashboardActivity.class);
         addFlagsToIntent(missedCallNotifIntent);
+        Context context = this.mContext;
+
+        //        Intent markAsReadIntent = new Intent(context, HistoryFragment.NotificationBroadcastReceiver2.class);
+        Intent markAsReadIntent = new Intent("com.duzzcall.duzzcall.NOTIFICATION_ACTION");
+        LocalBroadcastManager.getInstance(context).sendBroadcast(markAsReadIntent);
         @SuppressLint("WrongConstant") PendingIntent pendingIntent = PendingIntent.getActivity(this.mContext, 2, missedCallNotifIntent, 134217728);
         int missedCallCount = 2;
 //        int missedCallCount = LinphoneManager.getCore().getMissedCallsCount();
@@ -395,9 +418,10 @@ public class NotificationsManager {
 //            Log.i("[Notifications Manager] Creating missed call notification");
 //            body = body2;
 //        }
-        Context context = this.mContext;
         Notification notif = Compatibility.createMissedCallNotification(context, context.getString(R.string.missed_calls_notif_title), body, pendingIntent, missedCallCount);
         sendNotification(2, notif);
+
+
     }
 
     @SuppressLint("WrongConstant")
@@ -421,14 +445,56 @@ public class NotificationsManager {
             callNotifIntentClass = OutgoingActivity.class;
         }
         Intent callNotifIntent = new Intent(this.mContext, callNotifIntentClass);
+
         callNotifIntent.addFlags(268435456);
+
+
         if (Build.VERSION.SDK_INT >= 23) {
             pendingIntent = PendingIntent.getActivity(this.mContext, 0, callNotifIntent, 201326592);
+//            pendingIntent = PendingIntent.getBroadcast(this.mContext, 0, intaa, 201326592);
+
         } else {
             pendingIntent = PendingIntent.getActivity(this.mContext, 0, callNotifIntent, 134217728);
+//            pendingIntent = PendingIntent.getBroadcast(this.mContext, 0, intaa, 134217728);
+
         }
         Address address = call.getRemoteAddress();
+
+        Gson gson = new Gson();
+        String json = gson.toJson(address);
+        if (address != null) {
+            try {
+                String param;
+                // Create a JSON object and add remote address information
+                if (address.getMethodParam() == null) {
+                    param = "null";
+                } else {
+                    param = address.getMethodParam();
+                }
+                JSONObject remoteAddressJson = new JSONObject();
+                remoteAddressJson.put("userName", address.getDisplayName());
+                remoteAddressJson.put("domain", address.getDomain());
+                remoteAddressJson.put("displayName", address.getDisplayName());
+                remoteAddressJson.put("sipUri", address.asString());
+                remoteAddressJson.put("methodParams", param);
+
+
+                // Log the JSON representation
+                Log.e("responseeeee", "business--" + remoteAddressJson);
+                Log.e("responseeeee", "--" + json);
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        } else {
+            Log.d("LinphoneCall", "Remote Address is null");
+        }
+
+
         String addressAsString = address.asStringUriOnly();
+        String Image = address.getMethodParam();
+
         Notifiable notif3 = this.mCallNotifMap.get(addressAsString);
         if (notif3 != null) {
             notif = notif3;
@@ -500,18 +566,18 @@ public class NotificationsManager {
 //            name = contact.getFullName();
 //            name = "contact.getFullName()";
 //        } else {
-            name = LinphoneUtils.getAddressDisplayName(address);
+        name = LinphoneUtils.getAddressDisplayName(address);
 //            name = "LinphoneUtils.getAddressDisplayName(address)";
 ////        }
         boolean isIncoming = callNotifIntentClass == IncomingActivity.class;
         if (isIncoming) {
-            notification = Compatibility.createIncomingCallNotification(this.mContext, notif.getNotificationId(), null, name, addressAsString, pendingIntent);
+            notification = Compatibility.createIncomingCallNotification(this.mContext, notif.getNotificationId(), Image, name, addressAsString, pendingIntent);
             notif2 = notif;
             i = 1;
         } else {
             notif2 = notif;
             i = 1;
-            notification = Compatibility.createInCallNotification(this.mContext, notif.getNotificationId(), this.mContext.getString(notificationTextId), iconId, null, name, pendingIntent);
+            notification = Compatibility.createInCallNotification(this.mContext, notif.getNotificationId(), this.mContext.getString(notificationTextId), iconId, Image, name, pendingIntent);
         }
         if (isServiceNotificationDisplayed() || isIncoming) {
             sendNotification(notif2.getNotificationId(), notification);

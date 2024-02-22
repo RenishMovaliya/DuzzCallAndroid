@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragment.ContactFragment">
 
     <androidx.appcompat.widget.Toolbar
@@ -16,11 +16,11 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:layout_marginLeft="@dimen/d20"
             android:fontFamily="@font/poppins_bold"
             android:includeFontPadding="false"
             android:text="@string/recent"
-            android:layout_gravity="center_horizontal"
             android:textColor="@color/appcolour"
             android:textSize="@dimen/dt22" />
 
@@ -68,10 +68,10 @@
 
             <RelativeLayout
                 android:id="@+id/btnAdd"
-                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="42dp"
-                android:layout_weight="4.8">
+                android:layout_weight="4.8"
+                android:visibility="gone">
 
                 <ImageView
                     android:layout_width="@dimen/d50"
@@ -151,10 +151,7 @@
                         android:textColor="@color/tapbar_textcolor"
                         android:textSize="18dp" />
 
-
                 </RelativeLayout>
-
-
                 <RelativeLayout
                     android:id="@+id/relative_missed"
                     android:layout_width="match_parent"
@@ -172,7 +169,6 @@
 
                 </RelativeLayout>
 
-
             </LinearLayout>
         </FrameLayout>
 
@@ -180,8 +176,9 @@
             android:id="@+id/recyclerview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            />
+            android:scrollbarSize="5dp"
+            android:scrollbars="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
     </LinearLayout>
 </RelativeLayout>

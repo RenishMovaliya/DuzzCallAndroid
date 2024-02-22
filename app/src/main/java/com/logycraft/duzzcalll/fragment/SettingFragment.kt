@@ -1,31 +1,27 @@
 package com.logycraft.duzzcalll.fragment
 
-import android.Manifest
-import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
-import android.content.pm.PackageManager
+import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Environment
-import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.cardview.widget.CardView
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import com.adwardstark.mtextdrawable.MaterialTextDrawable
+import com.duzzcall.duzzcall.R
 import com.duzzcall.duzzcall.databinding.FragmentSettingBinding
 import com.example.restapiidemo.home.data.UserModel
+import com.logycraft.duzzcalll.Activity.HelpActivity
 import com.logycraft.duzzcalll.Activity.LoginScreen
 import com.logycraft.duzzcalll.LinphoneManager
 import com.logycraft.duzzcalll.Util.Preference
-import java.io.File
+
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -54,50 +50,41 @@ class SettingFragment : Fragment() {
     @SuppressLint("ResourceAsColor")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        val customDirectory = File(
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-            "DuzzCall/ProfilePhoto"
-        )
-
-        if (!customDirectory.exists()) {
-            customDirectory.mkdirs()
-        }
-        ActivityCompat.requestPermissions(
-            requireActivity(),
-            arrayOf(
-                READ_EXTERNAL_STORAGE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.READ_MEDIA_IMAGES,
-                Manifest.permission.MANAGE_EXTERNAL_STORAGE,
-            ),
-            101
-        )
-
-
         binding.llLogout.setOnClickListener {
             val dialog = activity?.let { it1 ->
                 Dialog(
-                    it1, android.R.style.Theme_Light_NoTitleBar_Fullscreen
+                    it1, R.style.Theme_DuzzCalll
                 )
             }
             dialog?.setContentView(com.duzzcall.duzzcall.R.layout.logout_dialog)
             dialog?.setCancelable(false)
             dialog?.window!!.setBackgroundDrawable(ColorDrawable(android.R.color.transparent))
+//            dialog?.window!!.statusBarColor = activity?.let { it1 -> ContextCompat.getColor(it1, R.color.appcolour) }!!
 
+            dialog?.window?.let {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    it.decorView.systemUiVisibility = View.STATUS_BAR_VISIBLE
+                }
+            }
             val cv_logout = dialog?.findViewById<CardView>(com.duzzcall.duzzcall.R.id.cv_logout)
             val cv_cancel = dialog?.findViewById<CardView>(com.duzzcall.duzzcall.R.id.cv_cancel)
             cv_logout?.setOnClickListener {
                 activity?.let { it1 -> Preference.setFirstUser(it1, false) }
                 val linphoneCore = LinphoneManager.getCore()
 
-                linphoneCore.setDefaultProxyConfig(null);
-                linphoneCore.clearAllAuthInfo();
-                linphoneCore.clearProxyConfig();
-                linphoneCore.clearCallLogs()
+                linphoneCore?.let {
+                    it.terminateAllCalls()
+                    it.clearProxyConfig()
+                    it.clearAllAuthInfo()
+                    it.clearCallLogs()
+                    it.setDefaultProxyConfig(null)
+                }
+
                 val intent = Intent(
                     activity, LoginScreen::class.java
                 )
                 startActivity(intent)
+                activity?.finish()
 
                 dialog?.dismiss()
             }
@@ -105,128 +92,18 @@ class SettingFragment : Fragment() {
             dialog?.show()
         }
 
-        val paths = File(
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-            "DuzzCall/ProfilePhoto/duzz_profile_img.jpg"
-        )
-
-        if (paths.exists()) {
-            val imageUri = Uri.parse("file://$paths")
-            binding.profileImage.setImageURI(imageUri)
-        } else {
-            binding.profileImage.setImageResource(com.duzzcall.duzzcall.R.drawable.ic_profile_image)
+        binding.linearHelp.setOnClickListener {
+            val intent = Intent(activity, HelpActivity::class.java)
+            startActivity(intent)
         }
-
-        val readImagePermission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-            android.Manifest.permission.READ_MEDIA_IMAGES
-        else
-            android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 
         binding.linAccountsetting.setOnClickListener {
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                // Call isExternalStorageManager() on Android 11 and higher
-                if (Environment.isExternalStorageManager()) {
-//            internal = File("/sdcard")
-//            internalContents = internal.listFiles()
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                        android.Manifest.permission.READ_MEDIA_IMAGES
-                        activity?.let { it1 ->
-                            ActivityCompat.requestPermissions(
-                                it1,
-                                arrayOf(
-                                    android.Manifest.permission.READ_MEDIA_IMAGES,
-                                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                                    Manifest.permission.MANAGE_EXTERNAL_STORAGE
-                                ),
-                                1
-                            )
-                        }
-                    } else {
-                        activity?.let { it1 ->
-                            ActivityCompat.requestPermissions(
-                                it1,
-                                arrayOf(
-                                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                                    Manifest.permission.MANAGE_EXTERNAL_STORAGE
-                                ),
-                                101
-                            )
-                        }
-                    }
-                    if (activity?.let { it1 ->
-                            ContextCompat.checkSelfPermission(
-                                it1,
-                                readImagePermission
-                            )
-                        } == PackageManager.PERMISSION_GRANTED) {
-                        val newFragment: Fragment = ProfileFragment()
-                        val transaction = activity?.supportFragmentManager?.beginTransaction()
-                        transaction?.add(com.duzzcall.duzzcall.R.id.fragment_container, newFragment)
-                        transaction?.addToBackStack(null)
-                        transaction?.commit()
-
-                    } else {
-
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                            android.Manifest.permission.READ_MEDIA_IMAGES
-                            activity?.let { it1 ->
-                                ActivityCompat.requestPermissions(
-                                    it1,
-                                    arrayOf(android.Manifest.permission.READ_MEDIA_IMAGES),
-                                    101
-                                )
-                            }
-                        } else {
-                            activity?.let { it1 ->
-                                ActivityCompat.requestPermissions(
-                                    it1,
-                                    arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                                    101
-                                )
-                            }
-                        }
-                    }
-                } else {
-                    val permissionIntent =
-                        Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION)
-                    startActivity(permissionIntent)
-                }
-            } else {
-                if (activity?.let { it1 ->
-                        ContextCompat.checkSelfPermission(
-                            it1,
-                            readImagePermission
-                        )
-                    } == PackageManager.PERMISSION_GRANTED) {
-                    val newFragment: Fragment = ProfileFragment()
-                    val transaction = activity?.supportFragmentManager?.beginTransaction()
-                    transaction?.add(com.duzzcall.duzzcall.R.id.fragment_container, newFragment)
-                    transaction?.addToBackStack(null)
-                    transaction?.commit()
-
-                } else {
-
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                        android.Manifest.permission.READ_MEDIA_IMAGES
-                        activity?.let { it1 ->
-                            ActivityCompat.requestPermissions(
-                                it1,
-                                arrayOf(android.Manifest.permission.READ_MEDIA_IMAGES),
-                                101
-                            )
-                        }
-                    } else {
-                        activity?.let { it1 ->
-                            ActivityCompat.requestPermissions(
-                                it1,
-                                arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                                101
-                            )
-                        }
-                    }
-                }
-            }
+            val newFragment: Fragment = ProfileFragment()
+            val transaction = activity?.supportFragmentManager?.beginTransaction()
+            transaction?.replace(com.duzzcall.duzzcall.R.id.fragment_container, newFragment)
+            transaction?.addToBackStack(null)
+            transaction?.commit()
 
 
         }
@@ -238,27 +115,33 @@ class SettingFragment : Fragment() {
         if (userModel.first_name.equals(" ")) {
             binding.tvProfileName.setText("John Doi")
             activity?.let {
-                MaterialTextDrawable.with(it)
-                    .text(binding.tvProfileName.text.toString()?.substring(0, 2) ?: "DC")
-                    .into(binding.profileImage)
+                val firstLetter =binding.tvProfileName.text.toString()
+                val textss = firstLetter?.get(0).toString()
+                val bitmap = Preference.textToBitmap(textss, Color.parseColor("#2F80ED"))
+                binding.profileImage.setImageBitmap(bitmap)
+//                MaterialTextDrawable.with(it)
+//                    .text(binding.tvProfileName.text.toString()?.substring(0, 2) ?: "DC")
+//                    .into(binding.profileImage)
             }
+
 
         } else {
             binding.tvProfileName.setText(userModel.first_name + " " + userModel.last_name)
-            activity?.let {
-                MaterialTextDrawable.with(it)
-                    .text(userModel.first_name?.substring(0, 2) ?: "DC")
-                    .into(binding.profileImage)
-            }
+            val first = userModel.first_name.toString()
+            val last = userModel.last_name.toString()
+            val firstLetter = first[0]
+            val second = last[0]
+            val textss = firstLetter+""+second
+            val bitmap = Preference.textToBitmap(textss, Color.parseColor("#2F80ED"))
+            binding.profileImage.setImageBitmap(bitmap)
+//            activity?.let {
+//                MaterialTextDrawable.with(it)
+//                    .colorMode(MaterialTextDrawable.MaterialColorMode.DARK)
+//                    .text(userModel.first_name?.substring(0, 2) ?: "DC")
+//                    .into(binding.profileImage)
+//            }
 
         }
-
-//        if (userModel.profileimg==null && userModel.profileimg.equals("") && userModel.profileimg?.isEmpty()!!){
-//            binding.profileImage.setImageResource(com.duzzcall.duzzcall.R.drawable.ic_profile_image)
-//        }else{
-//            binding.profileImage.setImageURI(Uri.parse(userModel.profileimg))
-//
-//        }
 
 
     }

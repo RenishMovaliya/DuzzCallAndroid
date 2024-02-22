@@ -2,27 +2,40 @@ package com.logycraft.duzzcalll.fragment
 
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
+import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Rect
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.provider.ContactsContract
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.*
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.annotation.Nullable
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.duzzcall.duzzcall.R
 import com.duzzcall.duzzcall.databinding.FragmentDialBinding
+import com.logycraft.duzzcalll.LinphoneManager
+import com.logycraft.duzzcalll.Model.ContactModel
+import com.logycraft.duzzcalll.Util.ProgressHelper
+import com.logycraft.duzzcalll.data.BusinessResponce
 import com.logycraft.duzzcalll.extention.addCharacter
 import com.logycraft.duzzcalll.extention.disableKeyboard
 import com.logycraft.duzzcalll.extention.getKeyEvent
 import com.logycraft.duzzcalll.helper.CallBackListener
 import com.logycraft.duzzcalll.helper.ToneGeneratorHelper
+import com.logycraft.duzzcalll.viewmodel.HomeViewModel
+import okhttp3.ResponseBody
+import org.json.JSONObject
+import org.linphone.core.CallLog
 
 
 import java.util.*
@@ -46,6 +59,15 @@ class DialFragment : Fragment() {
     private val longPressHandler = Handler(Looper.getMainLooper())
     private val pressedKeys = mutableSetOf<Char>()
     private var callBackListener: CallBackListener? = null
+    var businessresponce: ArrayList<BusinessResponce> = ArrayList()
+    private lateinit var viewModel: HomeViewModel
+    private var dialname = "";
+    private var dialImage = "";
+    lateinit var core: Array<CallLog>
+    private val contactList: MutableList<ContactModel> = mutableListOf()
+    private val READ_CONTACTS_PERMISSION_CODE = 123
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -67,11 +89,13 @@ class DialFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentDialBinding.inflate(inflater, container, false);
+        viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
         return binding.getRoot();
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         hasRussianLocale = Locale.getDefault().language == "ru"
+
 
 
         if (activity?.let {
@@ -93,93 +117,13 @@ class DialFragment : Fragment() {
             } != PackageManager.PERMISSION_GRANTED) {
             activity?.let {
                 ActivityCompat.requestPermissions(
-                    it, arrayOf(android.Manifest.permission.RECORD_AUDIO), 123
+                    it, arrayOf(android.Manifest.permission.RECORD_AUDIO,android.Manifest.permission.READ_CONTACTS), 123
                 )
             }
         }
-//        dialpad_1_holder = view.findViewById(R.id.dialpad_1_holder)
-//        dialpad_2_holder = view.findViewById(R.id.dialpad_2_holder)
-//        dialpad_3_holder = view.findViewById(R.id.dialpad_3_holder)
-//        dialpad_4_holder = view.findViewById(R.id.dialpad_4_holder)
-//        dialpad_5_holder = view.findViewById(R.id.dialpad_5_holder)
-//        dialpad_6_holder = view.findViewById(R.id.dialpad_6_holder)
-//        dialpad_7_holder = view.findViewById(R.id.dialpad_7_holder)
-//        dialpad_8_holder = view.findViewById(R.id.dialpad_8_holder)
-//        dialpad_9_holder = view.findViewById(R.id.dialpad_9_holder)
-//        dialpad_0_holder = view.findViewById(R.id.dialpad_0_holder)
-//        dialpad_plus_holder = view.findViewById(R.id.dialpad_plus_holder)
-//        dialpad_hashtag_holder = view.findViewById(R.id.dialpad_hashtag_holder)
-//        dialpad_asterisk_holder = view.findViewById(R.id.dialpad_asterisk_holder)
-//        dialpad_input = view.findViewById(R.id.dialpad_input)
 
-//        setupMaterialScrollListener(dialpad_list, dialpad_toolbar)
-//        updateNavigationBarColor(getProperBackgroundColor())
 
-//        if (checkAppSideloading()) {
-//            return
-//        }
-
-//        if (config.hideDialpadNumbers) {
-//            dialpad_1_holder.isVisible = false
-//            dialpad_2_holder.isVisible = false
-//            dialpad_3_holder.isVisible = false
-//            dialpad_4_holder.isVisible = false
-//            dialpad_5_holder.isVisible = false
-//            dialpad_6_holder.isVisible = false
-//            dialpad_7_holder.isVisible = false
-//            dialpad_8_holder.isVisible = false
-//            dialpad_9_holder.isVisible = false
-//            dialpad_plus_holder.isVisible = true
-//            dialpad_0_holder.visibility = View.INVISIBLE
-//        }
-
-//        arrayOf(
-//            dialpad_0_holder,
-//            dialpad_1_holder,
-//            dialpad_2_holder,
-//            dialpad_3_holder,
-//            dialpad_4_holder,
-//            dialpad_5_holder,
-//            dialpad_6_holder,
-//            dialpad_7_holder,
-//            dialpad_8_holder,
-//            dialpad_9_holder,
-//            bindingdialpad_plus_holder,
-//            dialpad_asterisk_holder,
-//            dialpad_hashtag_holder
-//        ).forEach {
-//            it.background = ResourcesCompat.getDrawable(resources, R.drawable.pill_background,
-//                activity?.theme
-//            )
-////            it.background?.alpha = 30
-//        }
-
-//        setupOptionsMenu()
-//        speedDialValues = config.getSpeedDialValues()
-//        privateCursor = activity.getMyContactsCursor(favoritesOnly = false, withPhoneNumbersOnly = true)
-
-//        toneGeneratorHelper = ToneGeneratorHelper(this, DIALPAD_TONE_LENGTH_MS)
-
-//        if (hasRussianLocale) {
-//            initRussianChars()
-//            dialpad_2_letters.append("\nАБВГ")
-//            dialpad_3_letters.append("\nДЕЁЖЗ")
-//            dialpad_4_letters.append("\nИЙКЛ")
-//            dialpad_5_letters.append("\nМНОП")
-//            dialpad_6_letters.append("\nРСТУ")
-//            dialpad_7_letters.append("\nФХЦЧ")
-//            dialpad_8_letters.append("\nШЩЪЫ")
-//            dialpad_9_letters.append("\nЬЭЮЯ")
-//
-//            val fontSize = resources.getDimension(R.dimen.small_text_size)
-//            arrayOf(
-//                dialpad_2_letters, dialpad_3_letters, dialpad_4_letters, dialpad_5_letters, dialpad_6_letters, dialpad_7_letters, dialpad_8_letters,
-//                dialpad_9_letters
-//            ).forEach {
-//                it.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize)
-//            }
-//        }
-
+        getbusinessList()
         setupCharClick(binding.dialpad1Holder, '1')
         setupCharClick(binding.dialpad2Holder, '2')
         setupCharClick(binding.dialpad3Holder, '3')
@@ -208,15 +152,76 @@ class DialFragment : Fragment() {
                         it, arrayOf(android.Manifest.permission.RECORD_AUDIO), 123
                     )
                 }
-            }else{
-                if (!binding.dialpadInput.text.toString().isEmpty()) {
-                    callBackListener?.onCallBack(
-                        binding.dialpadInput.text.toString(),
-                        binding.dialpadInput.text.toString(),
-                        " "
-                    );
+            }
+            if (activity?.let {
+                    ContextCompat.checkSelfPermission(
+                        it, android.Manifest.permission.READ_CONTACTS
+                    )
+                } != PackageManager.PERMISSION_GRANTED) {
+                activity?.let {
+                    ActivityCompat.requestPermissions(
+                        it,
+                        arrayOf(android.Manifest.permission.READ_CONTACTS),
+                        READ_CONTACTS_PERMISSION_CODE
+                    )
                 }
             }
+
+                if (!binding.dialpadInput.text.toString().isEmpty()) {
+                    core = LinphoneManager.getCore().callLogs
+
+                    for (item1 in businessresponce) {
+                        if (item1.lineExtension.equals(binding.dialpadInput.text.toString())) {
+                            dialname = item1.businessName.toString()+" "+item1.lineName
+                            dialImage = item1.businessLogo.toString()
+                            break
+                        } else {
+                            dialname = ""
+                            dialImage = " "
+                        }
+                    }
+
+                    if (dialname.equals("")){
+                        for (item1 in core) {
+                            if (item1.remoteAddress.username.equals(binding.dialpadInput.text.toString())) {
+                                if (item1.remoteAddress.displayName.equals("Direct Call")){
+                                    dialname = item1.remoteAddress.displayName.toString()
+                                    dialImage = item1.remoteAddress.methodParam.toString()
+
+                                }else{
+                                    dialname = item1.remoteAddress.displayName.toString()
+                                    dialImage = item1.remoteAddress.methodParam.toString()
+                                    break
+                                }
+
+                            } else {
+                                dialname = ""
+                                dialImage = " "
+                            }
+                        }
+                    }
+
+                    if (dialname.equals("")) {
+                        if (activity?.let {
+                                ContextCompat.checkSelfPermission(
+                                    it, android.Manifest.permission.READ_CONTACTS
+                                )
+                            } == PackageManager.PERMISSION_GRANTED) {
+
+                            fetchContactList(binding.dialpadInput.text.toString())
+                        }else{
+                            dialname = "Direct Call"
+                            dialImage = " "
+
+                        }
+                    }
+                    callBackListener?.onCallBack(
+                        binding.dialpadInput.text.toString(),
+                        dialname,
+                        dialImage
+                    );
+                }
+
 
 
         }
@@ -226,9 +231,110 @@ class DialFragment : Fragment() {
         binding.dialpadInput.disableKeyboard()
 
 
-
+//        fetchContactList(binding.dialpadInput.text.toString())
 
         binding.dialpadCallButton.setImageDrawable(resources.getDrawable(R.drawable.ic_phone_vector))
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+        val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(binding.appcontainer.getWindowToken(), 0)
+    }
+    private fun getbusinessList() {
+
+        activity?.let { viewModel.getBusiness(it) }
+
+        activity?.let {
+            viewModel.getbusinessLiveData?.observe(it, androidx.lifecycle.Observer {
+
+                if (it.isSuccess == true && it.Responcecode == 200) {
+                    ProgressHelper.dismissProgressDialog()
+
+                    it.data?.let { it1 -> businessresponce.addAll(it1) }
+
+
+                    //                val `objecsst` = JSONObject(usedata.toString())
+                    ////                showError("" + sendOtp.toString())
+                    //                val intent = Intent(
+                    //                    this@Verify_PhoneActivity, Terms_And_ConditionActivity::class.java
+                    //                )
+                    //                Preference.saveAccessToken(this@Verify_PhoneActivity,objecsst.getString("access_token"))
+                    //                intent.putExtra("PASS", "NEW_PASS")
+                    //                intent.putExtra("MOBILE", intent.getStringExtra("MOBILE"))
+                    //                startActivity(intent)
+                    //                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+                    //                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+                } else if (it.error != null) {
+                    ProgressHelper.dismissProgressDialog()
+                    var errorResponce: ResponseBody = it.error
+                    val jsonObj = JSONObject(errorResponce!!.charStream().readText())
+//                    showMessage(jsonObj.getString("errors"))
+                } else {
+                    ProgressHelper.dismissProgressDialog()
+//                    showMessage("Something Went Wrong!")
+                }
+
+
+            })
+        }
+
+    }
+
+    private fun fetchContactList(toString: String) {
+        val cursor = activity?.getContentResolver()?.query(
+            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+            null,
+            null,
+            null,
+            ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC"
+        )
+        var currentGroup = ""
+        cursor?.let {
+            while (it.moveToNext()) {
+                val name =
+                    it.getString(it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME))
+                val number =
+                    it.getString(it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
+                val imageUriString: String? =
+                    cursor.getString(it.getColumnIndex(ContactsContract.Contacts.PHOTO_URI))
+                val imageUri: Uri? = imageUriString?.let { Uri.parse(it) }
+
+                if (!name.isNullOrEmpty() && !number.isNullOrEmpty()) {
+
+                    val groupName = name.toString().toUpperCase()
+                    val historycontact: String = number.substring(Math.max(number.length - 9, 0))
+                    val diall: String = toString.substring(Math.max(toString.length - 9, 0))
+
+                    if (historycontact.equals(diall)) {
+                        dialname = name
+                        dialImage = " "
+                        break
+                    } else {
+                        dialname = "Direct Call"
+                        dialImage = " "
+                    }
+                    for (contact2 in core) {
+                        val phonecontact: String = contact2.remoteAddress.username?.substring(
+                            Math.max(
+                                contact2.remoteAddress.username!!.length - 9, 0
+                            )
+                        )!!
+
+                        if (groupName != currentGroup && historycontact.equals(phonecontact)) {
+                            currentGroup = groupName
+                            contactList.add(ContactModel(groupName, number, imageUri))
+//                            Toast.makeText(activity, "aa", Toast.LENGTH_SHORT)
+//                                .show()
+                            break
+                        }
+
+                    }
+                }
+            }
+            it.close()
+        }
     }
 
     companion object {

@@ -247,7 +247,7 @@ class CoreService : CoreService() {
         val channel = NotificationChannel(
             NOTIFICATION_CHANNEL_ID,
             NOTIFICATION_CHANNEL_NAME,
-            NotificationManager.IMPORTANCE_LOW
+            NotificationManager.IMPORTANCE_HIGH
         )
         channel.description =
             NOTIFICATION_CHANNEL_DESC

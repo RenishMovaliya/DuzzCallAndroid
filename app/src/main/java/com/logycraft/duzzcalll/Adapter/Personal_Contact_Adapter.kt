@@ -48,10 +48,10 @@ class Personal_Contact_Adapter(
 
         if (favoritesContactlist != null) {
 
-            holder.txt_contact_name.setText(favoritesContactlist?.get(position)?.businessName)
+            holder.txt_contact_name.setText(favoritesContactlist!!.get(position).businessName+" "+ favoritesContactlist!!.get(position).lineName)
             holder.txt_contact_number.setText(favoritesContactlist?.get(position)?.lineExtension)
             context?.let {
-                Glide.with(it).load(favoritesContactlist?.get(position)?.businessLogo).centerCrop()
+                Glide.with(it).load(favoritesContactlist?.get(position)?.businessLogo)
                     .into(holder.contact_image)
             };
         }
@@ -69,7 +69,7 @@ class Personal_Contact_Adapter(
         lateinit var txt_contact_name: TextView
         lateinit var txt_contact_number: TextView
         lateinit var img_star: ImageView
-        lateinit var contact_image: CircleImageView
+        lateinit var contact_image: ImageView
 
         init {
             txt_contact_name = itemView.findViewById(R.id.txt_contact_name)

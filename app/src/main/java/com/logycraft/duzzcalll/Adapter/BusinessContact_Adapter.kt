@@ -44,10 +44,11 @@ class BusinessContact_Adapter(
         }
 
         activity?.let {
-            Glide.with(it).load(businessresponce.get(position).businessLogo).centerCrop()
+            Glide.with(it).load(businessresponce.get(position).businessLogo)
                 .into(holder.contact_image)
         };
-        holder.txt_contact_name.setText(businessresponce.get(position).businessName)
+
+        holder.txt_contact_name.setText(businessresponce.get(position).businessName+" "+businessresponce.get(position).lineName)
         holder.txt_contact_number.setText(businessresponce.get(position).lineExtension)
 
         var listdata: MutableList<BusinessResponce>? = mutableListOf()
@@ -140,7 +141,7 @@ class BusinessContact_Adapter(
         lateinit var txt_contact_number: TextView
         lateinit var img_star_filled: ImageView
         lateinit var img_star_blank: ImageView
-        lateinit var contact_image: CircleImageView
+        lateinit var contact_image: ImageView
         lateinit var rl_layout: RelativeLayout
 
         init {

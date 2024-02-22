@@ -3,6 +3,7 @@ package com.logycraft.duzzcalll.service;
 import android.app.Application;
 import android.app.Service;
 import android.content.Intent;
+import android.os.Handler;
 import android.os.IBinder;
 import android.view.WindowManager;
 
@@ -92,6 +93,7 @@ public final class LinphoneService extends Service {
                 core.setNetworkReachable(false);
             }
             stopSelf();
+
         }
         super.onTaskRemoved(rootIntent);
     }

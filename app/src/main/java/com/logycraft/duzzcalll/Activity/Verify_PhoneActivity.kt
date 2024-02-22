@@ -6,7 +6,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.view.View
-import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.Observer
@@ -16,9 +15,6 @@ import com.duzzcall.duzzcall.R
 import com.logycraft.duzzcalll.Util.BaseActivity
 import com.logycraft.duzzcalll.Util.Preference
 import com.logycraft.duzzcalll.Util.ProgressHelper
-import com.logycraft.duzzcalll.Util.Utils.Companion.FROM
-import com.logycraft.duzzcalll.Util.Utils.Companion.LOGIN
-import com.logycraft.duzzcalll.Util.Utils.Companion.REGISTER
 import com.logycraft.duzzcalll.data.SendOTP
 import com.duzzcall.duzzcall.databinding.ActivityVerifyPhoneBinding
 import com.example.restapiidemo.home.data.UserModel
@@ -118,20 +114,21 @@ class Verify_PhoneActivity : BaseActivity() {
 
         binding.btnResendOtp.setOnClickListener {
             ProgressHelper.showProgrssDialogs(this@Verify_PhoneActivity)
-            SendOTP()
+            sendOTP(country_code)
         }
 
     }
 
 
-    private fun SendOTP() {
-
-        Preference.getNumber(this@Verify_PhoneActivity)?.let { viewModel.sentOtp(it) }
+    private fun sendOTP(country_code: String) {
+        viewModel.sentOtp(country_code,Preference.getNumber(this@Verify_PhoneActivity))
         viewModel.sentOtpLiveData?.observe(this@Verify_PhoneActivity, Observer {
 
             if (it.isSuccess == true && it.Responcecode == 200) {
                 ProgressHelper.dismissProgressDialog()
                 var sendOtp: SendOTP? = it.data
+                Preference.saveToken(
+                    this@Verify_PhoneActivity, "Bearer " + sendOtp?.verificationToken)
 //                Toast.makeText(this@Verify_PhoneActivity, "" + sendOtp?.tfaCode, Toast.LENGTH_LONG)
 //                    .show()
 
@@ -192,6 +189,7 @@ class Verify_PhoneActivity : BaseActivity() {
                 userModel.email = userdata?.extension?.email
                 userModel.extension = userdata?.extension?.extension
                 userModel.phone = userdata?.extension?.phone
+                Preference.saveExtensionNumber(this@Verify_PhoneActivity,userdata?.extension?.extension)
                 Preference.setUserData(this@Verify_PhoneActivity, userModel)
 
                 if (intent.getStringExtra("isNew").toString().equals("false")) {
